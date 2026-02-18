@@ -15,9 +15,37 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="resources.html">Kids Resources</a></li>
-        <li><a href="parent-resources.html">Parent Resources</a></li>
-        <li><a href="standards.html">Standards</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -25,17 +53,17 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Common Core Standards (K–2) 📘</h1>
-    <p>Quick “what to learn” checklist for Kindergarten, Grade 1, and Grade 2.</p>
+    <h1>Standards (K–2) 📘</h1>
+    <p>A friendly checklist of Common Core skills for Kindergarten, 1st, and 2nd grade.</p>
 
     <div class="bubbles">
       <a class="bubble" href="#ela"><span class="emoji">📖</span><span class="text">ELA</span></a>
       <a class="bubble" href="#math"><span class="emoji">➕</span><span class="text">Math</span></a>
-      <a class="bubble" href="#k"><span class="emoji">🧸</span><span class="text">Kindergarten</span></a>
+      <a class="bubble" href="#k"><span class="emoji">🧸</span><span class="text">K</span></a>
       <a class="bubble" href="#g2"><span class="emoji">🌟</span><span class="text">Grade 2</span></a>
     </div>
 
-    <div class="hero-note">This is a friendly summary (not the full official document).</div>
+    <div class="hero-note">This is a summary (not the full official PDF).</div>
   </div>
 </section>
 
@@ -45,33 +73,31 @@
 
     <div class="game-box wide">
       <div class="grid-3">
-
         <div class="card" id="k">
-          <h3>🧸 Kindergarten — ELA</h3>
-          <p><strong>Foundations:</strong> letter names/sounds, print concepts, rhyming, syllables.</p>
-          <p><strong>Reading:</strong> retell stories, identify characters/settings, ask/answer questions.</p>
-          <p><strong>Writing:</strong> draw/write opinion, informative, and narrative with support.</p>
+          <h3>🧸 Kindergarten</h3>
+          <p><strong>Phonics:</strong> letter names/sounds, rhyming, syllables.</p>
+          <p><strong>Reading:</strong> retell, characters/settings, ask/answer questions.</p>
+          <p><strong>Writing:</strong> draw/write opinion, informative, narrative (with support).</p>
         </div>
 
         <div class="card">
-          <h3>🌱 Grade 1 — ELA</h3>
-          <p><strong>Foundations:</strong> phonics patterns, decode one-syllable words, common spellings.</p>
-          <p><strong>Reading:</strong> main idea/details, compare characters, use text evidence (simple).</p>
+          <h3>🌱 Grade 1</h3>
+          <p><strong>Phonics:</strong> decode one-syllable words, common spellings.</p>
+          <p><strong>Reading:</strong> main idea/details, compare characters, simple evidence.</p>
           <p><strong>Writing:</strong> opinion/info/narrative with sentences + details.</p>
         </div>
 
         <div class="card" id="g2">
-          <h3>🌟 Grade 2 — ELA</h3>
-          <p><strong>Foundations:</strong> fluent reading, vowel teams, prefixes/suffixes (basic).</p>
-          <p><strong>Reading:</strong> central message, summarize, compare versions of stories.</p>
+          <h3>🌟 Grade 2</h3>
+          <p><strong>Fluency:</strong> smoother reading, vowel teams, basic prefixes/suffixes.</p>
+          <p><strong>Reading:</strong> summarize, central message, compare versions of stories.</p>
           <p><strong>Writing:</strong> paragraphs, add details, revise/edit with support.</p>
         </div>
-
       </div>
 
       <div class="quick-strip">
-        <a class="btn" href="phonics.html">Phonics Practice</a>
-        <a class="btn secondary" href="reading.html">Reading Practice</a>
+        <a class="btn" href="reading.html">Reading Game</a>
+        <a class="btn secondary" href="phonics.html">Phonics Game</a>
       </div>
     </div>
   </div>
@@ -83,33 +109,31 @@
 
     <div class="game-box wide">
       <div class="grid-3">
-
         <div class="card">
-          <h3>🧸 Kindergarten — Math</h3>
-          <p><strong>Counting:</strong> count to 100, count objects, compare numbers.</p>
-          <p><strong>Add/Sub:</strong> within 10 (simple problems).</p>
-          <p><strong>Shapes:</strong> name shapes, compose/decompose shapes.</p>
+          <h3>🧸 Kindergarten</h3>
+          <p><strong>Counting:</strong> to 100, count objects, compare numbers.</p>
+          <p><strong>Add/Sub:</strong> within 10 (simple).</p>
+          <p><strong>Shapes:</strong> name shapes, build shapes.</p>
         </div>
 
         <div class="card">
-          <h3>🌱 Grade 1 — Math</h3>
-          <p><strong>Add/Sub:</strong> within 20, understand equals sign, fact strategies.</p>
+          <h3>🌱 Grade 1</h3>
+          <p><strong>Add/Sub:</strong> within 20, equals sign, strategies.</p>
           <p><strong>Place Value:</strong> tens/ones, compare 2-digit numbers.</p>
-          <p><strong>Measurement:</strong> length, time, data (simple charts).</p>
+          <p><strong>Measurement:</strong> time, data, length basics.</p>
         </div>
 
         <div class="card">
-          <h3>🌟 Grade 2 — Math</h3>
-          <p><strong>Add/Sub:</strong> within 100 (and foundations to 1000 place value).</p>
-          <p><strong>Place Value:</strong> hundreds/tens/ones, skip count by 2/5/10/100.</p>
-          <p><strong>Measurement:</strong> rulers, money basics, graphs, shapes (attributes).</p>
+          <h3>🌟 Grade 2</h3>
+          <p><strong>Add/Sub:</strong> within 100; place value to 1000 foundations.</p>
+          <p><strong>Skip Count:</strong> by 2, 5, 10, 100.</p>
+          <p><strong>Measurement:</strong> rulers, graphs, money basics.</p>
         </div>
-
       </div>
 
       <div class="quick-strip">
-        <a class="btn" href="math.html">Math Practice</a>
-        <a class="btn secondary" href="parent-resources.html#math">Math Tips</a>
+        <a class="btn" href="math.html">Math Game</a>
+        <a class="btn secondary" href="parent-resources.html">Parent Tips</a>
       </div>
     </div>
   </div>
