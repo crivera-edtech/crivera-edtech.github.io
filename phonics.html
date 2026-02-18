@@ -55,10 +55,10 @@
 <section class="hero">
   <div class="container">
     <h1>Phonics 🔤</h1>
-    <p>First we do a quick diagnostic. Then you’ll play a game that matches what you need most!</p>
+    <p>Take a quick diagnostic. Then play a game that matches what you need most!</p>
     <div class="quick-strip">
-      <button class="btn secondary" id="soundBtn">🔊 Read</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
+      <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
     </div>
     <div class="hero-note">K–2: letter names + letter sounds</div>
   </div>
@@ -76,7 +76,7 @@
         <button class="pill" data-grade="2">Grade 2</button>
       </div>
 
-      <!-- MODE TABS -->
+      <!-- Mode buttons -->
       <div class="quick-strip" style="margin-top:14px;">
         <button class="btn" id="goDiagBtn">Take Diagnostic</button>
         <button class="btn secondary" id="goGameBtn">Go to Game</button>
@@ -86,10 +86,15 @@
       <!-- DIAGNOSTIC PANEL -->
       <div class="game-box" id="diagPanel" style="margin-top:14px;">
         <p class="kid-big">Diagnostic ✅</p>
-        <p class="small" id="diagDesc">Answer a few letter name + sound questions.</p>
+        <p class="small">Answer letter <strong>name</strong> and <strong>sound</strong> questions.</p>
 
         <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="diagQ">Press “Take Diagnostic” to begin.</p>
+          <!-- Question Row with Sound Button -->
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <p class="kid-big" id="diagQ" style="margin:0;">Press “Take Diagnostic” to begin.</p>
+            <button class="btn secondary" id="diagSpeakBtn" style="white-space:nowrap;">🔊</button>
+          </div>
+
           <p class="small" id="diagHint"></p>
 
           <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
@@ -100,7 +105,9 @@
             <button class="btn secondary" id="diagSkipBtn">Skip</button>
           </div>
 
-          <p class="small" style="margin-top:10px;">This helps BloomELearning choose the right game for you.</p>
+          <p class="small" style="margin-top:10px;">
+            Tip: Press 🔊 to hear the letter name or the sound out loud.
+          </p>
         </div>
       </div>
 
@@ -110,7 +117,12 @@
         <p class="small" id="gamePlan">Your game is based on your diagnostic.</p>
 
         <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="gameQ">Game question loads here…</p>
+          <!-- Question Row with Sound Button -->
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <p class="kid-big" id="gameQ" style="margin:0;">Game question loads here…</p>
+            <button class="btn secondary" id="gameSpeakBtn" style="white-space:nowrap;">🔊</button>
+          </div>
+
           <p class="small" id="gameHint"></p>
 
           <div class="grid-3" id="gameChoices" style="margin-top:14px;"></div>
@@ -122,7 +134,7 @@
           </div>
 
           <p class="small" style="margin-top:10px;">
-            Correct answers earn ⭐ and show up in My Progress.
+            Tip: Press 🔊 to hear the sound again.
           </p>
         </div>
       </div>
@@ -146,13 +158,6 @@
   function save(key, obj) {
     localStorage.setItem(key, JSON.stringify(obj));
   }
-  function speak(text) {
-    if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1;
-    speechSynthesis.speak(u);
-  }
   function shuffle(arr){
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -160,6 +165,30 @@
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+  }
+
+  // Speech: “letter name” vs “sound”
+  function speak(text) {
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.95;
+    speechSynthesis.speak(u);
+  }
+
+  function speakLetterName(letter){
+    speak(`The letter is ${letter}.`);
+  }
+
+  function speakSound(soundText){
+    // Try to say a child-friendly version
+    // Example soundText: "/m/" or "long A (ai/ay)"
+    if (soundText.includes("/")) {
+      const cleaned = soundText.replaceAll("/", "").trim();
+      speak(`The sound is ${cleaned}. ${cleaned}.`);
+    } else {
+      speak(`Listen. ${soundText}.`);
+    }
   }
 
   // ---------- Grade Selection ----------
@@ -173,15 +202,12 @@
     btn.onclick = ()=>{
       grade = btn.dataset.grade;
       renderGradeButtons();
-      // if diagnostic exists for another grade, keep it but note it
       updateModeButtons();
       showDiagnosticIntro();
     };
   });
 
   // ---------- Content Banks (K–2) ----------
-  // Letter names: show letter -> choose name ("A" -> "A")
-  // Letter sounds: show sound -> choose letter (" /m/ " -> "M")
   const gradeBanks = {
     "K": {
       nameItems: [
@@ -222,35 +248,39 @@
   };
 
   // ---------- Diagnostic Builder ----------
-  // We mix name + sound questions into one diagnostic.
   function buildDiagnostic(grade){
     const b = gradeBanks[grade];
+
     const nameQs = b.nameItems.map(x => ({
       type:"name",
+      letter: x.letter,
       prompt:`What is the NAME of this letter: ${x.letter}?`,
       hint:"Say the letter name out loud.",
       correct:x.correct,
       choices:shuffle(x.choices),
       focusKey:`name:${x.letter}`
     }));
+
     const soundQs = b.soundItems.map(x => ({
       type:"sound",
+      sound: x.sound,
       prompt:`Which letter(s) make ${x.sound}?`,
       hint:x.hint || "Listen for the sound.",
       correct:x.correct,
       choices:shuffle(x.choices),
       focusKey:`sound:${x.correct}`
     }));
-    // 6 questions total (3 name + 3 sound)
+
     return shuffle([...nameQs, ...soundQs]);
   }
 
   // ---------- Targeted Game Builder ----------
-  // Use missed focusKeys first. If none missed, mix practice.
   function buildGame(grade, missedFocusKeys){
     const b = gradeBanks[grade];
 
     const nameQs = b.nameItems.map(x => ({
+      type:"name",
+      letter: x.letter,
       prompt:`Letter NAME: ${x.letter} is called…`,
       hint:"Pick the correct letter name.",
       correct:x.correct,
@@ -259,6 +289,8 @@
     }));
 
     const soundQs = b.soundItems.map(x => ({
+      type:"sound",
+      sound: x.sound,
       prompt:`Letter SOUND: Which makes ${x.sound}?`,
       hint:x.hint || "Listen for the sound.",
       correct:x.correct,
@@ -266,14 +298,10 @@
       focusKey:`sound:${x.correct}`
     }));
 
-    // Pool
     const pool = [...nameQs, ...soundQs];
-
-    // Prioritize missed items
     const missed = pool.filter(q => missedFocusKeys.includes(q.focusKey));
     const rest   = pool.filter(q => !missedFocusKeys.includes(q.focusKey));
 
-    // Build 10 rounds: missed first, then fill
     const game = [];
     while (game.length < 10) {
       if (missed.length) game.push(missed.shift());
@@ -286,34 +314,34 @@
   let diagQs = [];
   let diagIndex = 0;
   let diagCorrect = 0;
-  let diagMissed = []; // focusKey list
+  let diagMissed = [];
+  let lastDiagQ = null;
 
   let gameQs = [];
   let gameIndex = 0;
+  let lastGameQ = null;
 
   // ---------- UI refs ----------
   const diagPanel = document.getElementById("diagPanel");
   const gamePanel = document.getElementById("gamePanel");
 
-  const diagQ = document.getElementById("diagQ");
-  const diagHint = document.getElementById("diagHint");
-  const diagChoices = document.getElementById("diagChoices");
-  const diagResult = document.getElementById("diagResult");
+  const diagQEl = document.getElementById("diagQ");
+  const diagHintEl = document.getElementById("diagHint");
+  const diagChoicesEl = document.getElementById("diagChoices");
+  const diagResultEl = document.getElementById("diagResult");
 
-  const gameQ = document.getElementById("gameQ");
-  const gameHint = document.getElementById("gameHint");
-  const gameChoices = document.getElementById("gameChoices");
-  const gameResult = document.getElementById("gameResult");
-  const gamePlan = document.getElementById("gamePlan");
+  const gameQEl = document.getElementById("gameQ");
+  const gameHintEl = document.getElementById("gameHint");
+  const gameChoicesEl = document.getElementById("gameChoices");
+  const gameResultEl = document.getElementById("gameResult");
+  const gamePlanEl = document.getElementById("gamePlan");
 
-  // ---------- Mode buttons ----------
   const goDiagBtn = document.getElementById("goDiagBtn");
   const goGameBtn = document.getElementById("goGameBtn");
   const retakeBtn = document.getElementById("retakeBtn");
 
   function updateModeButtons(){
     const saved = load(PHONICS_DIAG_KEY, null);
-    // Show Go to Game if saved diag for current grade
     const hasCurrent = saved && saved.grade === grade;
     goGameBtn.disabled = !hasCurrent;
     goGameBtn.style.opacity = hasCurrent ? "1" : ".6";
@@ -321,44 +349,55 @@
 
   // ---------- Diagnostic UI ----------
   function showDiagnosticIntro(){
-    diagQ.textContent = "Press “Take Diagnostic” to begin.";
-    diagHint.textContent = "";
-    diagChoices.innerHTML = "";
-    diagResult.textContent = "";
+    diagQEl.textContent = "Press “Take Diagnostic” to begin.";
+    diagHintEl.textContent = "";
+    diagChoicesEl.innerHTML = "";
+    diagResultEl.textContent = "";
     diagPanel.style.display = "block";
     gamePanel.style.display = "none";
+    lastDiagQ = null;
+    lastGameQ = null;
   }
 
   function renderDiagQuestion(){
     const q = diagQs[diagIndex];
-    diagQ.textContent = q.prompt;
-    diagHint.textContent = q.hint || "";
-    diagResult.textContent = "";
+    lastDiagQ = q;
 
-    diagChoices.innerHTML = "";
+    diagQEl.textContent = q.prompt;
+    diagHintEl.textContent = q.hint || "";
+    diagResultEl.textContent = "";
+
+    diagChoicesEl.innerHTML = "";
     q.choices.forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
       card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
       card.onclick = ()=> checkDiagAnswer(c);
-      diagChoices.appendChild(card);
+      diagChoicesEl.appendChild(card);
     });
   }
 
+  function playDiagSound(){
+    if (!lastDiagQ) return speak("Press take diagnostic to begin.");
+    if (lastDiagQ.type === "name") speakLetterName(lastDiagQ.letter);
+    else speakSound(lastDiagQ.sound);
+  }
+
   function checkDiagAnswer(choice){
-    // prevent double answering
-    if (diagResult.textContent) return;
+    if (diagResultEl.textContent) return;
 
     const q = diagQs[diagIndex];
     if (choice === q.correct){
       diagCorrect++;
-      diagResult.textContent = "Correct! ⭐";
+      diagResultEl.textContent = "Correct! ⭐";
       speak("Correct!");
     } else {
       diagMissed.push(q.focusKey);
-      diagResult.textContent = `Good try! Answer: ${q.correct}`;
+      diagResultEl.textContent = `Good try! Answer: ${q.correct}`;
       speak("Good try.");
+      // extra help: replay sound automatically for sound questions
+      if (q.type === "sound") speakSound(q.sound);
     }
   }
 
@@ -366,20 +405,12 @@
     const total = diagQs.length || 1;
     const score = Math.round((diagCorrect / total) * 100);
 
-    // Save diagnostic result
-    const resultObj = {
-      grade,
-      score,
-      missed: diagMissed,
-      date: Date.now()
-    };
+    const resultObj = { grade, score, missed: diagMissed, date: Date.now() };
     save(PHONICS_DIAG_KEY, resultObj);
 
-    // Build targeted game
     gameQs = buildGame(grade, diagMissed);
     gameIndex = 0;
 
-    // UI: show plan
     const missedNames = diagMissed.filter(x=>x.startsWith("name:")).length;
     const missedSounds = diagMissed.filter(x=>x.startsWith("sound:")).length;
 
@@ -392,7 +423,7 @@
       if (missedSounds) parts.push(`letter sounds (${missedSounds})`);
       planText += parts.join(" and ") + ".";
     }
-    gamePlan.textContent = planText;
+    gamePlanEl.textContent = planText;
 
     updateModeButtons();
     startGameFromSaved();
@@ -401,19 +432,27 @@
   // ---------- Game UI ----------
   function renderGameQuestion(){
     const q = gameQs[gameIndex % gameQs.length];
-    gameQ.textContent = q.prompt;
-    gameHint.textContent = q.hint || "";
-    gameResult.textContent = "";
+    lastGameQ = q;
 
-    gameChoices.innerHTML = "";
+    gameQEl.textContent = q.prompt;
+    gameHintEl.textContent = q.hint || "";
+    gameResultEl.textContent = "";
+
+    gameChoicesEl.innerHTML = "";
     q.choices.forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
       card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
       card.onclick = ()=> checkGameAnswer(c);
-      gameChoices.appendChild(card);
+      gameChoicesEl.appendChild(card);
     });
+  }
+
+  function playGameSound(){
+    if (!lastGameQ) return speak("Start the game after the diagnostic.");
+    if (lastGameQ.type === "name") speakLetterName(lastGameQ.letter);
+    else speakSound(lastGameQ.sound);
   }
 
   function addPhonicsStar(){
@@ -425,33 +464,31 @@
   }
 
   function checkGameAnswer(choice){
-    if (gameResult.textContent) return;
+    if (gameResultEl.textContent) return;
 
     const q = gameQs[gameIndex % gameQs.length];
     if (choice === q.correct){
-      gameResult.textContent = "Correct! ⭐";
+      gameResultEl.textContent = "Correct! ⭐";
       addPhonicsStar();
       speak("Correct!");
     } else {
-      gameResult.textContent = "Try again 🙂";
+      gameResultEl.textContent = "Try again 🙂";
       speak("Try again.");
+      // replay sound for sound-type items to support learning
+      if (q.type === "sound") speakSound(q.sound);
     }
   }
 
   function startGameFromSaved(){
-    // ensure we have saved diag and matching grade
     const savedDiag = load(PHONICS_DIAG_KEY, null);
     if (!savedDiag || savedDiag.grade !== grade){
-      // if not present, keep diagnostic visible
       showDiagnosticIntro();
       return;
     }
 
-    // build game from saved diag
     gameQs = buildGame(grade, savedDiag.missed || []);
     gameIndex = 0;
 
-    // show plan
     const missedNames = (savedDiag.missed || []).filter(x=>x.startsWith("name:")).length;
     const missedSounds = (savedDiag.missed || []).filter(x=>x.startsWith("sound:")).length;
 
@@ -464,9 +501,8 @@
       if (missedSounds) parts.push(`letter sounds (${missedSounds})`);
       planText += parts.join(" and ") + ".";
     }
-    gamePlan.textContent = planText;
+    gamePlanEl.textContent = planText;
 
-    // switch panels
     diagPanel.style.display = "none";
     gamePanel.style.display = "block";
     renderGameQuestion();
@@ -481,37 +517,41 @@
     diagPanel.style.display = "block";
     gamePanel.style.display = "none";
     renderDiagQuestion();
+    playDiagSound(); // auto-play first prompt
   };
 
   document.getElementById("diagNextBtn").onclick = ()=>{
     if (!diagQs.length) return;
-    // if question wasn't answered, treat as missed
-    if (!diagResult.textContent){
+
+    if (!diagResultEl.textContent){
       diagMissed.push(diagQs[diagIndex].focusKey);
     }
+
     diagIndex++;
     if (diagIndex >= diagQs.length){
       finishDiagnostic();
     } else {
       renderDiagQuestion();
+      playDiagSound();
     }
   };
 
   document.getElementById("diagSkipBtn").onclick = ()=>{
     if (!diagQs.length) return;
     diagMissed.push(diagQs[diagIndex].focusKey);
+
     diagIndex++;
     if (diagIndex >= diagQs.length){
       finishDiagnostic();
     } else {
       renderDiagQuestion();
+      playDiagSound();
     }
   };
 
   goGameBtn.onclick = ()=> startGameFromSaved();
 
   retakeBtn.onclick = ()=>{
-    // clear saved diagnostic for current grade (only)
     const savedDiag = load(PHONICS_DIAG_KEY, null);
     if (savedDiag && savedDiag.grade === grade){
       localStorage.removeItem(PHONICS_DIAG_KEY);
@@ -524,6 +564,7 @@
   document.getElementById("gameNextBtn").onclick = ()=>{
     gameIndex++;
     renderGameQuestion();
+    playGameSound();
   };
 
   document.getElementById("resetStarsBtn").onclick = ()=>{
@@ -535,22 +576,14 @@
     alert("Phonics stars reset!");
   };
 
-  // 🔊 read current prompt (diagnostic or game)
-  document.getElementById("soundBtn").onclick = ()=>{
-    const isGameVisible = gamePanel.style.display !== "none";
-    const text = isGameVisible
-      ? (gameQ.textContent || "Phonics game.")
-      : (diagQ.textContent || "Phonics diagnostic.");
-    speak(text);
-  };
+  // Sound buttons near question
+  document.getElementById("diagSpeakBtn").onclick = playDiagSound;
+  document.getElementById("gameSpeakBtn").onclick = playGameSound;
 
   // ---------- Initialize ----------
   renderGradeButtons();
   updateModeButtons();
   showDiagnosticIntro();
-
-  // If they already took diagnostic for this grade, allow game
-  // (we don't auto-jump; they can tap “Go to Game”)
 </script>
 
 </body>
