@@ -15,15 +15,37 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="phonics.html">Phonics</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="math.html">Math</a></li>
-        <li><a href="games.html">Games</a></li>
-        <li><a href="resources.html">Kids Resources</a></li>
-        <li><a href="parent-resources.html">Parent Resources</a></li>
-        <li><a href="standards.html">Standards</a></li>
-        <li><a href="sticker-book.html">Stickers</a></li>
-        <li><a href="progress.html">Progress</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -32,31 +54,29 @@
 <section class="hero">
   <div class="container">
     <h1>Kids Resources 🎥✍️</h1>
-    <p>Videos + handwriting practice. Tap a bubble to jump quickly.</p>
+    <p>Watch videos, practice tracing, and earn stickers!</p>
 
     <div class="bubbles">
       <a class="bubble" href="#tracing"><span class="emoji">✍️</span><span class="text">Tracing</span></a>
       <a class="bubble" href="#videos"><span class="emoji">🎥</span><span class="text">Videos</span></a>
-      <a class="bubble" href="phonics.html"><span class="emoji">🔤</span><span class="text">Phonics</span></a>
-      <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Stickers</span></a>
+      <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Sticker Book</span></a>
+      <a class="bubble" href="progress.html"><span class="emoji">📊</span><span class="text">Progress</span></a>
     </div>
-
-    <div class="hero-note">Tip: Trace a letter to earn a sticker ⭐</div>
   </div>
 </section>
 
 <section id="tracing" class="section">
   <div class="container">
-    <h2 class="section-title">✍️ Letter Tracing (Upper & Lowercase)</h2>
+    <h2 class="section-title">Letter Tracing ✍️</h2>
 
     <div class="game-box wide">
-      <p class="kid-big">Choose what to trace:</p>
-      <p class="small">Inside the tracing game, press 🔊 to hear how to write each letter.</p>
+      <p class="kid-big">Pick what you want to trace:</p>
+      <p class="small">Press 🔊 inside tracing for step-by-step voice directions.</p>
 
       <div class="grid-3" style="margin-top:14px;">
         <div class="card">
           <h3>ABC Uppercase</h3>
-          <p>Big letters for strong handwriting starts.</p>
+          <p>Big letters for strong starts.</p>
           <a class="btn" href="letter-formation.html?set=upper">Trace Uppercase</a>
         </div>
 
@@ -74,8 +94,8 @@
       </div>
 
       <div class="quick-strip">
-        <a class="btn secondary" href="letter-formation.html">Open Full Tracing</a>
         <a class="btn secondary" href="sticker-book.html">Open Sticker Book</a>
+        <a class="btn secondary" href="progress.html">My Progress</a>
       </div>
     </div>
   </div>
@@ -83,85 +103,42 @@
 
 <section id="videos" class="section">
   <div class="container">
-    <h2 class="section-title">🔤 Phonics Videos</h2>
+    <h2 class="section-title">Phonics Videos 🔤</h2>
 
     <div class="game-box wide">
       <p class="small">
-        Replace <strong>VIDEO_ID_HERE</strong> with the YouTube video ID.
-        Example: https://www.youtube.com/watch?v=<strong>abc123</strong> → ID is <strong>abc123</strong>.
+        Replace <strong>VIDEO_ID_HERE</strong> with a YouTube video ID.
+        Example: https://www.youtube.com/watch?v=<strong>abc123</strong> → ID is <strong>abc123</strong>
       </p>
 
       <div class="grid-3" style="margin-top:14px;">
         <div class="card">
           <h3>Letter Sounds (A–Z)</h3>
           <p>Practice each letter sound.</p>
-          <iframe class="video"
-            src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-            title="Letter Sounds"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          <iframe class="video" src="https://www.youtube.com/embed/VIDEO_ID_HERE" title="Letter Sounds" allowfullscreen></iframe>
         </div>
 
         <div class="card">
           <h3>Blending Sounds</h3>
           <p>Put sounds together to read words.</p>
-          <iframe class="video"
-            src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-            title="Blending"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          <iframe class="video" src="https://www.youtube.com/embed/VIDEO_ID_HERE" title="Blending" allowfullscreen></iframe>
         </div>
 
         <div class="card">
           <h3>Short Vowels</h3>
           <p>Practice a, e, i, o, u.</p>
-          <iframe class="video"
-            src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-            title="Short Vowels"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          <iframe class="video" src="https://www.youtube.com/embed/VIDEO_ID_HERE" title="Short Vowels" allowfullscreen></iframe>
         </div>
       </div>
 
       <div class="quick-strip">
-        <a class="btn" href="phonics.html">Go to Phonics</a>
-        <a class="btn secondary" href="#tracing">Go to Tracing</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">🌿 Practice Ideas</h2>
-
-    <div class="game-box wide">
-      <div class="grid-3">
-        <div class="card">
-          <h3>🗣️ Say It</h3>
-          <p>Point to a letter and say the sound. Name 2 words that start with it.</p>
-        </div>
-
-        <div class="card">
-          <h3>👂 Hear It</h3>
-          <p>Clap syllables: “el-e-phant” (3 claps). Try 5 words a day.</p>
-        </div>
-
-        <div class="card">
-          <h3>✍️ Write It</h3>
-          <p>Trace a letter, then write it in the air with your finger.</p>
-        </div>
-      </div>
-
-      <div class="quick-strip">
-        <a class="btn secondary" href="parent-resources.html">Parent Resources</a>
-        <a class="btn secondary" href="standards.html">Standards</a>
+        <a class="btn" href="phonics.html">Go to Phonics Game</a>
+        <a class="btn secondary" href="#tracing">Back to Tracing</a>
       </div>
     </div>
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
-
 </body>
 </html>
