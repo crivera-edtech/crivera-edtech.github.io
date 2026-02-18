@@ -26,7 +26,7 @@
 <section class="hero">
   <div class="container">
     <h1>🔤 Phonics</h1>
-    <p>Mini Game: Pick the correct sound for the letter!</p>
+    <p>Pick a grade and play Sound Match!</p>
   </div>
 </section>
 
@@ -35,15 +35,38 @@
     <h2 class="section-title">Sound Match Game</h2>
 
     <div class="game-box">
-      <div id="prompt" style="font-size:28px; font-weight:800;">Loading...</div>
+      <!-- Grade selector -->
+      <div style="font-weight:900;">Choose a grade:</div>
+      <div class="grade-row">
+        <button class="select" data-grade="K">Kindergarten</button>
+        <button class="select" data-grade="1">1st Grade</button>
+        <button class="select" data-grade="2">2nd Grade</button>
+      </div>
+
+      <!-- Prompt + Read Aloud -->
+      <div id="prompt" style="margin-top:16px; font-size:28px; font-weight:900;">Pick a grade to start!</div>
+      <button class="btn secondary read-btn" id="readAloudBtn">🔊 Read Aloud</button>
+
+      <!-- Answer choices -->
       <div class="game-row" id="choices"></div>
 
+      <!-- Score + badges -->
       <div class="status" id="status">Score: 0</div>
+      <div class="badge-row">
+        <div class="badge" id="badge1">⭐ 5-in-a-row: Locked</div>
+        <div class="badge" id="badge2">🏅 10 points: Locked</div>
+      </div>
+
+      <!-- Controls -->
       <div class="game-row">
         <button class="btn secondary" id="newBtn">New Question</button>
+        <button class="btn secondary" id="resetBtn">Reset Score</button>
         <a class="btn secondary" href="index.html">Back Home</a>
       </div>
-      <div class="small" style="margin-top:10px;">Tip: Click “New Question” to practice more.</div>
+
+      <div class="small" style="margin-top:10px;">
+        Tip: The 🔊 button uses your browser’s built-in voice.
+      </div>
     </div>
   </div>
 </section>
@@ -53,53 +76,159 @@
 </footer>
 
 <script>
-  const items = [
-    { letter: "B", sound: "/b/ like 'ball'" },
-    { letter: "M", sound: "/m/ like 'moon'" },
-    { letter: "S", sound: "/s/ like 'sun'" },
-    { letter: "T", sound: "/t/ like 'top'" },
-    { letter: "F", sound: "/f/ like 'fish'" },
-    { letter: "P", sound: "/p/ like 'pig'" }
+  // ---------- Grade Question Banks ----------
+  // K: single letter sounds
+  const bankK = [
+    { prompt: 'What sound does "B" make?', correct: "/b/ like ball", wrong: ["/m/ like moon", "/s/ like sun"] },
+    { prompt: 'What sound does "M" make?', correct: "/m/ like moon", wrong: ["/b/ like ball", "/t/ like top"] },
+    { prompt: 'What sound does "S" make?', correct: "/s/ like sun",  wrong: ["/f/ like fish", "/p/ like pig"] },
+    { prompt: 'What sound does "T" make?', correct: "/t/ like top",  wrong: ["/s/ like sun", "/b/ like ball"] },
+    { prompt: 'What sound does "F" make?', correct: "/f/ like fish", wrong: ["/p/ like pig", "/m/ like moon"] },
+    { prompt: 'What sound does "P" make?', correct: "/p/ like pig",  wrong: ["/t/ like top", "/f/ like fish"] }
   ];
 
+  // 1st: digraphs
+  const bank1 = [
+    { prompt: 'What sound does "sh" make?', correct: "sh like ship", wrong: ["ch like chin", "th like thin"] },
+    { prompt: 'What sound does "ch" make?', correct: "ch like chin", wrong: ["sh like ship", "th like this"] },
+    { prompt: 'What sound does "th" (thin) make?', correct: "th like thin", wrong: ["th like this", "ch like chin"] },
+    { prompt: 'What sound does "th" (this) make?', correct: "th like this", wrong: ["sh like ship", "th like thin"] },
+    { prompt: 'What sound does "wh" make?', correct: "wh like whale", wrong: ["sh like ship", "ch like chin"] }
+  ];
+
+  // 2nd: vowel teams / common patterns
+  const bank2 = [
+    { prompt: 'What sound does "ai" make?', correct: "long A like rain", wrong: ["long E like see", "long O like boat"] },
+    { prompt: 'What sound does "ee" make?', correct: "long E like see", wrong: ["long A like rain", "long I like pie"] },
+    { prompt: 'What sound does "oa" make?', correct: "long O like boat", wrong: ["long U like blue", "long E like see"] },
+    { prompt: 'What sound does "igh" make?', correct: "long I like light", wrong: ["long O like boat", "long A like rain"] },
+    { prompt: 'What sound does "oo" (book) make?', correct: "oo like book", wrong: ["oo like moon", "long E like see"] },
+    { prompt: 'What sound does "oo" (moon) make?', correct: "oo like moon", wrong: ["oo like book", "long O like boat"] }
+  ];
+
+  function getBank(grade) {
+    if (grade === "K") return bankK;
+    if (grade === "1") return bank1;
+    return bank2;
+  }
+
+  // ---------- Game State ----------
+  let grade = null;
   let score = 0;
+  let streak = 0;
   let current = null;
 
+  // localStorage keys per grade
+  function key(name) {
+    return `bloom_phonics_${grade}_${name}`;
+  }
+
+  function loadProgress() {
+    score = parseInt(localStorage.getItem(key("score")) || "0", 10);
+    streak = parseInt(localStorage.getItem(key("streak")) || "0", 10);
+    updateStatus("Score: " + score);
+    updateBadges();
+  }
+
+  function saveProgress() {
+    localStorage.setItem(key("score"), String(score));
+    localStorage.setItem(key("streak"), String(streak));
+  }
+
+  // ---------- Helpers ----------
   function shuffle(arr) {
     return arr.slice().sort(() => Math.random() - 0.5);
   }
 
+  function updateStatus(text) {
+    document.getElementById("status").textContent = text;
+  }
+
+  function updateBadges() {
+    const badge1 = document.getElementById("badge1");
+    const badge2 = document.getElementById("badge2");
+
+    const hasStreakBadge = (streak >= 5);
+    const hasScoreBadge = (score >= 10);
+
+    badge1.textContent = hasStreakBadge ? "⭐ 5-in-a-row: Unlocked!" : "⭐ 5-in-a-row: Locked";
+    badge2.textContent = hasScoreBadge ? "🏅 10 points: Unlocked!" : "🏅 10 points: Locked";
+  }
+
+  // ---------- Read Aloud ----------
+  function speak(text) {
+    if (!("speechSynthesis" in window)) {
+      alert("Sorry! Your browser does not support read aloud.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1.0;
+    utter.pitch = 1.1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  document.getElementById("readAloudBtn").addEventListener("click", () => {
+    if (!current) return;
+    speak(current.prompt);
+  });
+
+  // ---------- Build Question ----------
   function newQuestion() {
+    if (!grade) return;
+
     const promptEl = document.getElementById("prompt");
     const choicesEl = document.getElementById("choices");
-    const statusEl = document.getElementById("status");
 
-    current = items[Math.floor(Math.random() * items.length)];
-    promptEl.textContent = `What sound does the letter "${current.letter}" make?`;
+    const bank = getBank(grade);
+    current = bank[Math.floor(Math.random() * bank.length)];
 
-    const wrong = shuffle(items.filter(x => x.letter !== current.letter)).slice(0, 2);
-    const options = shuffle([current, ...wrong]);
+    promptEl.textContent = current.prompt;
+
+    const options = shuffle([current.correct, ...current.wrong]);
 
     choicesEl.innerHTML = "";
     options.forEach(opt => {
       const btn = document.createElement("button");
       btn.className = "pill";
-      btn.textContent = opt.sound;
+      btn.textContent = opt;
       btn.onclick = () => {
-        if (opt.letter === current.letter) {
+        if (opt === current.correct) {
           score++;
-          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          streak++;
+          updateStatus(`✅ Correct! Score: ${score} | Streak: ${streak}`);
         } else {
-          statusEl.textContent = `❌ Oops! The correct answer is ${current.sound}. Score: ${score}`;
+          streak = 0;
+          updateStatus(`❌ Oops! Correct is: ${current.correct} | Score: ${score} | Streak reset`);
         }
-        setTimeout(newQuestion, 900);
+        saveProgress();
+        updateBadges();
+        setTimeout(newQuestion, 800);
       };
       choicesEl.appendChild(btn);
     });
   }
 
+  // ---------- Grade Select Buttons ----------
+  document.querySelectorAll(".select").forEach(btn => {
+    btn.addEventListener("click", () => {
+      grade = btn.getAttribute("data-grade");
+      loadProgress();
+      newQuestion();
+    });
+  });
+
+  // Controls
   document.getElementById("newBtn").addEventListener("click", newQuestion);
-  newQuestion();
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (!grade) return;
+    score = 0;
+    streak = 0;
+    saveProgress();
+    updateStatus("Score: 0");
+    updateBadges();
+  });
 </script>
 
 </body>
