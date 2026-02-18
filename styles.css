@@ -290,3 +290,65 @@ footer{
   header .container{ flex-direction: column; gap: 10px; }
   .grid-3{ grid-template-columns: 1fr; }
 }
+
+/* ---------- Dropdown Menu (Bubbly + Kid Friendly) ---------- */
+
+nav ul { align-items: center; }
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown > a::after {
+  content: " ▾";
+  font-weight: 900;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 44px;
+  right: 0;
+  min-width: 210px;
+  background: #ffffff;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+  padding: 10px;
+  z-index: 999;
+}
+
+.dropdown-menu a {
+  display: block;
+  color: #233025;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(106,174,214,0.18);
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown:focus-within .dropdown-menu {
+  display: block;
+}
+
+/* Mobile-friendly: dropdown becomes inline */
+@media (max-width: 900px) {
+  .dropdown-menu {
+    position: static;
+    display: none;
+    min-width: unset;
+    margin-top: 8px;
+    box-shadow: none;
+    border: 2px solid rgba(58,143,107,0.18);
+  }
+
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu {
+    display: block;
+  }
+}
