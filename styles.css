@@ -191,3 +191,41 @@ footer {
 @media (max-width: 900px) {
   .grid-3 { grid-template-columns: 1fr; }
 }
+
+/* --- Extras: Grade selector + Badges + Read Aloud button --- */
+
+.grade-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.select {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(183,110,121,0.25);
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.badge-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.badge {
+  background: #fff;
+  border: 2px dashed rgba(183,110,121,0.35);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+.read-btn {
+  margin-top: 12px;
+}
