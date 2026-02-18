@@ -60,6 +60,27 @@
         </div>
 
         <div class="progress-item">
+          <div style="font-weight:900;">🦄 Unicorn Word Builder</div>
+          <div id="unicornScore">0</div>
+          <div class="bar"><div id="unicornBar"></div></div>
+          <div class="small">Goal: 10 points</div>
+        </div>
+
+        <div class="progress-item">
+          <div style="font-weight:900;">🦉 Owl Sentence Fixer</div>
+          <div id="owlScore">0</div>
+          <div class="bar"><div id="owlBar"></div></div>
+          <div class="small">Goal: 10 points</div>
+        </div>
+
+        <div class="progress-item">
+          <div style="font-weight:900;">🦖 Dino Number Treasure</div>
+          <div id="dinoScore">0</div>
+          <div class="bar"><div id="dinoBar"></div></div>
+          <div class="small">Goal: 10 points</div>
+        </div>
+
+        <div class="progress-item">
           <div style="font-weight:900;">🧠 Diagnostic</div>
           <div id="diagStatus">Not taken yet</div>
           <div class="small">Take it anytime: <a href="diagnostic.html">Diagnostic Test</a></div>
@@ -67,9 +88,10 @@
       </div>
 
       <div class="game-row">
-        <a class="btn" href="phonics.html">Play Phonics</a>
-        <a class="btn" href="reading.html">Play Reading</a>
-        <a class="btn" href="math.html">Play Math</a>
+        <a class="btn" href="phonics.html">Phonics</a>
+        <a class="btn" href="reading.html">Reading</a>
+        <a class="btn" href="math.html">Math</a>
+        <a class="btn" href="games.html">Character Games</a>
       </div>
 
       <div class="game-row">
@@ -92,14 +114,18 @@
   function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
   function pct(score, goal) { return clamp(Math.round((score / goal) * 100), 0, 100); }
 
-  // Scores used by the games in this pack:
+  // Core scores
   const readingScore = parseInt(localStorage.getItem("bloom_reading_score") || "0", 10);
   const mathScore = parseInt(localStorage.getItem("bloom_math_score") || "0", 10);
-
   const phonicsK = parseInt(localStorage.getItem("bloom_phonics_K_score") || "0", 10);
   const phonics1 = parseInt(localStorage.getItem("bloom_phonics_1_score") || "0", 10);
   const phonics2 = parseInt(localStorage.getItem("bloom_phonics_2_score") || "0", 10);
   const phonicsTotal = phonicsK + phonics1 + phonics2;
+
+  // Character game scores
+  const unicornScore = parseInt(localStorage.getItem("bloom_unicorn_score") || "0", 10);
+  const owlScore = parseInt(localStorage.getItem("bloom_owl_score") || "0", 10);
+  const dinoScore = parseInt(localStorage.getItem("bloom_dino_score") || "0", 10);
 
   const logged = localStorage.getItem("bloom_student_logged_in") === "true";
   const charId = localStorage.getItem("bloom_student_character") || "bunny";
@@ -108,36 +134,49 @@
   document.getElementById("studentLine").textContent =
     logged ? `Hi, ${label}! 🌿` : `Hi! Go to Student Login and pick a buddy. 🌿`;
 
+  // Fill values
   document.getElementById("phonicsScore").textContent = phonicsTotal;
   document.getElementById("readingScore").textContent = readingScore;
   document.getElementById("mathScore").textContent = mathScore;
 
+  document.getElementById("unicornScore").textContent = unicornScore;
+  document.getElementById("owlScore").textContent = owlScore;
+  document.getElementById("dinoScore").textContent = dinoScore;
+
+  // Bars (goal 10)
   document.getElementById("phonicsBar").style.width = pct(phonicsTotal, 10) + "%";
   document.getElementById("readingBar").style.width = pct(readingScore, 10) + "%";
   document.getElementById("mathBar").style.width = pct(mathScore, 10) + "%";
 
+  document.getElementById("unicornBar").style.width = pct(unicornScore, 10) + "%";
+  document.getElementById("owlBar").style.width = pct(owlScore, 10) + "%";
+  document.getElementById("dinoBar").style.width = pct(dinoScore, 10) + "%";
+
+  // Diagnostic status
   const diag = localStorage.getItem("bloom_diagnostic_latest");
   if (diag) {
     try {
       const obj = JSON.parse(diag);
-      document.getElementById("diagStatus").textContent =
-        `Last score: ${obj.percent}% (${obj.level})`;
+      document.getElementById("diagStatus").textContent = `Last score: ${obj.percent}% (${obj.level})`;
     } catch {
       document.getElementById("diagStatus").textContent = "Taken (saved)";
     }
   }
 
+  // Reset all
   document.getElementById("resetAllBtn").addEventListener("click", () => {
+    // Core
     localStorage.removeItem("bloom_reading_score");
     localStorage.removeItem("bloom_math_score");
     localStorage.removeItem("bloom_diagnostic_latest");
-
     localStorage.removeItem("bloom_phonics_K_score");
     localStorage.removeItem("bloom_phonics_1_score");
     localStorage.removeItem("bloom_phonics_2_score");
 
-    localStorage.removeItem("bloom_student_logged_in");
-    // keep character choice (optional)
+    // Character games
+    localStorage.removeItem("bloom_unicorn_score");
+    localStorage.removeItem("bloom_owl_score");
+    localStorage.removeItem("bloom_dino_score");
 
     location.reload();
   });
