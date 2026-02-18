@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Audio Test</title>
+</head>
+<body>
+
+<h2>Test Phonics Audio</h2>
+
+<button onclick="play('assets/audio/sounds/m.mp3')">Play /m/</button>
+<button onclick="play('assets/audio/letters/A.mp3')">Play Letter A</button>
+
+<script>
+  const audio = new Audio();
+
+  function play(src){
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = src;
+    audio.play().catch(()=> alert("Audio not found"));
+  }
+</script>
+
+</body>
+</html>
