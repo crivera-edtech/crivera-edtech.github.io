@@ -239,3 +239,78 @@ footer {
   header .container { flex-direction: column; gap: 10px; }
   .grid-3 { grid-template-columns: 1fr; }
 }
+
+/* --- Student UI extras: characters + progress --- */
+
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.char-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 14px;
+  text-align: center;
+  border: 2px solid rgba(183,110,121,0.18);
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.char-card:hover { transform: translateY(-3px); }
+
+.char-card.selected {
+  border-color: rgba(183,110,121,0.8);
+  background: rgba(247, 213, 215, 0.35);
+}
+
+.char-emoji { font-size: 40px; margin-bottom: 6px; }
+.char-name { font-weight: 900; color: #7b4b4b; }
+
+.pin-input {
+  font-size: 22px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 2px solid rgba(183,110,121,0.25);
+  width: 180px;
+  text-align: center;
+  outline: none;
+}
+
+.progress-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.progress-item {
+  background: #fff;
+  border-radius: 22px;
+  padding: 14px;
+  border: 2px solid rgba(183,110,121,0.18);
+}
+
+.bar {
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(183,110,121,0.12);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.bar > div {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, #b76e79, #d9a5b3);
+}
+
+.kid-big {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+@media (max-width: 900px) {
+  .char-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
