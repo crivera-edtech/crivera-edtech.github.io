@@ -8,21 +8,160 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Link to CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Baloo 2", cursive;
+            background: #fff7f9;
+            color: #5a3a3a;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #b76e79, #e6b8a2);
+            padding: 18px 0;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 28px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 18px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 999px;
+            transition: 0.2s ease;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 90px 0;
+            text-align: center;
+            background: linear-gradient(90deg, #f3c4c6, #f7d7c7);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto 26px auto;
+            font-size: 18px;
+        }
+
+        .hero button {
+            background: linear-gradient(135deg, #b76e79, #d9a5b3);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 999px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+            transition: 0.2s ease;
+        }
+
+        .hero button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+        }
+
+        /* Features */
+        .features {
+            padding: 70px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 26px;
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.06);
+            transition: 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #7b4b4b;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 22px 0;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, #b76e79, #e6b8a2);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
     <div class="container">
-        <h2 class="logo">EduTech</h2>
+        <h2 class="logo">BloomLearn ✨</h2>
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Courses</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#">Login</a></li>
             </ul>
         </nav>
     </div>
@@ -30,33 +169,31 @@
 
 <section class="hero">
     <div class="container">
-        <h1>Learn Smarter. Grow Faster.</h1>
-        <p>Interactive courses, personalized learning paths, and progress tracking for modern learners.</p>
-        <button>Get Started</button>
+        <h1>Learning Made Lovely 💖</h1>
+        <p>Interactive courses, cozy dashboards, and smart progress tracking designed to help you bloom.</p>
+        <button>Start Your Journey</button>
     </div>
 </section>
 
 <section class="features">
     <div class="container features-grid">
         <div class="card">
-            <h3>Interactive Lessons</h3>
-            <p>Engaging content designed for better retention and deeper understanding.</p>
+            <h3>🌸 Fun Lessons</h3>
+            <p>Engaging and beautifully designed lessons for modern learners.</p>
         </div>
-
         <div class="card">
-            <h3>Progress Tracking</h3>
-            <p>Real-time dashboards and analytics for students and educators.</p>
+            <h3>📊 Progress Tracking</h3>
+            <p>Track achievements with soft, easy-to-read dashboards.</p>
         </div>
-
         <div class="card">
-            <h3>Secure Platform</h3>
-            <p>Built with modern security standards to protect user data.</p>
+            <h3>🔒 Safe & Secure</h3>
+            <p>Your data is protected with modern security standards.</p>
         </div>
     </div>
 </section>
 
 <footer>
-    <p>© 2026 EduTech Platform | All Rights Reserved</p>
+    © 2026 BloomLearn ✨ | Made with 💖
 </footer>
 
 </body>
