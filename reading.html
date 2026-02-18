@@ -5,6 +5,180 @@
   <title>Reading | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Reading 📖</h1>
+    <p>Read the short passage and answer the question. Tap 🔊 to hear it!</p>
+    <div class="quick-strip">
+      <button class="btn secondary" id="readBtn">🔊 Read Passage</button>
+      <a class="btn secondary" href="progress.html">My Progress</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Mini Reading Check ✅</h2>
+
+    <div class="game-box wide">
+      <div class="game-box">
+        <p class="kid-big" id="passage">Passage loads here…</p>
+        <p class="small" id="question">Question loads here…</p>
+
+        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+
+        <p class="kid-big" id="result" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="nextBtn">Next</button>
+          <button class="btn secondary" id="resetBtn">Reset Stars</button>
+        </div>
+
+        <p class="small" style="margin-top:10px;">Earn ⭐ for correct answers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  const PROG_KEY = "bloom_progress";
+
+  function loadProgress(){ try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); } catch { return {}; } }
+  function saveProgress(p){ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1;
+    speechSynthesis.speak(u);
+  }
+
+  const items = [
+    {
+      passage: "Mia has a red kite. She runs fast. The kite goes up, up, up!",
+      question: "What color is Mia’s kite?",
+      correct: "Red",
+      choices: ["Blue", "Red", "Green"]
+    },
+    {
+      passage: "Ben has a pet fish. He feeds it every day. The fish swims in circles.",
+      question: "What does Ben have?",
+      correct: "A fish",
+      choices: ["A dog", "A fish", "A cat"]
+    },
+    {
+      passage: "The sun is bright. Kai puts on his hat. He goes outside to play.",
+      question: "Why does Kai put on his hat?",
+      correct: "The sun is bright",
+      choices: ["It is raining", "The sun is bright", "It is snowing"]
+    }
+  ];
+
+  let idx = 0;
+
+  function render(){
+    const it = items[idx % items.length];
+    document.getElementById("passage").textContent = it.passage;
+    document.getElementById("question").textContent = it.question;
+    document.getElementById("result").textContent = "";
+
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
+
+    it.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
+      card.onclick = ()=> check(c, it.correct);
+      choices.appendChild(card);
+    });
+  }
+
+  function addStar(){
+    const p = loadProgress();
+    p.readingStars = (p.readingStars || 0) + 1;
+    saveProgress(p);
+  }
+
+  function check(choice, correct){
+    if (choice === correct){
+      document.getElementById("result").textContent = "Correct! ⭐";
+      addStar();
+      speak("Correct!");
+    } else {
+      document.getElementById("result").textContent = "Try again 🙂";
+      speak("Try again.");
+    }
+  }
+
+  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
+  document.getElementById("resetBtn").onclick = ()=>{
+    const p = loadProgress();
+    p.readingStars = 0;
+    saveProgress(p);
+    alert("Reading stars reset!");
+  };
+  document.getElementById("readBtn").onclick = ()=>{
+    const t = `${document.getElementById("passage").textContent} ${document.getElementById("question").textContent}`;
+    speak(t);
+  };
+
+  render();
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reading | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
