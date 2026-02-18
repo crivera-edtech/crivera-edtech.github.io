@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Owl Sentence Fixer | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="games.html">Character Games</a></li>
+        <li><a href="progress.html">My Progress</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>🦉 Owl Sentence Fixer</h1>
+    <p>Pick the best sentence. Owl helps you read carefully!</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Fix the Sentence ✅</h2>
+
+    <div class="game-box">
+      <div class="kid-big" id="task">Loading…</div>
+
+      <div class="game-row">
+        <button class="btn secondary" id="readBtn">🔊 Read</button>
+        <button class="btn secondary" id="newBtn">New</button>
+        <button class="btn secondary" id="resetBtn">Reset Score</button>
+      </div>
+
+      <div class="game-row" id="choices" style="margin-top:10px;"></div>
+
+      <div class="status" id="status"></div>
+      <div class="small" id="scoreLine"></div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  const SCORE_KEY = "bloom_owl_score";
+
+  const items = [
+    {
+      task: "Pick the sentence that is correct:",
+      options: [
+        "i like to read books.",
+        "I like to read books.",
+        "I like to read books"
+      ],
+      correct: 1
+    },
+    {
+      task: "Pick the sentence with correct punctuation:",
+      options: [
+        "Where is my hat",
+        "Where is my hat!",
+        "Where is my hat?"
+      ],
+      correct: 2
+    },
+    {
+      task: "Pick the best sentence:",
+      options: [
+        "We goed to the park.",
+        "We went to the park.",
+        "We go to the park yesterday."
+      ],
+      correct: 1
+    },
+    {
+      task: "Pick the sentence that makes sense:",
+      options: [
+        "The dog barked because it heard the bell.",
+        "The dog barked because it ate the sky.",
+        "The dog barked because it was a chair."
+      ],
+      correct: 0
+    }
+  ];
+
+  let score = parseInt(localStorage.getItem(SCORE_KEY) || "0", 10);
+  let current = null;
+
+  const taskEl = document.getElementById("task");
+  const choicesEl = document.getElementById("choices");
+  const statusEl = document.getElementById("status");
+  const scoreLineEl = document.getElementById("scoreLine");
+
+  function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
+  function showScore(){ scoreLineEl.textContent = `Score: ${score} (saved)`; }
+
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1; u.pitch = 1.04;
+    window.speechSynthesis.speak(u);
+  }
+
+  function newRound(){
+    current = items[Math.floor(Math.random() * items.length)];
+    taskEl.textContent = current.task;
+    statusEl.textContent = "";
+    choicesEl.innerHTML = "";
+
+    current.options.forEach((opt, idx) => {
+      const b = document.createElement("button");
+      b.className = "pill";
+      b.textContent = opt;
+      b.onclick = () => {
+        if (idx === current.correct) {
+          score++;
+          save();
+          statusEl.textContent = "✅ Correct! +1 point 🌟";
+          showScore();
+          setTimeout(newRound, 700);
+        } else {
+          statusEl.textContent = "❌ Try again!";
+        }
+      };
+      choicesEl.appendChild(b);
+    });
+
+    showScore();
+  }
+
+  document.getElementById("readBtn").onclick = () => {
+    if (!current) return;
+    speak(`${current.task} خيارات: ${current.options.join(". ")}`);
+  };
+
+  document.getElementById("newBtn").onclick = newRound;
+  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Score reset!"; showScore(); };
+
+  newRound();
+</script>
+
+</body>
+</html>
