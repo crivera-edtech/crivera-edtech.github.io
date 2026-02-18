@@ -1,314 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>BloomELearning ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Google Font (bubbly) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* ----- Base ----- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth; /* makes clicking nav links scroll nicely */
-    }
-
-    body {
-      font-family: "Baloo 2", cursive;
-      background: #fff7f9;
-      color: #5a3a3a;
-    }
-
-    .container {
-      width: 92%;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    /* ----- Header ----- */
-    header {
-      background: linear-gradient(135deg, #b76e79, #e6b8a2);
-      padding: 18px 0;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    header .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .logo {
-      color: #fff;
-      font-size: 28px;
-      font-weight: 700;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 999px;
-      transition: 0.2s ease;
-    }
-
-    nav a:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
-
-    /* ----- Hero ----- */
-    .hero {
-      padding: 90px 0;
-      text-align: center;
-      background: linear-gradient(90deg, #f3c4c6, #f7d7c7);
-    }
-
-    .hero h1 {
-      font-size: clamp(32px, 5vw, 52px);
-      margin-bottom: 14px;
-    }
-
-    .hero p {
-      max-width: 700px;
-      margin: 0 auto 26px auto;
-      font-size: 18px;
-      line-height: 1.5;
-    }
-
-    .hero button {
-      background: linear-gradient(135deg, #b76e79, #d9a5b3);
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-      transition: 0.2s ease;
-    }
-
-    .hero button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
-    }
-
-    /* ----- Courses Section ----- */
-    .courses {
-      padding: 80px 0;
-      background: #ffffff;
-      text-align: center;
-    }
-
-    .section-title {
-      font-size: 36px;
-      margin-bottom: 40px;
-      color: #7b4b4b;
-    }
-
-    .courses-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-    }
-
-    .course-card {
-      background: #fff7f9;
-      border-radius: 30px;
-      padding: 28px;
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.06);
-      transition: 0.2s ease;
-    }
-
-    .course-card:hover {
-      transform: translateY(-6px);
-    }
-
-    .course-card h3 {
-      font-size: 22px;
-      margin-bottom: 12px;
-      color: #7b4b4b;
-    }
-
-    .course-card p {
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
-
-    .course-card button {
-      background: linear-gradient(135deg, #b76e79, #d9a5b3);
-      color: white;
-      border: none;
-      padding: 10px 22px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 800;
-      transition: 0.2s ease;
-    }
-
-    .course-card button:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* ----- Features ----- */
-    .features {
-      padding: 70px 0;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 26px;
-      padding: 28px;
-      text-align: center;
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.06);
-      transition: 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-    }
-
-    .card h3 {
-      margin-bottom: 10px;
-      color: #7b4b4b;
-      font-size: 22px;
-    }
-
-    .card p {
-      line-height: 1.5;
-    }
-
-    /* ----- Footer ----- */
-    footer {
-      margin-top: 40px;
-      padding: 22px 0;
-      text-align: center;
-      color: white;
-      background: linear-gradient(135deg, #b76e79, #e6b8a2);
-    }
-
-    /* ----- Responsive ----- */
-    @media (max-width: 900px) {
-      header .container {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .courses-grid,
-      .features-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-  <!-- Header -->
-  <header>
-    <div class="container">
-      <h2 class="logo">BloomELearning ✨</h2>
-      <nav>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#courses">Courses</a></li>
-          <li><a href="#features">About</a></li>
-          <li><a href="#footer">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-  <!-- Hero -->
-  <section id="home" class="hero">
-    <div class="container">
-      <h1>Learning Made Lovely 💖</h1>
-      <p>Interactive courses, cozy dashboards, and smart progress tracking designed to help you bloom.</p>
-      <button onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">
-        Start Your Journey
-      </button>
-    </div>
-  </section>
+<section class="hero">
+  <div class="container">
+    <h1>Learning Made Lovely 💖</h1>
+    <p>Choose a subject below and play a mini game to practice skills.</p>
+    <a class="btn" href="#courses">See Courses</a>
+  </div>
+</section>
 
-  <!-- Courses -->
-  <section id="courses" class="courses">
-    <div class="container">
-      <h2 class="section-title">Our Courses 🌸</h2>
+<section id="courses" class="section">
+  <div class="container">
+    <h2 class="section-title">Courses 🌸</h2>
 
-      <div class="courses-grid">
-
-        <div class="course-card">
-          <h3>🔤 Phonics</h3>
-          <p>Learn letter sounds, blending, and word building with fun activities.</p>
-          <button>Explore Phonics</button>
-        </div>
-
-        <div class="course-card">
-          <h3>📖 Reading</h3>
-          <p>Build fluency and comprehension with stories, questions, and vocabulary practice.</p>
-          <button>Explore Reading</button>
-        </div>
-
-        <div class="course-card">
-          <h3>➕ Math</h3>
-          <p>Practice number sense, addition, subtraction, and problem-solving in a friendly way.</p>
-          <button>Explore Math</button>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Features / About -->
-  <section id="features" class="features">
-    <div class="container features-grid">
+    <div class="grid-3">
       <div class="card">
-        <h3>🌸 Fun Lessons</h3>
-        <p>Engaging lessons designed to keep learners excited and confident.</p>
+        <h3>🔤 Phonics</h3>
+        <p>Match letters to sounds and build strong foundations.</p>
+        <a class="btn" href="phonics.html">Go to Phonics</a>
       </div>
 
       <div class="card">
-        <h3>📊 Progress Tracking</h3>
-        <p>Simple progress monitoring to celebrate growth and guide next steps.</p>
+        <h3>📖 Reading</h3>
+        <p>Read a tiny passage and answer a fun question.</p>
+        <a class="btn" href="reading.html">Go to Reading</a>
       </div>
 
       <div class="card">
-        <h3>🔒 Safe & Secure</h3>
-        <p>Built with modern practices to help protect student privacy.</p>
+        <h3>➕ Math</h3>
+        <p>Quick math practice with instant feedback.</p>
+        <a class="btn" href="math.html">Go to Math</a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer id="footer">
-    © 2026 BloomELearning ✨ | Made with 💖Mrs.R
-  </footer>
+<section id="about" class="section">
+  <div class="container">
+    <h2 class="section-title">About BloomELearning</h2>
+    <div class="game-box">
+      <p><strong>BloomELearning</strong> is a cute, beginner-friendly practice space for phonics, reading, and math.</p>
+      <p class="small">Next we can add: grade levels, student profiles, badges, and more games.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 BloomELearning ✨ | Made with 💖
+</footer>
 
 </body>
 </html>
