@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Math | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="phonics.html">Phonics</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="math.html">Math</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>➕ Math</h1>
+    <p>Mini Game: Solve the problem and choose the answer!</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Quick Math Game</h2>
+
+    <div class="game-box">
+      <div id="problem" style="font-size:30px; font-weight:900;">Loading...</div>
+      <div class="game-row" id="choices"></div>
+
+      <div class="status" id="status">Score: 0</div>
+
+      <div class="game-row">
+        <button class="btn secondary" id="newBtn">New Problem</button>
+        <a class="btn secondary" href="index.html">Back Home</a>
+      </div>
+
+      <div class="small" style="margin-top:10px;">Tip: Try to get 10 points!</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 BloomELearning ✨ | Made with 💖
+</footer>
+
+<script>
+  let score = 0;
+  let answer = 0;
+
+  function shuffle(arr) {
+    return arr.slice().sort(() => Math.random() - 0.5);
+  }
+
+  function newProblem() {
+    const problemEl = document.getElementById("problem");
+    const choicesEl = document.getElementById("choices");
+    const statusEl = document.getElementById("status");
+
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    const ops = ["+", "-"];
+    const op = ops[Math.floor(Math.random() * ops.length)];
+
+    if (op === "+") {
+      answer = a + b;
+    } else {
+      answer = Math.max(a, b) - Math.min(a, b);
+    }
+
+    const shownA = (op === "-") ? Math.max(a, b) : a;
+    const shownB = (op === "-") ? Math.min(a, b) : b;
+
+    problemEl.textContent = `${shownA} ${op} ${shownB} = ?`;
+
+    const wrong1 = answer + (Math.floor(Math.random() * 3) + 1);
+    const wrong2 = Math.max(0, answer - (Math.floor(Math.random() * 3) + 1));
+    const options = shuffle([answer, wrong1, wrong2]);
+
+    choicesEl.innerHTML = "";
+    options.forEach(val => {
+      const btn = document.createElement("button");
+      btn.className = "pill";
+      btn.textContent = val;
+      btn.onclick = () => {
+        if (val === answer) {
+          score++;
+          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          setTimeout(newProblem, 700);
+        } else {
+          statusEl.textContent = `❌ Try again! Score: ${score}`;
+        }
+      };
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  document.getElementById("newBtn").addEventListener("click", newProblem);
+  newProblem();
+</script>
+
+</body>
+</html>
