@@ -17,7 +17,6 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="games.html">Character Games</a></li>
         <li><a href="progress.html">My Progress</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -26,7 +25,7 @@
 <section class="hero">
   <div class="container">
     <h1>🦖 Dino Number Treasure</h1>
-    <p>Choose the right answer to collect treasure!</p>
+    <p>Choose the right answer to collect treasure! (+Math points)</p>
   </div>
 </section>
 
@@ -40,7 +39,7 @@
       <div class="game-row">
         <button class="btn secondary" id="readBtn">🔊 Read</button>
         <button class="btn secondary" id="newBtn">New</button>
-        <button class="btn secondary" id="resetBtn">Reset Score</button>
+        <button class="btn secondary" id="resetBtn">Reset Math Score</button>
       </div>
 
       <div class="game-row" id="choices"></div>
@@ -60,7 +59,7 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const SCORE_KEY = "bloom_dino_score";
+  const SCORE_KEY = "bloom_math_score";
 
   let score = parseInt(localStorage.getItem(SCORE_KEY) || "0", 10);
   let textToRead = "";
@@ -73,7 +72,7 @@
 
   function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
   function showScore(){
-    scoreLineEl.textContent = `Score: ${score} (saved)`;
+    scoreLineEl.textContent = `Math Score: ${score} (saved)`;
     document.getElementById("treasure").textContent = `💎 Treasure: ${score}`;
     document.getElementById("badge5").textContent = score >= 5 ? "⭐ 5: Unlocked!" : "⭐ 5: Locked";
     document.getElementById("badge10").textContent = score >= 10 ? "🏅 10: Unlocked!" : "🏅 10: Locked";
@@ -106,7 +105,6 @@
       promptEl.textContent = `Find the treasure: ${big} - ${small} = ?`;
       textToRead = `What is ${big} minus ${small}?`;
     } else {
-      // compare
       const x = Math.floor(Math.random() * 50) + 1;
       const y = Math.floor(Math.random() * 50) + 1;
       answer = Math.max(x,y);
@@ -133,7 +131,7 @@
         if (v === answer) {
           score++;
           save();
-          statusEl.textContent = "✅ You found treasure! +1 💎";
+          statusEl.textContent = "✅ You found treasure! +1 Math point 💎";
           showScore();
           setTimeout(newRound, 700);
         } else {
@@ -148,7 +146,7 @@
 
   document.getElementById("readBtn").onclick = () => speak(textToRead);
   document.getElementById("newBtn").onclick = newRound;
-  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Score reset!"; showScore(); };
+  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Math score reset!"; showScore(); };
 
   newRound();
 </script>
