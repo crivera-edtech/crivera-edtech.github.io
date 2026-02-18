@@ -15,9 +15,10 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="phonics.html">Phonics</a></li>
         <li><a href="reading.html">Reading</a></li>
         <li><a href="math.html">Math</a></li>
+        <li><a href="progress.html">My Progress</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -26,208 +27,131 @@
 <section class="hero">
   <div class="container">
     <h1>🔤 Phonics</h1>
-    <p>Pick a grade and play Sound Match!</p>
+    <p>Pick a grade, listen, and choose the best answer!</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Sound Match Game</h2>
+    <h2 class="section-title">Bunny Sound Hunt 🐰</h2>
 
     <div class="game-box">
-      <!-- Grade selector -->
-      <div style="font-weight:900;">Choose a grade:</div>
+      <div class="kid-big">Choose grade:</div>
       <div class="grade-row">
         <button class="select" data-grade="K">Kindergarten</button>
         <button class="select" data-grade="1">1st Grade</button>
         <button class="select" data-grade="2">2nd Grade</button>
       </div>
 
-      <!-- Prompt + Read Aloud -->
-      <div id="prompt" style="margin-top:16px; font-size:28px; font-weight:900;">Pick a grade to start!</div>
-      <button class="btn secondary read-btn" id="readAloudBtn">🔊 Read Aloud</button>
+      <div id="prompt" style="margin-top:18px; font-size:22px; font-weight:900;">Pick a grade to start!</div>
 
-      <!-- Answer choices -->
+      <div class="game-row">
+        <button class="btn secondary" id="readBtn" disabled>🔊 Read</button>
+        <button class="btn secondary" id="newBtn" disabled>New</button>
+        <button class="btn secondary" id="resetBtn" disabled>Reset Score</button>
+      </div>
+
       <div class="game-row" id="choices"></div>
 
-      <!-- Score + badges -->
       <div class="status" id="status">Score: 0</div>
-      <div class="badge-row">
-        <div class="badge" id="badge1">⭐ 5-in-a-row: Locked</div>
-        <div class="badge" id="badge2">🏅 10 points: Locked</div>
-      </div>
-
-      <!-- Controls -->
-      <div class="game-row">
-        <button class="btn secondary" id="newBtn">New Question</button>
-        <button class="btn secondary" id="resetBtn">Reset Score</button>
-        <a class="btn secondary" href="index.html">Back Home</a>
-      </div>
-
-      <div class="small" style="margin-top:10px;">
-        Tip: The 🔊 button uses your browser’s built-in voice.
-      </div>
+      <div class="small" id="saveNote"></div>
     </div>
   </div>
 </section>
 
-<footer>
-  © 2026 BloomELearning ✨ | Made with 💖
-</footer>
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  // ---------- Grade Question Banks ----------
-  // K: single letter sounds
-  const bankK = [
-    { prompt: 'What sound does "B" make?', correct: "/b/ like ball", wrong: ["/m/ like moon", "/s/ like sun"] },
-    { prompt: 'What sound does "M" make?', correct: "/m/ like moon", wrong: ["/b/ like ball", "/t/ like top"] },
-    { prompt: 'What sound does "S" make?', correct: "/s/ like sun",  wrong: ["/f/ like fish", "/p/ like pig"] },
-    { prompt: 'What sound does "T" make?', correct: "/t/ like top",  wrong: ["/s/ like sun", "/b/ like ball"] },
-    { prompt: 'What sound does "F" make?', correct: "/f/ like fish", wrong: ["/p/ like pig", "/m/ like moon"] },
-    { prompt: 'What sound does "P" make?', correct: "/p/ like pig",  wrong: ["/t/ like top", "/f/ like fish"] }
-  ];
+  const banks = {
+    K: [
+      { q:"Which word starts with /m/?", say:"Which word starts with the m sound?", options:["moon","sun","hat"], correct:0 },
+      { q:"Which word starts with /s/?", say:"Which word starts with the s sound?", options:["sock","cat","map"], correct:0 },
+      { q:"Which word ends with /t/?", say:"Which word ends with the t sound?", options:["bat","bee","go"], correct:0 },
+      { q:"Which word starts with /b/?", say:"Which word starts with the b sound?", options:["ball","rain","sun"], correct:0 }
+    ],
+    1: [
+      { q:"Which word has a short a sound?", say:"Which word has a short a sound?", options:["cat","cake","cone"], correct:0 },
+      { q:"Which word has /sh/?", say:"Which word has the sh sound?", options:["ship","sip","lip"], correct:0 },
+      { q:"Which word has /ch/?", say:"Which word has the ch sound?", options:["chin","thin","fin"], correct:0 },
+      { q:"Which word has a long i sound?", say:"Which word has a long i sound?", options:["bike","bit","bin"], correct:0 }
+    ],
+    2: [
+      { q:"Which word has a vowel team?", say:"Which word has a vowel team?", options:["boat","bat","bit"], correct:0 },
+      { q:"Which word has a long a sound?", say:"Which word has a long a sound?", options:["rain","ran","ring"], correct:0 },
+      { q:"Which word has an r-controlled vowel?", say:"Which word has an r-controlled vowel?", options:["car","cap","cake"], correct:0 },
+      { q:"Which word has a silent e?", say:"Which word has silent e?", options:["cake","cat","cap"], correct:0 }
+    ]
+  };
 
-  // 1st: digraphs
-  const bank1 = [
-    { prompt: 'What sound does "sh" make?', correct: "sh like ship", wrong: ["ch like chin", "th like thin"] },
-    { prompt: 'What sound does "ch" make?', correct: "ch like chin", wrong: ["sh like ship", "th like this"] },
-    { prompt: 'What sound does "th" (thin) make?', correct: "th like thin", wrong: ["th like this", "ch like chin"] },
-    { prompt: 'What sound does "th" (this) make?', correct: "th like this", wrong: ["sh like ship", "th like thin"] },
-    { prompt: 'What sound does "wh" make?', correct: "wh like whale", wrong: ["sh like ship", "ch like chin"] }
-  ];
-
-  // 2nd: vowel teams / common patterns
-  const bank2 = [
-    { prompt: 'What sound does "ai" make?', correct: "long A like rain", wrong: ["long E like see", "long O like boat"] },
-    { prompt: 'What sound does "ee" make?', correct: "long E like see", wrong: ["long A like rain", "long I like pie"] },
-    { prompt: 'What sound does "oa" make?', correct: "long O like boat", wrong: ["long U like blue", "long E like see"] },
-    { prompt: 'What sound does "igh" make?', correct: "long I like light", wrong: ["long O like boat", "long A like rain"] },
-    { prompt: 'What sound does "oo" (book) make?', correct: "oo like book", wrong: ["oo like moon", "long E like see"] },
-    { prompt: 'What sound does "oo" (moon) make?', correct: "oo like moon", wrong: ["oo like book", "long O like boat"] }
-  ];
-
-  function getBank(grade) {
-    if (grade === "K") return bankK;
-    if (grade === "1") return bank1;
-    return bank2;
-  }
-
-  // ---------- Game State ----------
   let grade = null;
   let score = 0;
-  let streak = 0;
   let current = null;
 
-  // localStorage keys per grade
-  function key(name) {
-    return `bloom_phonics_${grade}_${name}`;
-  }
+  const promptEl = document.getElementById("prompt");
+  const choicesEl = document.getElementById("choices");
+  const statusEl = document.getElementById("status");
+  const saveNoteEl = document.getElementById("saveNote");
+  const readBtn = document.getElementById("readBtn");
+  const newBtn = document.getElementById("newBtn");
+  const resetBtn = document.getElementById("resetBtn");
 
-  function loadProgress() {
-    score = parseInt(localStorage.getItem(key("score")) || "0", 10);
-    streak = parseInt(localStorage.getItem(key("streak")) || "0", 10);
-    updateStatus("Score: " + score);
-    updateBadges();
-  }
+  function keyForGrade(g){ return `bloom_phonics_${g}_score`; }
 
-  function saveProgress() {
-    localStorage.setItem(key("score"), String(score));
-    localStorage.setItem(key("streak"), String(streak));
-  }
-
-  // ---------- Helpers ----------
-  function shuffle(arr) {
-    return arr.slice().sort(() => Math.random() - 0.5);
-  }
-
-  function updateStatus(text) {
-    document.getElementById("status").textContent = text;
-  }
-
-  function updateBadges() {
-    const badge1 = document.getElementById("badge1");
-    const badge2 = document.getElementById("badge2");
-
-    const hasStreakBadge = (streak >= 5);
-    const hasScoreBadge = (score >= 10);
-
-    badge1.textContent = hasStreakBadge ? "⭐ 5-in-a-row: Unlocked!" : "⭐ 5-in-a-row: Locked";
-    badge2.textContent = hasScoreBadge ? "🏅 10 points: Unlocked!" : "🏅 10 points: Locked";
-  }
-
-  // ---------- Read Aloud ----------
-  function speak(text) {
-    if (!("speechSynthesis" in window)) {
-      alert("Sorry! Your browser does not support read aloud.");
-      return;
-    }
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 1.0;
-    utter.pitch = 1.1;
-    window.speechSynthesis.speak(utter);
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1; u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
   }
 
-  document.getElementById("readAloudBtn").addEventListener("click", () => {
-    if (!current) return;
-    speak(current.prompt);
-  });
+  function loadScore(){
+    score = parseInt(localStorage.getItem(keyForGrade(grade)) || "0", 10);
+    statusEl.textContent = `Score: ${score}`;
+    saveNoteEl.textContent = `Saved for grade ${grade}.`;
+  }
 
-  // ---------- Build Question ----------
-  function newQuestion() {
-    if (!grade) return;
+  function saveScore(){
+    localStorage.setItem(keyForGrade(grade), String(score));
+  }
 
-    const promptEl = document.getElementById("prompt");
-    const choicesEl = document.getElementById("choices");
-
-    const bank = getBank(grade);
+  function newQuestion(){
+    const bank = banks[grade];
     current = bank[Math.floor(Math.random() * bank.length)];
-
-    promptEl.textContent = current.prompt;
-
-    const options = shuffle([current.correct, ...current.wrong]);
+    promptEl.textContent = current.q;
 
     choicesEl.innerHTML = "";
-    options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.className = "pill";
-      btn.textContent = opt;
-      btn.onclick = () => {
-        if (opt === current.correct) {
+    current.options.forEach((opt, idx) => {
+      const b = document.createElement("button");
+      b.className = "pill";
+      b.textContent = opt;
+      b.onclick = () => {
+        if (idx === current.correct) {
           score++;
-          streak++;
-          updateStatus(`✅ Correct! Score: ${score} | Streak: ${streak}`);
+          saveScore();
+          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          setTimeout(newQuestion, 650);
         } else {
-          streak = 0;
-          updateStatus(`❌ Oops! Correct is: ${current.correct} | Score: ${score} | Streak reset`);
+          statusEl.textContent = `❌ Try again! Score: ${score}`;
         }
-        saveProgress();
-        updateBadges();
-        setTimeout(newQuestion, 800);
       };
-      choicesEl.appendChild(btn);
+      choicesEl.appendChild(b);
     });
   }
 
-  // ---------- Grade Select Buttons ----------
+  readBtn.onclick = () => { if (current) speak(current.say || current.q); };
+  newBtn.onclick = newQuestion;
+  resetBtn.onclick = () => { score = 0; saveScore(); statusEl.textContent = "Score: 0"; };
+
   document.querySelectorAll(".select").forEach(btn => {
     btn.addEventListener("click", () => {
       grade = btn.getAttribute("data-grade");
-      loadProgress();
+      readBtn.disabled = false;
+      newBtn.disabled = false;
+      resetBtn.disabled = false;
+      loadScore();
       newQuestion();
     });
-  });
-
-  // Controls
-  document.getElementById("newBtn").addEventListener("click", newQuestion);
-
-  document.getElementById("resetBtn").addEventListener("click", () => {
-    if (!grade) return;
-    score = 0;
-    streak = 0;
-    saveProgress();
-    updateStatus("Score: 0");
-    updateBadges();
   });
 </script>
 
