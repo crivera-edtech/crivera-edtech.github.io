@@ -17,6 +17,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="login.html">Student Login</a></li>
         <li><a href="games.html">Character Games</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -25,7 +26,7 @@
 <section class="hero">
   <div class="container">
     <h1>⭐ My Progress</h1>
-    <p>See your points and badges in one place.</p>
+    <p>Your points and your skill check all in one place.</p>
   </div>
 </section>
 
@@ -75,19 +76,15 @@
         <button class="btn secondary" id="resetAllBtn">Reset ALL Progress</button>
       </div>
 
-      <p class="small" style="margin-top:10px;">
-        Progress is saved on this device only.
-      </p>
+      <p class="small" style="margin-top:10px;">Progress saves on this device only.</p>
     </div>
   </div>
 </section>
 
-<footer>
-  © 2026 BloomELearning ✨ | Made with 💖
-</footer>
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const characters = {
+  const charMap = {
     bunny:"🐰 Bunny", panda:"🐼 Panda", fox:"🦊 Foxy", cat:"🐱 Kitty",
     dog:"🐶 Puppy", owl:"🦉 Ollie Owl", unicorn:"🦄 Uni", dino:"🦖 Dino"
   };
@@ -95,6 +92,7 @@
   function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
   function pct(score, goal) { return clamp(Math.round((score / goal) * 100), 0, 100); }
 
+  // Scores used by the games in this pack:
   const readingScore = parseInt(localStorage.getItem("bloom_reading_score") || "0", 10);
   const mathScore = parseInt(localStorage.getItem("bloom_math_score") || "0", 10);
 
@@ -105,10 +103,10 @@
 
   const logged = localStorage.getItem("bloom_student_logged_in") === "true";
   const charId = localStorage.getItem("bloom_student_character") || "bunny";
-  const charLabel = characters[charId] || characters.bunny;
+  const label = charMap[charId] || charMap.bunny;
 
   document.getElementById("studentLine").textContent =
-    logged ? `Hi, ${charLabel}! 🌸` : `Hi! Go to Student Login and pick a buddy. 🌸`;
+    logged ? `Hi, ${label}! 🌿` : `Hi! Go to Student Login and pick a buddy. 🌿`;
 
   document.getElementById("phonicsScore").textContent = phonicsTotal;
   document.getElementById("readingScore").textContent = readingScore;
@@ -122,7 +120,8 @@
   if (diag) {
     try {
       const obj = JSON.parse(diag);
-      document.getElementById("diagStatus").textContent = `Last score: ${obj.percent}%`;
+      document.getElementById("diagStatus").textContent =
+        `Last score: ${obj.percent}% (${obj.level})`;
     } catch {
       document.getElementById("diagStatus").textContent = "Taken (saved)";
     }
@@ -136,9 +135,9 @@
     localStorage.removeItem("bloom_phonics_K_score");
     localStorage.removeItem("bloom_phonics_1_score");
     localStorage.removeItem("bloom_phonics_2_score");
-    localStorage.removeItem("bloom_phonics_K_streak");
-    localStorage.removeItem("bloom_phonics_1_streak");
-    localStorage.removeItem("bloom_phonics_2_streak");
+
+    localStorage.removeItem("bloom_student_logged_in");
+    // keep character choice (optional)
 
     location.reload();
   });
