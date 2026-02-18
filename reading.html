@@ -16,8 +16,9 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="phonics.html">Phonics</a></li>
-        <li><a href="reading.html">Reading</a></li>
         <li><a href="math.html">Math</a></li>
+        <li><a href="progress.html">My Progress</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -26,144 +27,114 @@
 <section class="hero">
   <div class="container">
     <h1>📖 Reading</h1>
-    <p>Mini Game: Read the passage and answer the question!</p>
+    <p>Read a tiny passage, listen if you want, and answer the question.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Reading Check Game</h2>
+    <h2 class="section-title">Panda Story Time 🐼</h2>
 
     <div class="game-box">
       <div id="passage" style="line-height:1.6; font-size:18px;"></div>
-      <div id="question" style="margin-top:14px; font-size:20px; font-weight:900;"></div>
-
-      <button class="btn secondary read-btn" id="readAloudBtn">🔊 Read Aloud</button>
-
-      <div class="game-row" id="answers"></div>
-
-      <div class="status" id="status">Score: 0</div>
-      <div class="badge-row">
-        <div class="badge" id="badge1">⭐ 5 correct: Locked</div>
-        <div class="badge" id="badge2">🏅 10 correct: Locked</div>
-      </div>
+      <div id="question" style="margin-top:12px; font-size:22px; font-weight:900;"></div>
 
       <div class="game-row">
-        <button class="btn secondary" id="nextBtn">Next Passage</button>
+        <button class="btn secondary" id="readBtn">🔊 Read Aloud</button>
+        <button class="btn secondary" id="newBtn">New Story</button>
         <button class="btn secondary" id="resetBtn">Reset Score</button>
-        <a class="btn secondary" href="index.html">Back Home</a>
       </div>
+
+      <div class="game-row" id="choices"></div>
+
+      <div class="status" id="status"></div>
+      <div class="small">Score saves on this device.</div>
     </div>
   </div>
 </section>
 
-<footer>
-  © 2026 BloomELearning ✨ | Made with 💖
-</footer>
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const passages = [
+  const stories = [
     {
-      text: "Lina has a small plant. She gives it water every day. The plant sits by the sunny window. Soon, it grows new leaves.",
-      q: "Why did the plant grow new leaves?",
-      options: ["It got water and sunlight", "It got a new pot", "It was painted green"],
+      passage: "Mia put on her rain boots and grabbed an umbrella. Dark clouds filled the sky.",
+      q: "What is the weather probably like?",
+      options: ["Rainy", "Snowy", "Sunny"],
       correct: 0
     },
     {
-      text: "Jay puts on his rain boots. Dark clouds cover the sky. He brings an umbrella before going outside.",
-      q: "What is the weather probably like?",
-      options: ["Sunny", "Rainy", "Snowy"],
-      correct: 1
+      passage: "Ben practiced reading every day. After a week, he read the book smoothly.",
+      q: "What helped Ben improve?",
+      options: ["Practice", "Sleeping", "Skipping"],
+      correct: 0
     },
     {
-      text: "Mia reads a book about whales. She learns whales are mammals and breathe air. She shares the fact with her friend.",
-      q: "What did Mia learn about whales?",
-      options: ["They live in trees", "They breathe air", "They are insects"],
-      correct: 1
+      passage: "Ava’s puppy barked when the doorbell rang. Ava went to see who was there.",
+      q: "What made the puppy bark?",
+      options: ["Doorbell", "A sandwich", "A balloon"],
+      correct: 0
+    },
+    {
+      passage: "Sam packed a lunch because he was going on a field trip to the zoo.",
+      q: "Why did Sam pack a lunch?",
+      options: ["Field trip", "Bedtime", "Dinner party"],
+      correct: 0
     }
   ];
 
   let score = parseInt(localStorage.getItem("bloom_reading_score") || "0", 10);
   let current = null;
 
-  function updateStatus(t) {
-    document.getElementById("status").textContent = t;
+  const passageEl = document.getElementById("passage");
+  const questionEl = document.getElementById("question");
+  const choicesEl = document.getElementById("choices");
+  const statusEl = document.getElementById("status");
+
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1; u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
   }
 
-  function updateBadges() {
-    document.getElementById("badge1").textContent = score >= 5 ? "⭐ 5 correct: Unlocked!" : "⭐ 5 correct: Locked";
-    document.getElementById("badge2").textContent = score >= 10 ? "🏅 10 correct: Unlocked!" : "🏅 10 correct: Locked";
-  }
+  function save(){ localStorage.setItem("bloom_reading_score", String(score)); }
 
-  function save() {
-    localStorage.setItem("bloom_reading_score", String(score));
-  }
+  function newStory(){
+    current = stories[Math.floor(Math.random() * stories.length)];
+    passageEl.textContent = current.passage;
+    questionEl.textContent = current.q;
 
-  function shuffle(arr) {
-    return arr.slice().sort(() => Math.random() - 0.5);
-  }
-
-  function loadPassage() {
-    const passageEl = document.getElementById("passage");
-    const qEl = document.getElementById("question");
-    const answersEl = document.getElementById("answers");
-
-    current = passages[Math.floor(Math.random() * passages.length)];
-    passageEl.textContent = current.text;
-    qEl.textContent = current.q;
-
-    const optionObjs = current.options.map((t, i) => ({ text: t, idx: i }));
-    const shuffled = shuffle(optionObjs);
-
-    answersEl.innerHTML = "";
-    shuffled.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.className = "pill";
-      btn.textContent = opt.text;
-      btn.onclick = () => {
-        if (opt.idx === current.correct) {
+    choicesEl.innerHTML = "";
+    current.options.forEach((opt, idx) => {
+      const b = document.createElement("button");
+      b.className = "pill";
+      b.textContent = opt;
+      b.onclick = () => {
+        if (idx === current.correct) {
           score++;
           save();
-          updateStatus(`✅ Correct! Score: ${score}`);
-          updateBadges();
+          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          setTimeout(newStory, 700);
         } else {
-          updateStatus(`❌ Not quite. Score: ${score}`);
+          statusEl.textContent = `❌ Try again! Score: ${score}`;
         }
       };
-      answersEl.appendChild(btn);
+      choicesEl.appendChild(b);
     });
 
-    updateStatus(`Score: ${score}`);
-    updateBadges();
+    statusEl.textContent = `Score: ${score}`;
   }
 
-  // Read Aloud
-  function speak(text) {
-    if (!("speechSynthesis" in window)) {
-      alert("Sorry! Your browser does not support read aloud.");
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 1.0;
-    utter.pitch = 1.1;
-    window.speechSynthesis.speak(utter);
-  }
-
-  document.getElementById("readAloudBtn").addEventListener("click", () => {
+  document.getElementById("readBtn").onclick = () => {
     if (!current) return;
-    speak(current.text + " " + current.q);
-  });
+    speak(`${current.passage} سؤال: ${current.q}`);
+  };
+  document.getElementById("newBtn").onclick = newStory;
+  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Score: 0"; };
 
-  document.getElementById("nextBtn").addEventListener("click", loadPassage);
-  document.getElementById("resetBtn").addEventListener("click", () => {
-    score = 0;
-    save();
-    updateStatus("Score: 0");
-    updateBadges();
-  });
-
-  loadPassage();
+  newStory();
 </script>
 
 </body>
