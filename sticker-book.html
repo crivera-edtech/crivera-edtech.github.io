@@ -5,7 +5,7 @@
   <title>Sticker Book | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
@@ -15,14 +15,37 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="phonics.html">Phonics</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="math.html">Math</a></li>
-        <li><a href="games.html">Character Games</a></li>
-        <li><a href="resources.html">Kids Resources</a></li>
-        <li><a href="letter-formation.html">Letter Tracing</a></li>
-        <li><a href="sticker-book.html">Sticker Book</a></li>
-        <li><a href="progress.html">My Progress</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -30,11 +53,12 @@
 
 <section class="hero">
   <div class="container">
-    <h1>📖 Sticker Book</h1>
-    <p>Every time you finish tracing, you earn a sticker! Collect them all! 🌈</p>
-    <div class="game-row" style="justify-content:center;">
-      <a class="btn" href="letter-formation.html">Earn More Stickers</a>
-      <button class="btn secondary" id="readBtn">🔊 Read Page</button>
+    <h1>Sticker Book 📖</h1>
+    <p>Trace letters and numbers to earn stickers ⭐</p>
+    <div class="quick-strip">
+      <a class="btn" href="resources.html#tracing">Earn Stickers</a>
+      <a class="btn secondary" href="progress.html">My Progress</a>
+      <button class="btn secondary" id="readBtn">🔊 Read</button>
     </div>
   </div>
 </section>
@@ -44,27 +68,26 @@
     <h2 class="section-title">My Stickers ⭐</h2>
 
     <div class="game-box wide">
-      <div class="sticker-stats">
+      <div class="badge-row">
         <span class="badge" id="countBadge">🎁 Stickers: 0</span>
         <span class="badge" id="uniqueBadge">🌟 Unique: 0</span>
       </div>
 
-      <div id="emptyState" class="empty-state">
-        <div class="empty-emoji">🧸</div>
-        <div class="kid-big">No stickers yet!</div>
-        <p class="small">Go trace a letter to earn your first sticker.</p>
-        <a class="btn" href="letter-formation.html">Start Tracing</a>
+      <div id="emptyBox" class="game-box" style="margin-top:14px; display:none;">
+        <p class="kid-big">No stickers yet 🧸</p>
+        <p class="small">Go trace a letter to earn your first sticker!</p>
+        <div class="quick-strip">
+          <a class="btn" href="resources.html#tracing">Start Tracing</a>
+        </div>
       </div>
 
-      <div id="stickerGrid" class="sticker-grid" aria-live="polite"></div>
+      <div id="grid" class="sticker-grid"></div>
 
-      <div class="game-row" style="margin-top:16px;">
+      <div class="quick-strip" style="margin-top:14px;">
         <button class="btn secondary" id="clearBtn">Reset Sticker Book</button>
       </div>
 
-      <p class="small" style="margin-top:10px;">
-        This Sticker Book is saved on this device (browser storage). If you clear browser data, stickers may reset.
-      </p>
+      <p class="small" style="margin-top:10px;">Saved on this device (browser storage).</p>
     </div>
   </div>
 </section>
@@ -74,78 +97,59 @@
 <script>
   const STICKER_KEY = "bloom_sticker_book";
 
-  function loadStickers(){
-    try {
-      return JSON.parse(localStorage.getItem(STICKER_KEY) || "[]");
-    } catch {
-      return [];
-    }
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STICKER_KEY) || "[]"); }
+    catch { return []; }
   }
-
-  function saveStickers(list){
+  function save(list){
     localStorage.setItem(STICKER_KEY, JSON.stringify(list));
   }
-
   function speak(text){
     if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
+    speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1; u.pitch = 1.05;
-    window.speechSynthesis.speak(u);
+    u.rate = 1;
+    speechSynthesis.speak(u);
   }
 
   function render(){
-    const stickers = loadStickers();
-    const grid = document.getElementById("stickerGrid");
-    const empty = document.getElementById("emptyState");
+    const stickers = load();
+    document.getElementById("countBadge").textContent = `🎁 Stickers: ${stickers.length}`;
+    document.getElementById("uniqueBadge").textContent = `🌟 Unique: ${new Set(stickers.map(s=>s.emoji)).size}`;
 
-    const countBadge = document.getElementById("countBadge");
-    const uniqueBadge = document.getElementById("uniqueBadge");
-
-    countBadge.textContent = `🎁 Stickers: ${stickers.length}`;
-    const unique = new Set(stickers.map(s => s.emoji)).size;
-    uniqueBadge.textContent = `🌟 Unique: ${unique}`;
+    const empty = document.getElementById("emptyBox");
+    const grid = document.getElementById("grid");
 
     if (stickers.length === 0){
       empty.style.display = "block";
-      grid.style.display = "none";
       grid.innerHTML = "";
       return;
     }
-
     empty.style.display = "none";
-    grid.style.display = "grid";
 
-    // newest first
-    const reversed = stickers.slice().reverse();
-
-    grid.innerHTML = reversed.map((s) => {
-      const date = new Date(s.time).toLocaleString();
+    grid.innerHTML = stickers.slice().reverse().map(s => {
+      const d = new Date(s.time).toLocaleString();
       return `
         <div class="sticker-card">
           <div class="sticker-big">${s.emoji}</div>
-          <div class="sticker-label"><strong>${s.item}</strong></div>
-          <div class="small">⭐ ${s.perfect ? "Perfect Trace" : "Great Trace"}</div>
-          <div class="small">${date}</div>
+          <div class="sticker-label">${s.item}</div>
+          <div class="small">${s.perfect ? "Perfect Trace ⭐" : "Great Trace 👍"}</div>
+          <div class="small">${d}</div>
         </div>
       `;
     }).join("");
   }
 
   document.getElementById("clearBtn").onclick = () => {
-    if (confirm("Reset the Sticker Book? This removes all stickers.")){
-      saveStickers([]);
-      render();
-    }
+    if (!confirm("Reset Sticker Book?")) return;
+    save([]);
+    render();
   };
 
   document.getElementById("readBtn").onclick = () => {
-    const stickers = loadStickers();
-    if (stickers.length === 0) {
-      speak("Sticker book. No stickers yet. Go trace a letter to earn your first sticker!");
-    } else {
-      speak(`Sticker book. You have ${stickers.length} stickers.`);
-    }
+    const stickers = load();
+    if (stickers.length === 0) speak("Sticker book. No stickers yet. Trace a letter to earn one!");
+    else speak(`Sticker book. You have ${stickers.length} stickers. Great job!`);
   };
 
   render();
