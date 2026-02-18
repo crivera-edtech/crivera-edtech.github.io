@@ -17,6 +17,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="progress.html">My Progress</a></li>
         <li><a href="games.html">Character Games</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -25,7 +26,7 @@
 <section class="hero">
   <div class="container">
     <h1>👋 Student Login</h1>
-    <p>Pick your character and enter your 4-digit PIN.</p>
+    <p>Pick your buddy and type your 4-number PIN.</p>
   </div>
 </section>
 
@@ -46,15 +47,13 @@
 
       <div class="status" id="status"></div>
       <p class="small" style="margin-top:10px;">
-        This is a pretend login. It saves your character + PIN on this device only.
+        This is a pretend login. It saves your character on this device only.
       </p>
     </div>
   </div>
 </section>
 
-<footer>
-  © 2026 BloomELearning ✨ | Made with 💖
-</footer>
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
   const characters = [
@@ -90,20 +89,20 @@
     });
   }
 
-  function getCharById(id) {
-    return characters.find(c => c.id === id) || characters[0];
+  function getCharName(id){
+    const c = characters.find(x => x.id === id);
+    return c ? c.name : "Buddy";
   }
 
   document.getElementById("loginBtn").addEventListener("click", () => {
     const pin = pinEl.value.trim();
     if (!/^\d{4}$/.test(pin)) {
-      statusEl.textContent = "❌ Please enter a 4-digit PIN (numbers only).";
+      statusEl.textContent = "❌ Please enter a 4-digit PIN.";
       return;
     }
     localStorage.setItem("bloom_student_pin", pin);
     localStorage.setItem("bloom_student_logged_in", "true");
-    const c = getCharById(selected);
-    statusEl.textContent = `🎉 Welcome, ${c.name}! Go to “My Progress”.`;
+    statusEl.textContent = `🎉 Welcome, ${getCharName(selected)}!`;
   });
 
   document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -112,9 +111,8 @@
   });
 
   renderCharacters();
-  const c = getCharById(selected);
   const logged = localStorage.getItem("bloom_student_logged_in") === "true";
-  statusEl.textContent = logged ? `✅ You’re logged in as ${c.name}.` : `Pick a buddy to begin!`;
+  statusEl.textContent = logged ? `✅ You’re logged in as ${getCharName(selected)}.` : "Pick a buddy to begin!";
 </script>
 
 </body>
