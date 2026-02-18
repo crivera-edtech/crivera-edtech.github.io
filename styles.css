@@ -8,7 +8,6 @@ html { scroll-behavior: smooth; }
   --muted: rgba(47,58,47,.78); /* softer text */
   --bg: #f6fbf6;               /* page background */
   --panel: #ffffff;            /* card/panel */
-  --soft: #eef7ee;             /* light green tint */
   --accent: #3a8f6b;           /* leafy green */
   --accent2: #6aaed6;          /* sky blue */
   --accent3: #f0c36a;          /* sunshine */
@@ -187,6 +186,7 @@ nav a:hover{
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 14px;
+  align-items: center;
 }
 
 /* Choice pills */
@@ -318,6 +318,32 @@ nav a:hover{
 
 .kid-big{
   font-size: 22px;
+  font-weight: 900;
+}
+
+/* Table (Parent Resources) */
+.table-wrap{
+  overflow-x: auto;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+th, td{
+  text-align: left;
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(58,143,107,0.12);
+  vertical-align: top;
+}
+
+th{
+  background: rgba(106,174,214,0.14);
   font-weight: 900;
 }
 
