@@ -17,7 +17,6 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="games.html">Character Games</a></li>
         <li><a href="progress.html">My Progress</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -26,7 +25,7 @@
 <section class="hero">
   <div class="container">
     <h1>🦄 Unicorn Word Builder</h1>
-    <p>Drag the letters into the boxes to build the word!</p>
+    <p>Drag the letters into the boxes to build the word! (+Reading points)</p>
   </div>
 </section>
 
@@ -40,7 +39,7 @@
       <div class="game-row" style="margin-top:12px;">
         <button class="btn secondary" id="readBtn">🔊 Read</button>
         <button class="btn secondary" id="newBtn">New Word</button>
-        <button class="btn secondary" id="resetBtn">Reset Score</button>
+        <button class="btn secondary" id="resetBtn">Reset Reading Score</button>
       </div>
 
       <div style="margin-top:16px; font-weight:900;">Drag letters here:</div>
@@ -58,8 +57,7 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  // Saves score here:
-  const SCORE_KEY = "bloom_unicorn_score";
+  const SCORE_KEY = "bloom_reading_score";
 
   const words = [
     { word: "CAT", hint: "A pet that says meow" },
@@ -90,7 +88,7 @@
 
   function shuffle(arr){ return arr.slice().sort(() => Math.random() - 0.5); }
   function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
-  function showScore(){ scoreLineEl.textContent = `Score: ${score} (saved)`; }
+  function showScore(){ scoreLineEl.textContent = `Reading Score: ${score} (saved)`; }
 
   function buildSlots(len){
     slotsEl.innerHTML = "";
@@ -101,9 +99,7 @@
       slot.style.textAlign = "center";
       slot.style.fontSize = "22px";
       slot.style.userSelect = "none";
-      slot.dataset.slotIndex = String(i);
       slot.dataset.letter = "";
-
       slot.textContent = "⬜";
 
       slot.addEventListener("dragover", (e) => e.preventDefault());
@@ -112,14 +108,11 @@
         const letterId = e.dataTransfer.getData("text/plain");
         const letterBtn = document.getElementById(letterId);
         if (!letterBtn) return;
-
-        // If this slot already has a letter, do nothing
         if (slot.dataset.letter) return;
 
         slot.dataset.letter = letterBtn.dataset.letter;
         slot.textContent = letterBtn.dataset.letter;
 
-        // disable dragged letter
         letterBtn.disabled = true;
         letterBtn.style.opacity = "0.5";
 
@@ -150,8 +143,7 @@
   }
 
   function getBuiltWord(){
-    const slots = Array.from(slotsEl.children);
-    return slots.map(s => s.dataset.letter || "").join("");
+    return Array.from(slotsEl.children).map(s => s.dataset.letter || "").join("");
   }
 
   function checkAnswer(){
@@ -161,7 +153,7 @@
     if (built === current.word) {
       score++;
       save();
-      statusEl.textContent = `✅ Nice! You built "${current.word}"! +1 point 🌟`;
+      statusEl.textContent = `✅ Nice! You built "${current.word}"! +1 Reading point 🌟`;
       showScore();
       setTimeout(newRound, 800);
     } else {
@@ -180,7 +172,7 @@
 
   document.getElementById("readBtn").onclick = () => {
     if (!current) return;
-    speak(`Unicorn Word Builder. Hint: ${current.hint}. Build the word with ${current.word.length} letters.`);
+    speak(`Hint: ${current.hint}. Build the word with ${current.word.length} letters.`);
   };
 
   document.getElementById("newBtn").onclick = newRound;
@@ -188,7 +180,7 @@
   document.getElementById("resetBtn").onclick = () => {
     score = 0;
     save();
-    statusEl.textContent = "Score reset!";
+    statusEl.textContent = "Reading score reset!";
     showScore();
   };
 
