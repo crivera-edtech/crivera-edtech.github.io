@@ -15,13 +15,37 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="phonics.html">Phonics</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="math.html">Math</a></li>
-        <li><a href="resources.html">Kids Resources</a></li>
-        <li><a href="parent-resources.html">Parent Resources</a></li>
-        <li><a href="standards.html">Standards</a></li>
-        <li><a href="progress.html">My Progress</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -30,39 +54,40 @@
 <section class="hero">
   <div class="container">
     <h1>Parent Resources 🧑‍🏫🌿</h1>
-    <p>Quick, simple ideas to support learning at home. Tap a bubble to jump.</p>
+    <p>Simple ways to support learning at home (K–2).</p>
 
     <div class="bubbles">
-      <a class="bubble" href="standards.html"><span class="emoji">📘</span><span class="text">Common Core</span></a>
-      <a class="bubble" href="#routine"><span class="emoji">🗓️</span><span class="text">Daily Routine</span></a>
+      <a class="bubble" href="standards.html"><span class="emoji">📘</span><span class="text">Standards</span></a>
+      <a class="bubble" href="#routine"><span class="emoji">🗓️</span><span class="text">Routine</span></a>
       <a class="bubble" href="#phonics"><span class="emoji">🔤</span><span class="text">Phonics Tips</span></a>
       <a class="bubble" href="#math"><span class="emoji">➕</span><span class="text">Math Tips</span></a>
     </div>
-
-    <div class="hero-note">Want the official skill list? Open <strong>Standards</strong>.</div>
   </div>
 </section>
 
 <section id="routine" class="section">
   <div class="container">
-    <h2 class="section-title">A Simple Daily Routine ⏱️</h2>
+    <h2 class="section-title">A Quick Daily Routine ⏱️</h2>
     <div class="game-box wide">
       <div class="grid-3">
         <div class="card">
-          <h3>5 min — Warm Up</h3>
-          <p>Letter sounds (2–3 letters) or count by 1s/2s/5s.</p>
-          <a class="btn secondary" href="phonics.html">Go to Phonics</a>
+          <h3>5 minutes</h3>
+          <p>Letter sounds or quick counting.</p>
         </div>
         <div class="card">
-          <h3>10 min — Skill Practice</h3>
-          <p>Reading a short passage or a math mini game.</p>
-          <a class="btn secondary" href="reading.html">Go to Reading</a>
+          <h3>10 minutes</h3>
+          <p>Reading or math mini game.</p>
         </div>
         <div class="card">
-          <h3>5 min — Handwriting</h3>
-          <p>Trace 1–2 letters or numbers. Earn a sticker after!</p>
-          <a class="btn secondary" href="resources.html#tracing">Go to Tracing</a>
+          <h3>5 minutes</h3>
+          <p>Tracing a letter or number (earn stickers!).</p>
         </div>
+      </div>
+
+      <div class="quick-strip">
+        <a class="btn secondary" href="resources.html#tracing">Tracing</a>
+        <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
+        <a class="btn secondary" href="standards.html">Standards</a>
       </div>
     </div>
   </div>
@@ -72,17 +97,15 @@
   <div class="container">
     <h2 class="section-title">Phonics Tips 🔤</h2>
     <div class="game-box">
-      <p class="kid-big">Easy support at home:</p>
-      <ul style="margin-top:10px; padding-left: 20px; line-height: 1.65;">
-        <li><strong>Say the sound</strong> (not the letter name): “/m/” not “em.”</li>
-        <li>Pick <strong>3 letters a week</strong> and review daily.</li>
+      <ul style="padding-left: 18px; line-height: 1.7;">
+        <li>Say the <strong>sound</strong>, not the letter name (“/m/”, not “em”).</li>
+        <li>Practice 3 letters a week and review daily.</li>
         <li>Play “I Spy”: “I spy something that starts with /s/.”</li>
         <li>Blend slowly: “/c/…/a/…/t/ → cat.”</li>
       </ul>
-
       <div class="quick-strip">
-        <a class="btn" href="phonics.html">Open Phonics</a>
-        <a class="btn secondary" href="resources.html#videos">Phonics Videos</a>
+        <a class="btn" href="phonics.html">Open Phonics Game</a>
+        <a class="btn secondary" href="resources.html#videos">Videos</a>
       </div>
     </div>
   </div>
@@ -92,16 +115,14 @@
   <div class="container">
     <h2 class="section-title">Math Tips ➕</h2>
     <div class="game-box">
-      <p class="kid-big">Everyday math ideas:</p>
-      <ul style="margin-top:10px; padding-left: 20px; line-height: 1.65;">
-        <li>Count snacks: “How many grapes? If we eat 2, how many left?”</li>
-        <li>Number talks: “How do you know 8 + 7?”</li>
-        <li>Use a number line for + / − within 20.</li>
-        <li>Practice “make 10”: 6 + 4, 7 + 3, 8 + 2.</li>
+      <ul style="padding-left: 18px; line-height: 1.7;">
+        <li>Count snacks: “If we eat 2, how many left?”</li>
+        <li>Use number lines for + and − within 20.</li>
+        <li>Practice “make 10”: 6+4, 7+3, 8+2.</li>
+        <li>Ask “How did you know?” to build math thinking.</li>
       </ul>
-
       <div class="quick-strip">
-        <a class="btn" href="math.html">Open Math</a>
+        <a class="btn" href="math.html">Open Math Game</a>
         <a class="btn secondary" href="standards.html#math">Math Standards</a>
       </div>
     </div>
