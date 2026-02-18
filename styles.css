@@ -92,11 +92,12 @@ nav a:hover {
   margin-bottom: 26px;
 }
 
-/* Grids / Cards */
+/* Cards + Grid */
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  /* This makes 4 cards look great: 2 columns on desktop */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .card {
@@ -115,7 +116,10 @@ nav a:hover {
   font-size: 22px;
 }
 
-.card p { line-height: 1.5; margin-bottom: 14px; }
+.card p {
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
 
 /* Buttons */
 .btn {
@@ -140,7 +144,7 @@ nav a:hover {
   box-shadow: none;
 }
 
-/* Game UI */
+/* Game containers */
 .game-box {
   background: #fff7f9;
   border-radius: 28px;
@@ -170,7 +174,7 @@ nav a:hover {
 
 .status {
   margin-top: 14px;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .small {
@@ -178,22 +182,7 @@ nav a:hover {
   font-size: 14px;
 }
 
-/* Footer */
-footer {
-  margin-top: 40px;
-  padding: 22px 0;
-  text-align: center;
-  color: #fff;
-  background: linear-gradient(135deg, #b76e79, #e6b8a2);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .grid-3 { grid-template-columns: 1fr; }
-}
-
-/* --- Extras: Grade selector + Badges + Read Aloud button --- */
-
+/* Grade selector + badges + read button */
 .grade-row {
   display: flex;
   gap: 10px;
@@ -206,9 +195,11 @@ footer {
   border-radius: 999px;
   border: 2px solid rgba(183,110,121,0.25);
   background: #fff;
-  font-weight: 800;
+  font-weight: 900;
   cursor: pointer;
 }
+
+.select:hover { background: rgba(247, 213, 215, 0.35); }
 
 .badge-row {
   display: flex;
@@ -223,9 +214,23 @@ footer {
   border: 2px dashed rgba(183,110,121,0.35);
   padding: 8px 12px;
   border-radius: 999px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .read-btn {
   margin-top: 12px;
+}
+
+/* Footer */
+footer {
+  margin-top: 40px;
+  padding: 22px 0;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, #b76e79, #e6b8a2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid-3 { grid-template-columns: 1fr; }
 }
