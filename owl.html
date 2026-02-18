@@ -17,7 +17,6 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="games.html">Character Games</a></li>
         <li><a href="progress.html">My Progress</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -26,7 +25,7 @@
 <section class="hero">
   <div class="container">
     <h1>🦉 Owl Sentence Fixer</h1>
-    <p>Pick the best sentence. Owl helps you read carefully!</p>
+    <p>Pick the best sentence! (+Reading points)</p>
   </div>
 </section>
 
@@ -40,7 +39,7 @@
       <div class="game-row">
         <button class="btn secondary" id="readBtn">🔊 Read</button>
         <button class="btn secondary" id="newBtn">New</button>
-        <button class="btn secondary" id="resetBtn">Reset Score</button>
+        <button class="btn secondary" id="resetBtn">Reset Reading Score</button>
       </div>
 
       <div class="game-row" id="choices" style="margin-top:10px;"></div>
@@ -54,43 +53,27 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const SCORE_KEY = "bloom_owl_score";
+  const SCORE_KEY = "bloom_reading_score";
 
   const items = [
     {
       task: "Pick the sentence that is correct:",
-      options: [
-        "i like to read books.",
-        "I like to read books.",
-        "I like to read books"
-      ],
+      options: ["i like to read books.", "I like to read books.", "I like to read books"],
       correct: 1
     },
     {
       task: "Pick the sentence with correct punctuation:",
-      options: [
-        "Where is my hat",
-        "Where is my hat!",
-        "Where is my hat?"
-      ],
+      options: ["Where is my hat", "Where is my hat!", "Where is my hat?"],
       correct: 2
     },
     {
       task: "Pick the best sentence:",
-      options: [
-        "We goed to the park.",
-        "We went to the park.",
-        "We go to the park yesterday."
-      ],
+      options: ["We goed to the park.", "We went to the park.", "We go to the park yesterday."],
       correct: 1
     },
     {
       task: "Pick the sentence that makes sense:",
-      options: [
-        "The dog barked because it heard the bell.",
-        "The dog barked because it ate the sky.",
-        "The dog barked because it was a chair."
-      ],
+      options: ["The dog barked because it heard the bell.", "The dog barked because it ate the sky.", "The dog barked because it was a chair."],
       correct: 0
     }
   ];
@@ -104,7 +87,7 @@
   const scoreLineEl = document.getElementById("scoreLine");
 
   function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
-  function showScore(){ scoreLineEl.textContent = `Score: ${score} (saved)`; }
+  function showScore(){ scoreLineEl.textContent = `Reading Score: ${score} (saved)`; }
 
   function speak(text){
     if (!("speechSynthesis" in window)) return;
@@ -128,7 +111,7 @@
         if (idx === current.correct) {
           score++;
           save();
-          statusEl.textContent = "✅ Correct! +1 point 🌟";
+          statusEl.textContent = "✅ Correct! +1 Reading point 🌟";
           showScore();
           setTimeout(newRound, 700);
         } else {
@@ -143,11 +126,11 @@
 
   document.getElementById("readBtn").onclick = () => {
     if (!current) return;
-    speak(`${current.task} خيارات: ${current.options.join(". ")}`);
+    speak(`${current.task} Options: ${current.options.join(". ")}`);
   };
 
   document.getElementById("newBtn").onclick = newRound;
-  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Score reset!"; showScore(); };
+  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Reading score reset!"; showScore(); };
 
   newRound();
 </script>
