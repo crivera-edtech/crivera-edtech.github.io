@@ -1,4 +1,4 @@
-/* BloomELearning — Bubbly, Kid-Friendly, Natural Colors */
+/* BloomELearning — Bubbly, Kid-Friendly, Natural Colors + Dropdown Nav */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -41,7 +41,7 @@ header{
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 30;
 }
 
 header .container{
@@ -57,9 +57,6 @@ header .container{
   font-size: 28px;
   font-weight: 900;
   letter-spacing: .2px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 /* Nav */
@@ -68,6 +65,7 @@ nav ul{
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 nav a{
@@ -77,10 +75,46 @@ nav a{
   padding: 8px 12px;
   border-radius: 999px;
   transition: .2s ease;
+  display: inline-block;
 }
 
 nav a:hover{
   background: rgba(255,255,255,0.22);
+}
+
+/* Dropdown */
+.dropdown{ position: relative; }
+.dropdown > a::after{ content: " ▾"; font-weight: 900; }
+
+.dropdown-menu{
+  display: none;
+  position: absolute;
+  top: 44px;
+  right: 0;
+  min-width: 230px;
+  background: #ffffff;
+  border: 2px solid rgba(58,143,107,0.18);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+  padding: 10px;
+  z-index: 999;
+}
+
+.dropdown-menu a{
+  display: block;
+  color: var(--ink);
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-weight: 900;
+}
+
+.dropdown-menu a:hover{
+  background: rgba(106,174,214,0.18);
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown:focus-within .dropdown-menu{
+  display: block;
 }
 
 /* Hero */
@@ -107,6 +141,12 @@ nav a:hover{
   color: var(--muted);
 }
 
+.hero-note{
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
 /* Sections */
 .section{ padding: 55px 0; }
 .section-title{
@@ -115,7 +155,7 @@ nav a:hover{
   margin-bottom: 22px;
 }
 
-/* Bubbly buttons */
+/* Buttons */
 .btn{
   display: inline-block;
   background: linear-gradient(135deg, var(--leaf), #2c7d5d);
@@ -141,7 +181,7 @@ nav a:hover{
 
 .btn.secondary:hover{ background: rgba(106,174,214,0.16); }
 
-/* NEW: Big bubble options (kid-friendly) */
+/* Bubbles on homepage */
 .bubbles{
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -184,21 +224,8 @@ nav a:hover{
   border-color: rgba(58,143,107,0.42);
 }
 
-.bubble .emoji{
-  font-size: 22px;
-  position: relative;
-}
-
-.bubble .text{
-  position: relative;
-}
-
-/* Mini helper line under bubbles */
-.hero-note{
-  margin-top: 12px;
-  font-size: 14px;
-  color: var(--muted);
-}
+.bubble .emoji{ font-size: 22px; position: relative; }
+.bubble .text{ position: relative; }
 
 /* Panels */
 .game-box{
@@ -213,7 +240,15 @@ nav a:hover{
 
 .game-box.wide{ max-width: 1100px; }
 
-/* Grid of cards */
+.quick-strip{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top: 14px;
+}
+
+/* Grid */
 .grid-3{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -259,17 +294,110 @@ nav a:hover{
   font-size: 15px;
 }
 
-/* Small text helpers */
 .kid-big{ font-size: 22px; font-weight: 900; }
 .small{ font-size: 14px; opacity: .85; }
 
-/* Simple “quick nav strip” */
-.quick-strip{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:center;
+.game-row{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-top: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inputs */
+.input{
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  font-family: "Baloo 2", cursive;
+  font-size: 18px;
+  outline: none;
+}
+
+.input:focus{
+  border-color: rgba(58,143,107,0.45);
+  box-shadow: 0 0 0 4px rgba(58,143,107,0.10);
+}
+
+/* Pills */
+.pill{
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  transition: .15s ease;
+}
+
+.pill:hover{ background: rgba(106,174,214,0.16); }
+
+.pill.active{
+  background: rgba(58,143,107,0.14);
+  border-color: rgba(58,143,107,0.55);
+}
+
+/* Video embeds */
+.video{
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 18px;
+  margin-top: 10px;
+}
+
+/* Sticker Book */
+.sticker-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.sticker-card{
+  background: #fff;
+  border-radius: 22px;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow2);
+  padding: 14px;
+  text-align: center;
+}
+
+.sticker-big{ font-size: 56px; margin-bottom: 6px; }
+.sticker-label{ font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+
+.badge-row{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 10px 0 6px;
+}
+
+.badge{
+  background: rgba(240,195,106,0.20);
+  border: 2px dashed rgba(240,195,106,0.65);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+/* Canvas */
+.canvas-wrap{
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+}
+
+canvas{
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
 }
 
 /* Footer */
@@ -284,71 +412,23 @@ footer{
 /* Responsive */
 @media (max-width: 980px){
   .bubbles{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sticker-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 900px){
   header .container{ flex-direction: column; gap: 10px; }
   .grid-3{ grid-template-columns: 1fr; }
-}
 
-/* ---------- Dropdown Menu (Bubbly + Kid Friendly) ---------- */
-
-nav ul { align-items: center; }
-
-.dropdown {
-  position: relative;
-}
-
-.dropdown > a::after {
-  content: " ▾";
-  font-weight: 900;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 44px;
-  right: 0;
-  min-width: 210px;
-  background: #ffffff;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-radius: 18px;
-  box-shadow: 0 14px 30px rgba(0,0,0,0.18);
-  padding: 10px;
-  z-index: 999;
-}
-
-.dropdown-menu a {
-  display: block;
-  color: #233025;
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-weight: 900;
-  text-decoration: none;
-}
-
-.dropdown-menu a:hover {
-  background: rgba(106,174,214,0.18);
-}
-
-.dropdown:hover .dropdown-menu,
-.dropdown:focus-within .dropdown-menu {
-  display: block;
-}
-
-/* Mobile-friendly: dropdown becomes inline */
-@media (max-width: 900px) {
-  .dropdown-menu {
+  /* dropdown becomes inline on mobile */
+  .dropdown-menu{
     position: static;
     display: none;
     min-width: unset;
     margin-top: 8px;
     box-shadow: none;
-    border: 2px solid rgba(58,143,107,0.18);
   }
-
   .dropdown:hover .dropdown-menu,
-  .dropdown:focus-within .dropdown-menu {
+  .dropdown:focus-within .dropdown-menu{
     display: block;
   }
 }
