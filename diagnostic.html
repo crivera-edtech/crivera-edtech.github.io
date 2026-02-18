@@ -27,7 +27,7 @@
 <section class="hero">
   <div class="container">
     <h1>🧠 Diagnostic Test</h1>
-    <p>For 2nd grade and older. Quick check of Word Skills, Reading, and Math.</p>
+    <p>For 2nd grade and older. Quick skill check with recommendations.</p>
   </div>
 </section>
 
@@ -36,32 +36,29 @@
     <h2 class="section-title">Start Diagnostic</h2>
 
     <div class="game-box">
+
       <div style="font-weight:900;">Choose level:</div>
       <div class="grade-row">
         <button class="select" data-level="2-3">2nd–3rd Grade</button>
         <button class="select" data-level="4plus">4th Grade+</button>
       </div>
 
-      <div id="intro" style="margin-top:14px; line-height:1.6;">
-        Click a level to load the test. Then answer all questions and click <strong>Submit</strong>.
-      </div>
+      <div id="quiz" style="margin-top:20px;"></div>
 
-      <div class="game-row" style="margin-top:14px;">
-        <button class="btn secondary" id="readAloudBtn" disabled>🔊 Read Aloud (Current Question)</button>
+      <div class="game-row">
+        <button class="btn secondary" id="readAloudBtn" disabled>🔊 Read Question</button>
         <button class="btn secondary" id="prevBtn" disabled>⬅ Prev</button>
         <button class="btn secondary" id="nextBtn" disabled>Next ➡</button>
       </div>
 
-      <div id="quiz" style="margin-top:18px;"></div>
-
-      <div class="game-row" style="margin-top:16px;">
+      <div class="game-row">
         <button class="btn" id="submitBtn" disabled>Submit Diagnostic</button>
         <button class="btn secondary" id="resetBtn" disabled>Reset</button>
         <a class="btn secondary" href="index.html">Back Home</a>
       </div>
 
-      <div id="results" style="margin-top:16px;"></div>
-      <div class="small" style="margin-top:10px;">Tip: Scores save in this browser only.</div>
+      <div id="results" style="margin-top:20px;"></div>
+
     </div>
   </div>
 </section>
@@ -71,251 +68,174 @@
 </footer>
 
 <script>
-  // ---------- Question Banks ----------
-  // Each question: { domain, q, options[], correctIndex, readAloud? }
-  const bank_2_3 = [
-    // Word Skills (phonics/spelling patterns)
-    { domain:"Word Skills", q:"Which word has a long A sound?", options:["rain", "ran", "ring"], correctIndex:0 },
-    { domain:"Word Skills", q:"Which word has the /ch/ sound?", options:["ship", "chin", "thin"], correctIndex:1 },
-    { domain:"Word Skills", q:"Which word has an r-controlled vowel?", options:["car", "cake", "cap"], correctIndex:0 },
-    { domain:"Word Skills", q:"Which word has a vowel team (two vowels together)?", options:["boat", "bat", "bit"], correctIndex:0 },
+/* ---------------- Question Banks ---------------- */
 
-    // Reading (short comprehension)
-    { domain:"Reading", q:"Read: 'Sam packed a lunch because he was going on a field trip.' Why did Sam pack a lunch?", options:["He was going on a field trip", "He was cooking dinner", "He was going to bed"], correctIndex:0 },
-    { domain:"Reading", q:"Read: 'The dog ran to the door when it heard the bell.' What made the dog run to the door?", options:["A bell", "A cat", "A sandwich"], correctIndex:0 },
-    { domain:"Reading", q:"Read: 'Maya wore a coat and mittens outside.' What is the weather probably like?", options:["Cold", "Hot", "Windless and warm"], correctIndex:0 },
-    { domain:"Reading", q:"Read: 'Leo practiced every day. Soon, he could ride his bike without training wheels.' What helped Leo learn?", options:["Practice", "Luck only", "A new helmet"], correctIndex:0 },
+const bank_2_3 = [
+  { domain:"Word Skills", q:"Which word has a long A sound?", options:["rain","ran","ring"], correct:0 },
+  { domain:"Word Skills", q:"Which word has an r-controlled vowel?", options:["car","cake","cap"], correct:0 },
+  { domain:"Reading", q:"Read: 'Sam packed a lunch for a field trip.' Why did Sam pack lunch?", options:["Field trip","Bedtime","Dinner party"], correct:0 },
+  { domain:"Reading", q:"Read: 'The dog ran to the door when it heard the bell.' What made it run?", options:["A bell","A cat","A sandwich"], correct:0 },
+  { domain:"Math", q:"47 + 18 = ?", options:["65","55","75"], correct:0 },
+  { domain:"Math", q:"56 - 29 = ?", options:["27","37","25"], correct:0 }
+];
 
-    // Math
-    { domain:"Math", q:"What is 47 + 18?", options:["65", "55", "75"], correctIndex:0 },
-    { domain:"Math", q:"What number is shown by 3 tens and 4 ones?", options:["34", "43", "304"], correctIndex:0 },
-    { domain:"Math", q:"What is 56 - 29?", options:["27", "37", "25"], correctIndex:0 },
-    { domain:"Math", q:"Which is an even number?", options:["15", "18", "21"], correctIndex:1 },
-  ];
+const bank_4plus = [
+  { domain:"Word Skills", q:"Which word has a prefix meaning 'again'?", options:["redo","happy","played"], correct:0 },
+  { domain:"Word Skills", q:"Which word contains a silent letter?", options:["knight","kite","kit"], correct:0 },
+  { domain:"Reading", q:"Read: 'Ella forgot her homework, so she wrote it in her planner.' What lesson did she learn?", options:["Use a planner","Skip homework","Lose papers"], correct:0 },
+  { domain:"Reading", q:"Read: 'Tom trained for weeks and improved.' What caused improvement?", options:["Training","A hat","Skipping practice"], correct:0 },
+  { domain:"Math", q:"326 + 187 = ?", options:["513","413","503"], correct:0 },
+  { domain:"Math", q:"72 ÷ 8 = ?", options:["9","8","7"], correct:0 }
+];
 
-  const bank_4plus = [
-    // Word Skills
-    { domain:"Word Skills", q:"Which word has a prefix that means 'again'?", options:["redo", "playful", "happiest"], correctIndex:0 },
-    { domain:"Word Skills", q:"Which word is a contraction?", options:["cannot", "can't", "cannotting"], correctIndex:1 },
-    { domain:"Word Skills", q:"Which word has the /tion/ ending sound?", options:["station", "staying", "staple"], correctIndex:0 },
-    { domain:"Word Skills", q:"Which word has a silent letter?", options:["knight", "kite", "kit"], correctIndex:0 },
+/* ---------------- State ---------------- */
 
-    // Reading
-    { domain:"Reading", q:"Read: 'The author describes the desert as dry and wide.' What detail supports the setting?", options:["Dry and wide", "A happy dog", "A loud piano"], correctIndex:0 },
-    { domain:"Reading", q:"Read: 'Ella forgot her homework, so she wrote it down in her planner.' What lesson does Ella learn?", options:["Use a planner to remember", "Never do homework", "Lose your planner"], correctIndex:0 },
-    { domain:"Reading", q:"Read: 'The main character felt nervous before the speech.' What does nervous mean?", options:["Worried", "Sleepy", "Hungry"], correctIndex:0 },
-    { domain:"Reading", q:"Read: 'Tom trained for weeks and improved his time.' What is the cause of improvement?", options:["Training for weeks", "A new hat", "Skipping practice"], correctIndex:0 },
+let level = null;
+let questions = [];
+let currentIndex = 0;
+let answers = {};
 
-    // Math
-    { domain:"Math", q:"What is 326 + 187?", options:["513", "413", "503"], correctIndex:0 },
-    { domain:"Math", q:"What is 72 ÷ 8?", options:["9", "8", "7"], correctIndex:0 },
-    { domain:"Math", q:"Which fraction is equal to 1/2?", options:["2/4", "1/3", "3/8"], correctIndex:0 },
-    { domain:"Math", q:"Round 478 to the nearest ten.", options:["480", "470", "500"], correctIndex:0 },
-  ];
+/* ---------------- Elements ---------------- */
 
-  // ---------- State ----------
-  let level = null;
-  let questions = [];
-  let currentIndex = 0;
-  const answers = {}; // index -> selected option index
+const quizEl = document.getElementById("quiz");
+const resultsEl = document.getElementById("results");
+const readBtn = document.getElementById("readAloudBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const resetBtn = document.getElementById("resetBtn");
 
-  // ---------- Elements ----------
-  const quizEl = document.getElementById("quiz");
-  const resultsEl = document.getElementById("results");
-  const readBtn = document.getElementById("readAloudBtn");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const submitBtn = document.getElementById("submitBtn");
-  const resetBtn = document.getElementById("resetBtn");
+/* ---------------- Speech ---------------- */
 
-  // ---------- Speech ----------
-  function speak(text) {
-    if (!("speechSynthesis" in window)) {
-      alert("Sorry! Your browser does not support read aloud.");
-      return;
+function speak(text) {
+  if (!("speechSynthesis" in window)) {
+    alert("Your browser does not support read aloud.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 1;
+  window.speechSynthesis.speak(utter);
+}
+
+readBtn.addEventListener("click", () => {
+  if (!questions.length) return;
+  speak(questions[currentIndex].q);
+});
+
+/* ---------------- Rendering ---------------- */
+
+function renderQuestion() {
+  const q = questions[currentIndex];
+
+  quizEl.innerHTML = `
+    <div style="font-weight:900; margin-bottom:10px;">
+      ${q.domain} • Question ${currentIndex+1} of ${questions.length}
+    </div>
+    <div style="font-size:20px; font-weight:900; margin-bottom:14px;">
+      ${q.q}
+    </div>
+    <div class="game-row" id="optionsRow"></div>
+  `;
+
+  const optionsRow = document.getElementById("optionsRow");
+
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "pill";
+    btn.textContent = opt;
+
+    if (answers[currentIndex] === idx) {
+      btn.style.background = "rgba(247,213,215,0.4)";
     }
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 1.0;
-    utter.pitch = 1.05;
-    window.speechSynthesis.speak(utter);
-  }
 
-  readBtn.addEventListener("click", () => {
-    if (!questions.length) return;
-    const q = questions[currentIndex];
-    const readable = `${q.domain}. Question ${currentIndex + 1}. ${q.q}`;
-    speak(readable);
-  });
-
-  // ---------- Render ----------
-  function renderQuestion() {
-    const q = questions[currentIndex];
-    resultsEl.innerHTML = "";
-
-    const selected = answers[currentIndex];
-
-    quizEl.innerHTML = `
-      <div style="font-weight:900; margin-bottom:8px;">
-        ${q.domain} • Question ${currentIndex + 1} of ${questions.length}
-      </div>
-
-      <div style="font-size:20px; font-weight:900; line-height:1.4;">
-        ${q.q}
-      </div>
-
-      <div class="game-row" style="margin-top:14px;" id="optionsRow"></div>
-
-      <div class="small" style="margin-top:10px;">
-        Answered: ${Object.keys(answers).length} / ${questions.length}
-      </div>
-    `;
-
-    const optionsRow = document.getElementById("optionsRow");
-    q.options.forEach((optText, optIdx) => {
-      const btn = document.createElement("button");
-      btn.className = "pill";
-      btn.textContent = optText;
-
-      // simple highlight if selected
-      if (selected === optIdx) {
-        btn.style.borderColor = "rgba(183,110,121,0.7)";
-        btn.style.background = "rgba(247, 213, 215, 0.45)";
-      }
-
-      btn.onclick = () => {
-        answers[currentIndex] = optIdx;
-        renderQuestion();
-        updateNavButtons();
-      };
-
-      optionsRow.appendChild(btn);
-    });
-
-    updateNavButtons();
-  }
-
-  function updateNavButtons() {
-    prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex === questions.length - 1;
-
-    // enable submit only if all answered
-    submitBtn.disabled = Object.keys(answers).length !== questions.length;
-  }
-
-  // ---------- Navigation ----------
-  prevBtn.addEventListener("click", () => {
-    if (currentIndex > 0) currentIndex--;
-    renderQuestion();
-  });
-
-  nextBtn.addEventListener("click", () => {
-    if (currentIndex < questions.length - 1) currentIndex++;
-    renderQuestion();
-  });
-
-  // ---------- Submit / Score ----------
-  function scoreTest() {
-    let correct = 0;
-    const domainTotals = {};
-    const domainCorrect = {};
-
-    questions.forEach((q, idx) => {
-      domainTotals[q.domain] = (domainTotals[q.domain] || 0) + 1;
-      domainCorrect[q.domain] = domainCorrect[q.domain] || 0;
-
-      if (answers[idx] === q.correctIndex) {
-        correct++;
-        domainCorrect[q.domain]++;
-      }
-    });
-
-    const percent = Math.round((correct / questions.length) * 100);
-
-    // Build recommendation text
-    const recs = [];
-    Object.keys(domainTotals).forEach(domain => {
-      const dPct = Math.round((domainCorrect[domain] / domainTotals[domain]) * 100);
-      if (dPct >= 80) recs.push(`✅ Strong in <strong>${domain}</strong> (${dPct}%)`);
-      else if (dPct >= 50) recs.push(`🟡 Growing in <strong>${domain}</strong> (${dPct}%)`);
-      else recs.push(`🌱 Needs support in <strong>${domain}</strong> (${dPct}%)`);
-    });
-
-    let overallMsg = "🌸 Great start!";
-    if (percent >= 85) overallMsg = "🏅 Awesome! You’re ready for more challenging work.";
-    else if (percent >= 60) overallMsg = "🌼 Nice! Let’s practice a few target skills.";
-    else overallMsg = "🌱 It’s okay! We’ll build skills step by step.";
-
-    // Save latest results
-    const payload = {
-      level,
-      correct,
-      total: questions.length,
-      percent,
-      domainTotals,
-      domainCorrect,
-      timestamp: new Date().toISOString()
+    btn.onclick = () => {
+      answers[currentIndex] = idx;
+      renderQuestion();
+      updateButtons();
     };
-    localStorage.setItem("bloom_diagnostic_latest", JSON.stringify(payload));
 
-    resultsEl.innerHTML = `
-      <div class="status" style="font-size:18px;">
-        ${overallMsg}<br>
-        <strong>Score:</strong> ${correct} / ${questions.length} (${percent}%)
-      </div>
-
-      <div class="badge-row" style="margin-top:12px;">
-        <div class="badge">🧠 Diagnostic Complete</div>
-        <div class="badge">${level === "2-3" ? "2nd–3rd" : "4th+"} Level</div>
-      </div>
-
-      <div style="margin-top:12px; line-height:1.6;">
-        <strong>Skill Summary:</strong><br>
-        ${recs.map(r => `• ${r}`).join("<br>")}
-      </div>
-
-      <div style="margin-top:12px;">
-        <strong>Next Steps:</strong><br>
-        • Practice <a href="phonics.html">Phonics</a> for Word Skills<br>
-        • Practice <a href="reading.html">Reading</a> for comprehension<br>
-        • Practice <a href="math.html">Math</a> for number skills
-      </div>
-    `;
-  }
-
-  submitBtn.addEventListener("click", scoreTest);
-
-  // ---------- Reset ----------
-  resetBtn.addEventListener("click", () => {
-    currentIndex = 0;
-    for (const k of Object.keys(answers)) delete answers[k];
-    resultsEl.innerHTML = "";
-    renderQuestion();
+    optionsRow.appendChild(btn);
   });
 
-  // ---------- Start ----------
-  function start(levelChoice) {
-    level = levelChoice;
-    questions = (level === "2-3") ? bank_2_3 : bank_4plus;
+  updateButtons();
+}
 
+function updateButtons() {
+  prevBtn.disabled = currentIndex === 0;
+  nextBtn.disabled = currentIndex === questions.length-1;
+  submitBtn.disabled = Object.keys(answers).length !== questions.length;
+}
+
+/* ---------------- Navigation ---------------- */
+
+prevBtn.onclick = () => {
+  if (currentIndex > 0) currentIndex--;
+  renderQuestion();
+};
+
+nextBtn.onclick = () => {
+  if (currentIndex < questions.length-1) currentIndex++;
+  renderQuestion();
+};
+
+/* ---------------- Scoring ---------------- */
+
+submitBtn.onclick = () => {
+  let correct = 0;
+  let domainTotals = {};
+  let domainCorrect = {};
+
+  questions.forEach((q,i)=>{
+    domainTotals[q.domain] = (domainTotals[q.domain]||0)+1;
+    domainCorrect[q.domain] = domainCorrect[q.domain]||0;
+
+    if (answers[i] === q.correct) {
+      correct++;
+      domainCorrect[q.domain]++;
+    }
+  });
+
+  const percent = Math.round((correct/questions.length)*100);
+
+  let summary = `<div class="status">
+    Score: ${correct} / ${questions.length} (${percent}%)
+  </div><br>`;
+
+  Object.keys(domainTotals).forEach(d=>{
+    const pct = Math.round((domainCorrect[d]/domainTotals[d])*100);
+    summary += `• ${d}: ${pct}%<br>`;
+  });
+
+  resultsEl.innerHTML = summary;
+};
+
+/* ---------------- Reset ---------------- */
+
+resetBtn.onclick = () => {
+  answers = {};
+  currentIndex = 0;
+  resultsEl.innerHTML = "";
+  renderQuestion();
+};
+
+/* ---------------- Start ---------------- */
+
+document.querySelectorAll(".select").forEach(btn=>{
+  btn.onclick = ()=>{
+    level = btn.getAttribute("data-level");
+    questions = level==="2-3"? bank_2_3 : bank_4plus;
+    answers = {};
     currentIndex = 0;
-    for (const k of Object.keys(answers)) delete answers[k];
 
-    // enable controls
     readBtn.disabled = false;
     prevBtn.disabled = false;
     nextBtn.disabled = false;
     resetBtn.disabled = false;
 
     renderQuestion();
-    updateNavButtons();
-  }
-
-  document.querySelectorAll(".select").forEach(btn => {
-    btn.addEventListener("click", () => {
-      start(btn.getAttribute("data-level"));
-    });
-  });
+  };
+});
 </script>
 
 </body>
