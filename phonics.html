@@ -5,7 +5,7 @@
   <title>Phonics | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
@@ -15,11 +15,37 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="letter-formation.html">Letter Tracing</a></li>
-        <li><a href="resources.html">Kids Resources</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="math.html">Math</a></li>
-        <li><a href="progress.html">My Progress</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -27,75 +53,42 @@
 
 <section class="hero">
   <div class="container">
-    <h1>🔤 Phonics</h1>
-    <p>Pick a grade, listen, and choose the best answer!</p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">Bunny Sound Hunt 🐰</h2>
-
-    <div class="game-box">
-      <div class="kid-big">Choose grade:</div>
-      <div class="grade-row">
-        <button class="select" data-grade="K">Kindergarten</button>
-        <button class="select" data-grade="1">1st Grade</button>
-        <button class="select" data-grade="2">2nd Grade</button>
-      </div>
-
-      <div id="prompt" style="margin-top:18px; font-size:22px; font-weight:900;">Pick a grade to start!</div>
-
-      <div class="game-row">
-        <button class="btn secondary" id="readBtn" disabled>🔊 Read</button>
-        <button class="btn secondary" id="newBtn" disabled>New</button>
-        <button class="btn secondary" id="resetBtn" disabled>Reset Score</button>
-      </div>
-
-      <div class="game-row" id="choices"></div>
-
-      <div class="status" id="status">Score: 0</div>
-      <div class="small" id="saveNote"></div>
-
-      <div class="game-row" style="margin-top:16px;">
-        <a class="btn secondary" href="resources.html">🎥 Watch Phonics Videos</a>
-        <a class="btn secondary" href="letter-formation.html">✍️ Practice Letter Tracing</a>
-      </div>
+    <h1>Phonics 🔤</h1>
+    <p>Pick a grade, listen to the sound, and choose the right letter!</p>
+    <div class="quick-strip">
+      <button class="btn secondary" id="soundBtn">🔊 Read Question</button>
+      <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
   </div>
 </section>
 
-<!-- NEW: Phonics Videos preview -->
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Phonics Videos 🎥</h2>
-    <div class="game-box">
-      <p class="small">Tip: Replace the YouTube IDs with your favorite phonics videos.</p>
+    <h2 class="section-title">Pick a Grade 🌟</h2>
 
-      <div class="video-grid">
-        <div class="video-card">
-          <h4>Letter Sounds (A–Z)</h4>
-          <iframe class="video"
-            src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-            title="Phonics Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-          <p class="small">Replace <strong>VIDEO_ID_HERE</strong> with a real YouTube ID.</p>
-        </div>
-
-        <div class="video-card">
-          <h4>Blending Sounds</h4>
-          <iframe class="video"
-            src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-            title="Blending Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-          <p class="small">You can add more videos on the Resources page.</p>
-        </div>
+    <div class="game-box wide">
+      <div class="badge-row">
+        <button class="pill active" data-grade="K">Kindergarten</button>
+        <button class="pill" data-grade="1">Grade 1</button>
+        <button class="pill" data-grade="2">Grade 2</button>
       </div>
 
-      <div class="game-row">
-        <a class="btn" href="resources.html">Go to Full Resources</a>
+      <div class="game-box" style="margin-top:14px;">
+        <p class="kid-big" id="question">Question loads here…</p>
+        <p class="small" id="hint">Hint loads here…</p>
+
+        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+
+        <p class="kid-big" id="result" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="nextBtn">Next</button>
+          <button class="btn secondary" id="resetBtn">Reset Stars</button>
+        </div>
+
+        <p class="small" style="margin-top:10px;">
+          Earn ⭐ for correct answers. Saved on this device.
+        </p>
       </div>
     </div>
   </div>
@@ -104,97 +97,113 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const banks = {
-    K: [
-      { q:"Which word starts with /m/?", say:"Which word starts with the m sound?", options:["moon","sun","hat"], correct:0 },
-      { q:"Which word starts with /s/?", say:"Which word starts with the s sound?", options:["sock","cat","map"], correct:0 },
-      { q:"Which word ends with /t/?", say:"Which word ends with the t sound?", options:["bat","bee","go"], correct:0 },
-      { q:"Which word starts with /b/?", say:"Which word starts with the b sound?", options:["ball","rain","sun"], correct:0 }
+  const PROG_KEY = "bloom_progress";
+
+  function loadProgress(){
+    try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); }
+    catch { return {}; }
+  }
+  function saveProgress(p){
+    localStorage.setItem(PROG_KEY, JSON.stringify(p));
+  }
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1;
+    speechSynthesis.speak(u);
+  }
+
+  const gradeSets = {
+    "K": [
+      { sound:"/m/", correct:"M", choices:["M","S","T"], hint:"M makes /m/ like 'moon'." },
+      { sound:"/s/", correct:"S", choices:["B","S","D"], hint:"S makes /s/ like 'sun'." },
+      { sound:"/t/", correct:"T", choices:["T","A","P"], hint:"T makes /t/ like 'top'." }
     ],
-    1: [
-      { q:"Which word has a short a sound?", say:"Which word has a short a sound?", options:["cat","cake","cone"], correct:0 },
-      { q:"Which word has /sh/?", say:"Which word has the sh sound?", options:["ship","sip","lip"], correct:0 },
-      { q:"Which word has /ch/?", say:"Which word has the ch sound?", options:["chin","thin","fin"], correct:0 },
-      { q:"Which word has a long i sound?", say:"Which word has a long i sound?", options:["bike","bit","bin"], correct:0 }
+    "1": [
+      { sound:"/sh/", correct:"SH", choices:["CH","SH","TH"], hint:"SH like 'ship'." },
+      { sound:"/ch/", correct:"CH", choices:["CH","PH","WH"], hint:"CH like 'chop'." },
+      { sound:"/th/", correct:"TH", choices:["TH","SH","CH"], hint:"TH like 'this' or 'thumb'." }
     ],
-    2: [
-      { q:"Which word has a vowel team?", say:"Which word has a vowel team?", options:["boat","bat","bit"], correct:0 },
-      { q:"Which word has a long a sound?", say:"Which word has a long a sound?", options:["rain","ran","ring"], correct:0 },
-      { q:"Which word has an r-controlled vowel?", say:"Which word has an r-controlled vowel?", options:["car","cap","cake"], correct:0 },
-      { q:"Which word has a silent e?", say:"Which word has silent e?", options:["cake","cat","cap"], correct:0 }
+    "2": [
+      { sound:"long A (ai/ay)", correct:"AI", choices:["AI","OA","EE"], hint:"AI like 'rain'." },
+      { sound:"long E (ee/ea)", correct:"EE", choices:["EE","OO","AI"], hint:"EE like 'feet'." },
+      { sound:"long O (oa/ow)", correct:"OA", choices:["OA","EE","AI"], hint:"OA like 'boat'." }
     ]
   };
 
-  let grade = null;
-  let score = 0;
-  let current = null;
+  let grade = "K";
+  let idx = 0;
 
-  const promptEl = document.getElementById("prompt");
-  const choicesEl = document.getElementById("choices");
-  const statusEl = document.getElementById("status");
-  const saveNoteEl = document.getElementById("saveNote");
-  const readBtn = document.getElementById("readBtn");
-  const newBtn = document.getElementById("newBtn");
-  const resetBtn = document.getElementById("resetBtn");
-
-  function keyForGrade(g){ return `bloom_phonics_${g}_score`; }
-
-  function speak(text){
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1; u.pitch = 1.05;
-    window.speechSynthesis.speak(u);
-  }
-
-  function loadScore(){
-    score = parseInt(localStorage.getItem(keyForGrade(grade)) || "0", 10);
-    statusEl.textContent = `Score: ${score}`;
-    saveNoteEl.textContent = `Saved for grade ${grade}.`;
-  }
-
-  function saveScore(){
-    localStorage.setItem(keyForGrade(grade), String(score));
-  }
-
-  function newQuestion(){
-    const bank = banks[grade];
-    current = bank[Math.floor(Math.random() * bank.length)];
-    promptEl.textContent = current.q;
-
-    choicesEl.innerHTML = "";
-    current.options.forEach((opt, idx) => {
-      const b = document.createElement("button");
-      b.className = "pill";
-      b.textContent = opt;
-      b.onclick = () => {
-        if (idx === current.correct) {
-          score++;
-          saveScore();
-          statusEl.textContent = `✅ Correct! Score: ${score}`;
-          setTimeout(newQuestion, 650);
-        } else {
-          statusEl.textContent = `❌ Try again! Score: ${score}`;
-        }
-      };
-      choicesEl.appendChild(b);
+  function renderGradeButtons(){
+    document.querySelectorAll(".pill").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.grade === grade);
     });
   }
 
-  readBtn.onclick = () => { if (current) speak(current.say || current.q); };
-  newBtn.onclick = newQuestion;
-  resetBtn.onclick = () => { score = 0; saveScore(); statusEl.textContent = "Score: 0"; };
+  function renderQuestion(){
+    const q = gradeSets[grade][idx % gradeSets[grade].length];
+    document.getElementById("question").textContent = `What letters make ${q.sound}?`;
+    document.getElementById("hint").textContent = q.hint;
+    document.getElementById("result").textContent = "";
 
-  document.querySelectorAll(".select").forEach(btn => {
-    btn.addEventListener("click", () => {
-      grade = btn.getAttribute("data-grade");
-      readBtn.disabled = false;
-      newBtn.disabled = false;
-      resetBtn.disabled = false;
-      loadScore();
-      newQuestion();
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
+    q.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
+      card.onclick = ()=> checkAnswer(c, q.correct);
+      choices.appendChild(card);
     });
+  }
+
+  function addStar(){
+    const p = loadProgress();
+    p.phonicsStars = (p.phonicsStars || 0) + 1;
+    saveProgress(p);
+  }
+
+  function checkAnswer(choice, correct){
+    if (choice === correct){
+      document.getElementById("result").textContent = "Correct! ⭐";
+      addStar();
+      speak("Correct!");
+    } else {
+      document.getElementById("result").textContent = "Try again 🙂";
+      speak("Try again.");
+    }
+  }
+
+  document.querySelectorAll(".pill").forEach(btn=>{
+    btn.onclick = ()=>{
+      grade = btn.dataset.grade;
+      idx = 0;
+      renderGradeButtons();
+      renderQuestion();
+    };
   });
+
+  document.getElementById("nextBtn").onclick = ()=>{
+    idx++;
+    renderQuestion();
+  };
+
+  document.getElementById("resetBtn").onclick = ()=>{
+    const p = loadProgress();
+    p.phonicsStars = 0;
+    saveProgress(p);
+    alert("Phonics stars reset!");
+  };
+
+  document.getElementById("soundBtn").onclick = ()=>{
+    const qText = document.getElementById("question").textContent;
+    speak(qText);
+  };
+
+  renderGradeButtons();
+  renderQuestion();
 </script>
 
 </body>
