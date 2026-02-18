@@ -15,15 +15,37 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="phonics.html">Phonics</a></li>
-        <li><a href="reading.html">Reading</a></li>
-        <li><a href="math.html">Math</a></li>
-        <li><a href="games.html">Games</a></li>
-        <li><a href="resources.html">Kids Resources</a></li>
-        <li><a href="parent-resources.html">Parent Resources</a></li>
-        <li><a href="standards.html">Standards</a></li>
-        <li><a href="sticker-book.html">Stickers</a></li>
-        <li><a href="progress.html">Progress</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -32,26 +54,24 @@
 <section class="hero">
   <div class="container">
     <h1>Learn & Play! 🌿✨</h1>
-    <p>Choose a bubble to start learning right away — phonics, reading, math, tracing, stickers, and more.</p>
+    <p>Tap a bubble to start fast — phonics, reading, math, tracing, resources, and student fun!</p>
 
     <div class="bubbles">
       <a class="bubble" href="phonics.html"><span class="emoji">🔤</span><span class="text">Phonics</span></a>
       <a class="bubble" href="reading.html"><span class="emoji">📖</span><span class="text">Reading</span></a>
       <a class="bubble" href="math.html"><span class="emoji">➕</span><span class="text">Math</span></a>
-      <a class="bubble" href="resources.html#tracing"><span class="emoji">✍️</span><span class="text">Letter Tracing</span></a>
+      <a class="bubble" href="resources.html#tracing"><span class="emoji">✍️</span><span class="text">Tracing</span></a>
 
-      <a class="bubble" href="games.html"><span class="emoji">🎮</span><span class="text">Games</span></a>
+      <a class="bubble" href="resources.html"><span class="emoji">🎥</span><span class="text">Kids Resources</span></a>
+      <a class="bubble" href="student-login.html"><span class="emoji">🧒</span><span class="text">Student Login</span></a>
       <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Sticker Book</span></a>
-      <a class="bubble" href="parent-resources.html"><span class="emoji">🧑‍🏫</span><span class="text">Parents</span></a>
-      <a class="bubble" href="standards.html"><span class="emoji">📘</span><span class="text">Standards</span></a>
+      <a class="bubble" href="progress.html"><span class="emoji">📊</span><span class="text">My Progress</span></a>
     </div>
 
-    <div class="hero-note">
-      Kids: go to <strong>Kids Resources</strong> for videos + tracing. Parents: see <strong>Standards</strong>.
-    </div>
+    <div class="hero-note">Tip: Use the top menu ▾ to find everything fast.</div>
 
     <div class="quick-strip">
-      <a class="btn" href="phonics.html">Start Now</a>
+      <a class="btn" href="phonics.html">Start Learning</a>
       <a class="btn secondary" href="resources.html">Kids Resources</a>
       <a class="btn secondary" href="parent-resources.html">Parent Hub</a>
     </div>
@@ -60,29 +80,27 @@
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Today’s Quick Picks 🌟</h2>
+    <h2 class="section-title">Quick Picks 🌟</h2>
 
     <div class="game-box wide">
       <div class="grid-3">
-
         <div class="card">
           <h3>🔤 Phonics Practice</h3>
-          <p>Pick a grade and practice letter sounds. Great for K–2.</p>
-          <a class="btn" href="phonics.html">Play Phonics</a>
+          <p>Pick a grade and practice sounds. Earn stars for correct answers.</p>
+          <a class="btn" href="phonics.html">Go</a>
         </div>
 
         <div class="card">
           <h3>✍️ Trace a Letter</h3>
-          <p>Uppercase, lowercase, or numbers — with voice directions.</p>
-          <a class="btn" href="resources.html#tracing">Go Trace</a>
+          <p>Uppercase, lowercase, or numbers. Earn a sticker when finished!</p>
+          <a class="btn" href="resources.html#tracing">Go</a>
         </div>
 
         <div class="card">
-          <h3>📘 Standards Check</h3>
-          <p>See what skills to focus on for K, 1st, and 2nd grade.</p>
-          <a class="btn" href="standards.html">Open Standards</a>
+          <h3>🎮 Character Games</h3>
+          <p>Play quick challenges with Unicorn, Owl, and Dino.</p>
+          <a class="btn" href="games.html">Go</a>
         </div>
-
       </div>
     </div>
   </div>
