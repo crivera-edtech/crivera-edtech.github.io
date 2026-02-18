@@ -36,16 +36,24 @@
 
     <div class="game-box">
       <div id="problem" style="font-size:30px; font-weight:900;">Loading...</div>
+
+      <button class="btn secondary read-btn" id="readAloudBtn">🔊 Read Aloud</button>
+
       <div class="game-row" id="choices"></div>
 
       <div class="status" id="status">Score: 0</div>
+      <div class="badge-row">
+        <div class="badge" id="badge1">⭐ 5 correct: Locked</div>
+        <div class="badge" id="badge2">🏅 10 correct: Locked</div>
+      </div>
 
       <div class="game-row">
         <button class="btn secondary" id="newBtn">New Problem</button>
+        <button class="btn secondary" id="resetBtn">Reset Score</button>
         <a class="btn secondary" href="index.html">Back Home</a>
       </div>
 
-      <div class="small" style="margin-top:10px;">Tip: Try to get 10 points!</div>
+      <div class="small" style="margin-top:10px;">Tip: Try to unlock the badges!</div>
     </div>
   </div>
 </section>
@@ -55,34 +63,71 @@
 </footer>
 
 <script>
-  let score = 0;
+  let score = parseInt(localStorage.getItem("bloom_math_score") || "0", 10);
   let answer = 0;
+  let currentProblemText = "";
 
   function shuffle(arr) {
     return arr.slice().sort(() => Math.random() - 0.5);
   }
 
+  function save() {
+    localStorage.setItem("bloom_math_score", String(score));
+  }
+
+  function updateStatus(text) {
+    document.getElementById("status").textContent = text;
+  }
+
+  function updateBadges() {
+    document.getElementById("badge1").textContent = score >= 5 ? "⭐ 5 correct: Unlocked!" : "⭐ 5 correct: Locked";
+    document.getElementById("badge2").textContent = score >= 10 ? "🏅 10 correct: Unlocked!" : "🏅 10 correct: Locked";
+  }
+
+  // Read Aloud
+  function speak(text) {
+    if (!("speechSynthesis" in window)) {
+      alert("Sorry! Your browser does not support read aloud.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1.0;
+    utter.pitch = 1.1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  document.getElementById("readAloudBtn").addEventListener("click", () => {
+    if (!currentProblemText) return;
+    speak(currentProblemText);
+  });
+
   function newProblem() {
     const problemEl = document.getElementById("problem");
     const choicesEl = document.getElementById("choices");
-    const statusEl = document.getElementById("status");
 
-    const a = Math.floor(Math.random() * 10) + 1;
-    const b = Math.floor(Math.random() * 10) + 1;
+    const a = Math.floor(Math.random() * 10) + 1; // 1-10
+    const b = Math.floor(Math.random() * 10) + 1; // 1-10
     const ops = ["+", "-"];
     const op = ops[Math.floor(Math.random() * ops.length)];
+
+    let shownA = a;
+    let shownB = b;
 
     if (op === "+") {
       answer = a + b;
     } else {
-      answer = Math.max(a, b) - Math.min(a, b);
+      // Avoid negative answers for beginners
+      shownA = Math.max(a, b);
+      shownB = Math.min(a, b);
+      answer = shownA - shownB;
     }
 
-    const shownA = (op === "-") ? Math.max(a, b) : a;
-    const shownB = (op === "-") ? Math.min(a, b) : b;
+    currentProblemText = `What is ${shownA} ${op === "+" ? "plus" : "minus"} ${shownB}?`;
 
     problemEl.textContent = `${shownA} ${op} ${shownB} = ?`;
 
+    // create options: 1 correct + 2 wrong
     const wrong1 = answer + (Math.floor(Math.random() * 3) + 1);
     const wrong2 = Math.max(0, answer - (Math.floor(Math.random() * 3) + 1));
     const options = shuffle([answer, wrong1, wrong2]);
@@ -92,20 +137,35 @@
       const btn = document.createElement("button");
       btn.className = "pill";
       btn.textContent = val;
+
       btn.onclick = () => {
         if (val === answer) {
           score++;
-          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          save();
+          updateStatus(`✅ Correct! Score: ${score}`);
+          updateBadges();
           setTimeout(newProblem, 700);
         } else {
-          statusEl.textContent = `❌ Try again! Score: ${score}`;
+          updateStatus(`❌ Try again! Score: ${score}`);
         }
       };
+
       choicesEl.appendChild(btn);
     });
+
+    updateStatus(`Score: ${score}`);
+    updateBadges();
   }
 
   document.getElementById("newBtn").addEventListener("click", newProblem);
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    score = 0;
+    save();
+    updateStatus("Score: 0");
+    updateBadges();
+  });
+
   newProblem();
 </script>
 
