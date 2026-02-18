@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Phonics | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="phonics.html">Phonics</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="math.html">Math</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>🔤 Phonics</h1>
+    <p>Mini Game: Pick the correct sound for the letter!</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Sound Match Game</h2>
+
+    <div class="game-box">
+      <div id="prompt" style="font-size:28px; font-weight:800;">Loading...</div>
+      <div class="game-row" id="choices"></div>
+
+      <div class="status" id="status">Score: 0</div>
+      <div class="game-row">
+        <button class="btn secondary" id="newBtn">New Question</button>
+        <a class="btn secondary" href="index.html">Back Home</a>
+      </div>
+      <div class="small" style="margin-top:10px;">Tip: Click “New Question” to practice more.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 BloomELearning ✨ | Made with 💖
+</footer>
+
+<script>
+  const items = [
+    { letter: "B", sound: "/b/ like 'ball'" },
+    { letter: "M", sound: "/m/ like 'moon'" },
+    { letter: "S", sound: "/s/ like 'sun'" },
+    { letter: "T", sound: "/t/ like 'top'" },
+    { letter: "F", sound: "/f/ like 'fish'" },
+    { letter: "P", sound: "/p/ like 'pig'" }
+  ];
+
+  let score = 0;
+  let current = null;
+
+  function shuffle(arr) {
+    return arr.slice().sort(() => Math.random() - 0.5);
+  }
+
+  function newQuestion() {
+    const promptEl = document.getElementById("prompt");
+    const choicesEl = document.getElementById("choices");
+    const statusEl = document.getElementById("status");
+
+    current = items[Math.floor(Math.random() * items.length)];
+    promptEl.textContent = `What sound does the letter "${current.letter}" make?`;
+
+    const wrong = shuffle(items.filter(x => x.letter !== current.letter)).slice(0, 2);
+    const options = shuffle([current, ...wrong]);
+
+    choicesEl.innerHTML = "";
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "pill";
+      btn.textContent = opt.sound;
+      btn.onclick = () => {
+        if (opt.letter === current.letter) {
+          score++;
+          statusEl.textContent = `✅ Correct! Score: ${score}`;
+        } else {
+          statusEl.textContent = `❌ Oops! The correct answer is ${current.sound}. Score: ${score}`;
+        }
+        // auto new question after a short moment
+        setTimeout(newQuestion, 900);
+      };
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  document.getElementById("newBtn").addEventListener("click", newQuestion);
+  newQuestion();
+</script>
+
+</body>
+</html>
