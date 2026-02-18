@@ -18,7 +18,7 @@
         <li><a href="phonics.html">Phonics</a></li>
         <li><a href="math.html">Math</a></li>
         <li><a href="progress.html">My Progress</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
+        <li><a href="games.html">Character Games</a></li>
       </ul>
     </nav>
   </div>
@@ -42,7 +42,7 @@
       <div class="game-row">
         <button class="btn secondary" id="readBtn">🔊 Read Aloud</button>
         <button class="btn secondary" id="newBtn">New Story</button>
-        <button class="btn secondary" id="resetBtn">Reset Score</button>
+        <button class="btn secondary" id="resetBtn">Reset Reading Score</button>
       </div>
 
       <div class="game-row" id="choices"></div>
@@ -56,6 +56,8 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
+  const SCORE_KEY = "bloom_reading_score";
+
   const stories = [
     {
       passage: "Mia put on her rain boots and grabbed an umbrella. Dark clouds filled the sky.",
@@ -83,7 +85,7 @@
     }
   ];
 
-  let score = parseInt(localStorage.getItem("bloom_reading_score") || "0", 10);
+  let score = parseInt(localStorage.getItem(SCORE_KEY) || "0", 10);
   let current = null;
 
   const passageEl = document.getElementById("passage");
@@ -99,7 +101,7 @@
     window.speechSynthesis.speak(u);
   }
 
-  function save(){ localStorage.setItem("bloom_reading_score", String(score)); }
+  function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
 
   function newStory(){
     current = stories[Math.floor(Math.random() * stories.length)];
@@ -115,24 +117,24 @@
         if (idx === current.correct) {
           score++;
           save();
-          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          statusEl.textContent = `✅ Correct! Reading Score: ${score}`;
           setTimeout(newStory, 700);
         } else {
-          statusEl.textContent = `❌ Try again! Score: ${score}`;
+          statusEl.textContent = `❌ Try again! Reading Score: ${score}`;
         }
       };
       choicesEl.appendChild(b);
     });
 
-    statusEl.textContent = `Score: ${score}`;
+    statusEl.textContent = `Reading Score: ${score}`;
   }
 
   document.getElementById("readBtn").onclick = () => {
     if (!current) return;
-    speak(`${current.passage} سؤال: ${current.q}`);
+    speak(`${current.passage} Question: ${current.q}`);
   };
   document.getElementById("newBtn").onclick = newStory;
-  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Score: 0"; };
+  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Reading Score: 0"; };
 
   newStory();
 </script>
