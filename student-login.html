@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Login | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Student Login 🧒</h1>
+    <p>Type your name (or nickname). This saves on this device.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="game-box">
+      <p class="kid-big">What’s your name? 🌈</p>
+
+      <div class="game-row">
+        <input class="input" id="studentName" placeholder="Example: Mia" />
+        <button class="btn" id="startBtn">Start</button>
+      </div>
+
+      <div id="helloBox" style="display:none; margin-top:16px;">
+        <div class="game-box">
+          <p class="kid-big" id="helloText">Hi!</p>
+          <div class="quick-strip">
+            <a class="btn" href="phonics.html">Phonics</a>
+            <a class="btn" href="reading.html">Reading</a>
+            <a class="btn" href="math.html">Math</a>
+            <a class="btn secondary" href="resources.html#tracing">Tracing</a>
+          </div>
+          <div class="quick-strip">
+            <a class="btn secondary" href="progress.html">My Progress</a>
+            <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="small" style="margin-top:10px;">
+        This is a login mockup (no passwords). It stores your name locally.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  const KEY = "bloom_student_name";
+  const input = document.getElementById("studentName");
+  const helloBox = document.getElementById("helloBox");
+  const helloText = document.getElementById("helloText");
+
+  function showHello(name){
+    helloText.textContent = `Hi ${name}! ⭐`;
+    helloBox.style.display = "block";
+  }
+
+  const saved = localStorage.getItem(KEY);
+  if (saved){
+    input.value = saved;
+    showHello(saved);
+  }
+
+  document.getElementById("startBtn").addEventListener("click", () => {
+    const name = (input.value || "").trim();
+    if (!name) return alert("Please type your name 🙂");
+    localStorage.setItem(KEY, name);
+    showHello(name);
+  });
+</script>
+
+</body>
+</html>
