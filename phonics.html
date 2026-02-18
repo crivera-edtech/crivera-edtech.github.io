@@ -9,7 +9,6 @@
 </head>
 <body>
 
-<!-- SAME DROPDOWN NAV -->
 <header>
   <div class="container">
     <div class="logo">BloomELearning ✨</div>
@@ -55,7 +54,7 @@
 <section class="hero">
   <div class="container">
     <h1>Phonics 🔤</h1>
-    <p>Take a quick diagnostic. Then play a game that matches what you need most!</p>
+    <p>Take a quick diagnostic. Then play a game based on what you need most!</p>
     <div class="quick-strip">
       <a class="btn secondary" href="progress.html">My Progress</a>
       <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
@@ -86,16 +85,17 @@
       <!-- DIAGNOSTIC PANEL -->
       <div class="game-box" id="diagPanel" style="margin-top:14px;">
         <p class="kid-big">Diagnostic ✅</p>
-        <p class="small">Answer letter <strong>name</strong> and <strong>sound</strong> questions.</p>
+        <p class="small">Answer letter <strong>name</strong> and <strong>sound</strong> questions. Tap 🔊 to hear it.</p>
 
         <div class="game-box" style="margin-top:12px;">
-          <!-- Question Row with Sound Button -->
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-            <p class="kid-big" id="diagQ" style="margin:0;">Press “Take Diagnostic” to begin.</p>
-            <button class="btn secondary" id="diagSpeakBtn" style="white-space:nowrap;">🔊</button>
+          <!-- Question Row with 🔊 next to question -->
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+            <p class="kid-big" id="diagQ" style="margin:0; flex:1;">Press “Take Diagnostic” to begin.</p>
+            <button class="btn secondary" id="diagSpeakBtn" title="Play sound" aria-label="Play sound">🔊</button>
           </div>
 
           <p class="small" id="diagHint"></p>
+          <p class="small" id="diagAudioStatus" style="display:none;"></p>
 
           <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
           <p class="kid-big" id="diagResult" style="margin-top:14px;"></p>
@@ -104,10 +104,6 @@
             <button class="btn" id="diagNextBtn">Next</button>
             <button class="btn secondary" id="diagSkipBtn">Skip</button>
           </div>
-
-          <p class="small" style="margin-top:10px;">
-            Tip: Press 🔊 to hear the letter name or the sound out loud.
-          </p>
         </div>
       </div>
 
@@ -117,13 +113,14 @@
         <p class="small" id="gamePlan">Your game is based on your diagnostic.</p>
 
         <div class="game-box" style="margin-top:12px;">
-          <!-- Question Row with Sound Button -->
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-            <p class="kid-big" id="gameQ" style="margin:0;">Game question loads here…</p>
-            <button class="btn secondary" id="gameSpeakBtn" style="white-space:nowrap;">🔊</button>
+          <!-- Question Row with 🔊 next to question -->
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+            <p class="kid-big" id="gameQ" style="margin:0; flex:1;">Game question loads here…</p>
+            <button class="btn secondary" id="gameSpeakBtn" title="Play sound" aria-label="Play sound">🔊</button>
           </div>
 
           <p class="small" id="gameHint"></p>
+          <p class="small" id="gameAudioStatus" style="display:none;"></p>
 
           <div class="grid-3" id="gameChoices" style="margin-top:14px;"></div>
           <p class="kid-big" id="gameResult" style="margin-top:14px;"></p>
@@ -132,10 +129,6 @@
             <button class="btn" id="gameNextBtn">Next</button>
             <button class="btn secondary" id="resetStarsBtn">Reset Stars</button>
           </div>
-
-          <p class="small" style="margin-top:10px;">
-            Tip: Press 🔊 to hear the sound again.
-          </p>
         </div>
       </div>
 
@@ -167,27 +160,30 @@
     return a;
   }
 
-  // Speech: “letter name” vs “sound”
-  function speak(text) {
-    if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.95;
-    speechSynthesis.speak(u);
+  // ---------- Real Audio Player ----------
+  // Put audio files in: assets/audio/sounds/ and assets/audio/letters/
+  // Example: assets/audio/sounds/m.mp3, sh.mp3, long-a.mp3
+  // Example: assets/audio/letters/A.mp3
+
+  const audio = new Audio();
+  audio.preload = "auto";
+
+  function showAudioStatus(el, msg){
+    if (!el) return;
+    el.style.display = "block";
+    el.textContent = msg;
+    clearTimeout(el._t);
+    el._t = setTimeout(()=>{ el.style.display = "none"; }, 2000);
   }
 
-  function speakLetterName(letter){
-    speak(`The letter is ${letter}.`);
-  }
-
-  function speakSound(soundText){
-    // Try to say a child-friendly version
-    // Example soundText: "/m/" or "long A (ai/ay)"
-    if (soundText.includes("/")) {
-      const cleaned = soundText.replaceAll("/", "").trim();
-      speak(`The sound is ${cleaned}. ${cleaned}.`);
-    } else {
-      speak(`Listen. ${soundText}.`);
+  async function playAudio(src, statusEl){
+    try {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.src = src;
+      await audio.play();
+    } catch (err) {
+      showAudioStatus(statusEl, "Audio not found yet. Add the mp3 file to your repo.");
     }
   }
 
@@ -207,7 +203,34 @@
     };
   });
 
+  // ---------- Audio Maps ----------
+  // soundKey values map to filenames
+  const soundAudio = {
+    "m": "./assets/audio/sounds/m.mp3",
+    "s": "./assets/audio/sounds/s.mp3",
+    "t": "./assets/audio/sounds/t.mp3",
+    "sh": "./assets/audio/sounds/sh.mp3",
+    "ch": "./assets/audio/sounds/ch.mp3",
+    "th": "./assets/audio/sounds/th.mp3",
+    "long-a": "./assets/audio/sounds/long-a.mp3",
+    "long-e": "./assets/audio/sounds/long-e.mp3",
+    "long-o": "./assets/audio/sounds/long-o.mp3"
+  };
+
+  const letterAudio = {
+    "A": "./assets/audio/letters/A.mp3",
+    "M": "./assets/audio/letters/M.mp3",
+    "S": "./assets/audio/letters/S.mp3",
+    "B": "./assets/audio/letters/B.mp3",
+    "R": "./assets/audio/letters/R.mp3",
+    "T": "./assets/audio/letters/T.mp3",
+    "G": "./assets/audio/letters/G.mp3",
+    "P": "./assets/audio/letters/P.mp3",
+    "V": "./assets/audio/letters/V.mp3"
+  };
+
   // ---------- Content Banks (K–2) ----------
+  // Each sound question has a soundKey which points to the mp3 filename
   const gradeBanks = {
     "K": {
       nameItems: [
@@ -216,9 +239,9 @@
         { letter:"S", correct:"S", choices:["S","C","G"] }
       ],
       soundItems: [
-        { sound:"/m/", correct:"M", choices:["M","S","T"], hint:"/m/ like moon" },
-        { sound:"/s/", correct:"S", choices:["B","S","D"], hint:"/s/ like sun" },
-        { sound:"/t/", correct:"T", choices:["T","A","P"], hint:"/t/ like top" }
+        { soundText:"/m/", soundKey:"m", correct:"M", choices:["M","S","T"], hint:"/m/ like moon" },
+        { soundText:"/s/", soundKey:"s", correct:"S", choices:["B","S","D"], hint:"/s/ like sun" },
+        { soundText:"/t/", soundKey:"t", correct:"T", choices:["T","A","P"], hint:"/t/ like top" }
       ]
     },
     "1": {
@@ -228,9 +251,9 @@
         { letter:"T", correct:"T", choices:["T","F","E"] }
       ],
       soundItems: [
-        { sound:"/sh/", correct:"SH", choices:["CH","SH","TH"], hint:"SH like ship" },
-        { sound:"/ch/", correct:"CH", choices:["CH","PH","WH"], hint:"CH like chop" },
-        { sound:"/th/", correct:"TH", choices:["TH","SH","CH"], hint:"TH like this" }
+        { soundText:"/sh/", soundKey:"sh", correct:"SH", choices:["CH","SH","TH"], hint:"SH like ship" },
+        { soundText:"/ch/", soundKey:"ch", correct:"CH", choices:["CH","PH","WH"], hint:"CH like chop" },
+        { soundText:"/th/", soundKey:"th", correct:"TH", choices:["TH","SH","CH"], hint:"TH like this" }
       ]
     },
     "2": {
@@ -240,9 +263,9 @@
         { letter:"V", correct:"V", choices:["V","W","Y"] }
       ],
       soundItems: [
-        { sound:"long A (ai/ay)", correct:"AI", choices:["AI","OA","EE"], hint:"AI like rain" },
-        { sound:"long E (ee/ea)", correct:"EE", choices:["EE","OO","AI"], hint:"EE like feet" },
-        { sound:"long O (oa/ow)", correct:"OA", choices:["OA","EE","AI"], hint:"OA like boat" }
+        { soundText:"long A (ai/ay)", soundKey:"long-a", correct:"AI", choices:["AI","OA","EE"], hint:"AI like rain" },
+        { soundText:"long E (ee/ea)", soundKey:"long-e", correct:"EE", choices:["EE","OO","AI"], hint:"EE like feet" },
+        { soundText:"long O (oa/ow)", soundKey:"long-o", correct:"OA", choices:["OA","EE","AI"], hint:"OA like boat" }
       ]
     }
   };
@@ -255,7 +278,7 @@
       type:"name",
       letter: x.letter,
       prompt:`What is the NAME of this letter: ${x.letter}?`,
-      hint:"Say the letter name out loud.",
+      hint:"Tap 🔊 to hear the letter name.",
       correct:x.correct,
       choices:shuffle(x.choices),
       focusKey:`name:${x.letter}`
@@ -263,9 +286,10 @@
 
     const soundQs = b.soundItems.map(x => ({
       type:"sound",
-      sound: x.sound,
-      prompt:`Which letter(s) make ${x.sound}?`,
-      hint:x.hint || "Listen for the sound.",
+      soundText: x.soundText,
+      soundKey: x.soundKey,
+      prompt:`Which letter(s) make this sound?`,
+      hint:`Tap 🔊 to hear the sound.`,
       correct:x.correct,
       choices:shuffle(x.choices),
       focusKey:`sound:${x.correct}`
@@ -282,7 +306,7 @@
       type:"name",
       letter: x.letter,
       prompt:`Letter NAME: ${x.letter} is called…`,
-      hint:"Pick the correct letter name.",
+      hint:"Tap 🔊 to hear the letter name.",
       correct:x.correct,
       choices:shuffle(x.choices),
       focusKey:`name:${x.letter}`
@@ -290,9 +314,10 @@
 
     const soundQs = b.soundItems.map(x => ({
       type:"sound",
-      sound: x.sound,
-      prompt:`Letter SOUND: Which makes ${x.sound}?`,
-      hint:x.hint || "Listen for the sound.",
+      soundText: x.soundText,
+      soundKey: x.soundKey,
+      prompt:`Letter SOUND: Which letter(s) make this sound?`,
+      hint:"Tap 🔊 to hear the sound.",
       correct:x.correct,
       choices:shuffle(x.choices),
       focusKey:`sound:${x.correct}`
@@ -329,12 +354,14 @@
   const diagHintEl = document.getElementById("diagHint");
   const diagChoicesEl = document.getElementById("diagChoices");
   const diagResultEl = document.getElementById("diagResult");
+  const diagAudioStatus = document.getElementById("diagAudioStatus");
 
   const gameQEl = document.getElementById("gameQ");
   const gameHintEl = document.getElementById("gameHint");
   const gameChoicesEl = document.getElementById("gameChoices");
   const gameResultEl = document.getElementById("gameResult");
   const gamePlanEl = document.getElementById("gamePlan");
+  const gameAudioStatus = document.getElementById("gameAudioStatus");
 
   const goDiagBtn = document.getElementById("goDiagBtn");
   const goGameBtn = document.getElementById("goGameBtn");
@@ -363,6 +390,8 @@
     const q = diagQs[diagIndex];
     lastDiagQ = q;
 
+    // For sound questions, question text stays “Which letter(s) make this sound?”
+    // (sound is played using audio button)
     diagQEl.textContent = q.prompt;
     diagHintEl.textContent = q.hint || "";
     diagResultEl.textContent = "";
@@ -378,10 +407,21 @@
     });
   }
 
-  function playDiagSound(){
-    if (!lastDiagQ) return speak("Press take diagnostic to begin.");
-    if (lastDiagQ.type === "name") speakLetterName(lastDiagQ.letter);
-    else speakSound(lastDiagQ.sound);
+  function playDiagAudio(){
+    if (!lastDiagQ) {
+      showAudioStatus(diagAudioStatus, "Press Take Diagnostic to start!");
+      return;
+    }
+
+    if (lastDiagQ.type === "name") {
+      const src = letterAudio[lastDiagQ.letter];
+      if (!src) return showAudioStatus(diagAudioStatus, "Add letter audio file for this letter.");
+      playAudio(src, diagAudioStatus);
+    } else {
+      const src = soundAudio[lastDiagQ.soundKey];
+      if (!src) return showAudioStatus(diagAudioStatus, "Add sound audio file for this sound.");
+      playAudio(src, diagAudioStatus);
+    }
   }
 
   function checkDiagAnswer(choice){
@@ -391,13 +431,11 @@
     if (choice === q.correct){
       diagCorrect++;
       diagResultEl.textContent = "Correct! ⭐";
-      speak("Correct!");
     } else {
       diagMissed.push(q.focusKey);
       diagResultEl.textContent = `Good try! Answer: ${q.correct}`;
-      speak("Good try.");
-      // extra help: replay sound automatically for sound questions
-      if (q.type === "sound") speakSound(q.sound);
+      // replay audio for extra help on sound items
+      if (q.type === "sound") playDiagAudio();
     }
   }
 
@@ -449,18 +487,29 @@
     });
   }
 
-  function playGameSound(){
-    if (!lastGameQ) return speak("Start the game after the diagnostic.");
-    if (lastGameQ.type === "name") speakLetterName(lastGameQ.letter);
-    else speakSound(lastGameQ.sound);
-  }
-
   function addPhonicsStar(){
     const p = load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
     });
     p.phonicsStars = (p.phonicsStars || 0) + 1;
     save(PROG_KEY, p);
+  }
+
+  function playGameAudio(){
+    if (!lastGameQ) {
+      showAudioStatus(gameAudioStatus, "Take the diagnostic first!");
+      return;
+    }
+
+    if (lastGameQ.type === "name") {
+      const src = letterAudio[lastGameQ.letter];
+      if (!src) return showAudioStatus(gameAudioStatus, "Add letter audio file for this letter.");
+      playAudio(src, gameAudioStatus);
+    } else {
+      const src = soundAudio[lastGameQ.soundKey];
+      if (!src) return showAudioStatus(gameAudioStatus, "Add sound audio file for this sound.");
+      playAudio(src, gameAudioStatus);
+    }
   }
 
   function checkGameAnswer(choice){
@@ -470,12 +519,10 @@
     if (choice === q.correct){
       gameResultEl.textContent = "Correct! ⭐";
       addPhonicsStar();
-      speak("Correct!");
     } else {
       gameResultEl.textContent = "Try again 🙂";
-      speak("Try again.");
-      // replay sound for sound-type items to support learning
-      if (q.type === "sound") speakSound(q.sound);
+      // replay audio for help
+      if (q.type === "sound") playGameAudio();
     }
   }
 
@@ -488,20 +535,6 @@
 
     gameQs = buildGame(grade, savedDiag.missed || []);
     gameIndex = 0;
-
-    const missedNames = (savedDiag.missed || []).filter(x=>x.startsWith("name:")).length;
-    const missedSounds = (savedDiag.missed || []).filter(x=>x.startsWith("sound:")).length;
-
-    let planText = `Diagnostic score: ${savedDiag.score}% — `;
-    if (missedNames === 0 && missedSounds === 0) planText += "Awesome! We'll do a fun mix of practice.";
-    else {
-      planText += "We will practice: ";
-      const parts = [];
-      if (missedNames) parts.push(`letter names (${missedNames})`);
-      if (missedSounds) parts.push(`letter sounds (${missedSounds})`);
-      planText += parts.join(" and ") + ".";
-    }
-    gamePlanEl.textContent = planText;
 
     diagPanel.style.display = "none";
     gamePanel.style.display = "block";
@@ -517,7 +550,6 @@
     diagPanel.style.display = "block";
     gamePanel.style.display = "none";
     renderDiagQuestion();
-    playDiagSound(); // auto-play first prompt
   };
 
   document.getElementById("diagNextBtn").onclick = ()=>{
@@ -532,7 +564,6 @@
       finishDiagnostic();
     } else {
       renderDiagQuestion();
-      playDiagSound();
     }
   };
 
@@ -545,7 +576,6 @@
       finishDiagnostic();
     } else {
       renderDiagQuestion();
-      playDiagSound();
     }
   };
 
@@ -564,7 +594,6 @@
   document.getElementById("gameNextBtn").onclick = ()=>{
     gameIndex++;
     renderGameQuestion();
-    playGameSound();
   };
 
   document.getElementById("resetStarsBtn").onclick = ()=>{
@@ -576,9 +605,9 @@
     alert("Phonics stars reset!");
   };
 
-  // Sound buttons near question
-  document.getElementById("diagSpeakBtn").onclick = playDiagSound;
-  document.getElementById("gameSpeakBtn").onclick = playGameSound;
+  // 🔊 buttons next to question
+  document.getElementById("diagSpeakBtn").onclick = playDiagAudio;
+  document.getElementById("gameSpeakBtn").onclick = playGameAudio;
 
   // ---------- Initialize ----------
   renderGradeButtons();
