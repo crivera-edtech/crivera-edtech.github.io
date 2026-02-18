@@ -36,13 +36,21 @@
 
     <div class="game-box">
       <div id="passage" style="line-height:1.6; font-size:18px;"></div>
+      <div id="question" style="margin-top:14px; font-size:20px; font-weight:900;"></div>
 
-      <div id="question" style="margin-top:14px; font-size:20px; font-weight:800;"></div>
+      <button class="btn secondary read-btn" id="readAloudBtn">🔊 Read Aloud</button>
+
       <div class="game-row" id="answers"></div>
 
       <div class="status" id="status">Score: 0</div>
+      <div class="badge-row">
+        <div class="badge" id="badge1">⭐ 5 correct: Locked</div>
+        <div class="badge" id="badge2">🏅 10 correct: Locked</div>
+      </div>
+
       <div class="game-row">
         <button class="btn secondary" id="nextBtn">Next Passage</button>
+        <button class="btn secondary" id="resetBtn">Reset Score</button>
         <a class="btn secondary" href="index.html">Back Home</a>
       </div>
     </div>
@@ -75,8 +83,21 @@
     }
   ];
 
-  let score = 0;
+  let score = parseInt(localStorage.getItem("bloom_reading_score") || "0", 10);
   let current = null;
+
+  function updateStatus(t) {
+    document.getElementById("status").textContent = t;
+  }
+
+  function updateBadges() {
+    document.getElementById("badge1").textContent = score >= 5 ? "⭐ 5 correct: Unlocked!" : "⭐ 5 correct: Locked";
+    document.getElementById("badge2").textContent = score >= 10 ? "🏅 10 correct: Unlocked!" : "🏅 10 correct: Locked";
+  }
+
+  function save() {
+    localStorage.setItem("bloom_reading_score", String(score));
+  }
 
   function shuffle(arr) {
     return arr.slice().sort(() => Math.random() - 0.5);
@@ -86,7 +107,6 @@
     const passageEl = document.getElementById("passage");
     const qEl = document.getElementById("question");
     const answersEl = document.getElementById("answers");
-    const statusEl = document.getElementById("status");
 
     current = passages[Math.floor(Math.random() * passages.length)];
     passageEl.textContent = current.text;
@@ -103,16 +123,46 @@
       btn.onclick = () => {
         if (opt.idx === current.correct) {
           score++;
-          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          save();
+          updateStatus(`✅ Correct! Score: ${score}`);
+          updateBadges();
         } else {
-          statusEl.textContent = `❌ Not quite. Score: ${score}`;
+          updateStatus(`❌ Not quite. Score: ${score}`);
         }
       };
       answersEl.appendChild(btn);
     });
+
+    updateStatus(`Score: ${score}`);
+    updateBadges();
   }
 
+  // Read Aloud
+  function speak(text) {
+    if (!("speechSynthesis" in window)) {
+      alert("Sorry! Your browser does not support read aloud.");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1.0;
+    utter.pitch = 1.1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  document.getElementById("readAloudBtn").addEventListener("click", () => {
+    if (!current) return;
+    speak(current.text + " " + current.q);
+  });
+
   document.getElementById("nextBtn").addEventListener("click", loadPassage);
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    score = 0;
+    save();
+    updateStatus("Score: 0");
+    updateBadges();
+  });
+
   loadPassage();
 </script>
 
