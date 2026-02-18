@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reading | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="phonics.html">Phonics</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="math.html">Math</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>📖 Reading</h1>
+    <p>Mini Game: Read the passage and answer the question!</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Reading Check Game</h2>
+
+    <div class="game-box">
+      <div id="passage" style="line-height:1.6; font-size:18px;"></div>
+
+      <div id="question" style="margin-top:14px; font-size:20px; font-weight:800;"></div>
+      <div class="game-row" id="answers"></div>
+
+      <div class="status" id="status">Score: 0</div>
+      <div class="game-row">
+        <button class="btn secondary" id="nextBtn">Next Passage</button>
+        <a class="btn secondary" href="index.html">Back Home</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 BloomELearning ✨ | Made with 💖
+</footer>
+
+<script>
+  const passages = [
+    {
+      text: "Lina has a small plant. She gives it water every day. The plant sits by the sunny window. Soon, it grows new leaves.",
+      q: "Why did the plant grow new leaves?",
+      options: ["It got water and sunlight", "It got a new pot", "It was painted green"],
+      correct: 0
+    },
+    {
+      text: "Jay puts on his rain boots. Dark clouds cover the sky. He brings an umbrella before going outside.",
+      q: "What is the weather probably like?",
+      options: ["Sunny", "Rainy", "Snowy"],
+      correct: 1
+    },
+    {
+      text: "Mia reads a book about whales. She learns whales are mammals and breathe air. She shares the fact with her friend.",
+      q: "What did Mia learn about whales?",
+      options: ["They live in trees", "They breathe air", "They are insects"],
+      correct: 1
+    }
+  ];
+
+  let score = 0;
+  let current = null;
+
+  function shuffle(arr) {
+    return arr.slice().sort(() => Math.random() - 0.5);
+  }
+
+  function loadPassage() {
+    const passageEl = document.getElementById("passage");
+    const qEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const statusEl = document.getElementById("status");
+
+    current = passages[Math.floor(Math.random() * passages.length)];
+    passageEl.textContent = current.text;
+    qEl.textContent = current.q;
+
+    const optionObjs = current.options.map((t, i) => ({ text: t, idx: i }));
+    const shuffled = shuffle(optionObjs);
+
+    answersEl.innerHTML = "";
+    shuffled.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "pill";
+      btn.textContent = opt.text;
+      btn.onclick = () => {
+        if (opt.idx === current.correct) {
+          score++;
+          statusEl.textContent = `✅ Correct! Score: ${score}`;
+        } else {
+          statusEl.textContent = `❌ Not quite. Score: ${score}`;
+        }
+      };
+      answersEl.appendChild(btn);
+    });
+  }
+
+  document.getElementById("nextBtn").addEventListener("click", loadPassage);
+  loadPassage();
+</script>
+
+</body>
+</html>
