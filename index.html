@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>BloomELearning ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="./styles.css">
 </head>
 
@@ -23,6 +20,7 @@
         <li><a href="phonics.html">Phonics</a></li>
         <li><a href="reading.html">Reading</a></li>
         <li><a href="math.html">Math</a></li>
+        <li><a href="games.html">Character Games</a></li>
         <li><a href="resources.html">Kids Resources</a></li>
         <li><a href="sticker-book.html">Sticker Book</a></li>
         <li><a href="progress.html">My Progress</a></li>
@@ -34,8 +32,13 @@
 <section class="hero">
   <div class="container">
     <h1>Let’s Learn & Play! 🌿✨</h1>
-    <p>Practice phonics, reading, math, and handwriting while earning stickers and tracking your progress.</p>
-    <a class="btn" href="resources.html">Start Learning</a>
+    <p>Practice phonics, reading, math, and handwriting — earn stickers and watch your progress grow!</p>
+
+    <div class="game-row">
+      <a class="btn" href="phonics.html">Start Phonics</a>
+      <a class="btn secondary" href="resources.html#tracing">Trace Letters ✍️</a>
+      <a class="btn secondary" href="sticker-book.html">Sticker Book 📖</a>
+    </div>
   </div>
 </section>
 
@@ -43,54 +46,80 @@
   <div class="container">
     <h2 class="section-title">Choose an Activity 🌟</h2>
 
-    <div class="grid-3">
+    <div class="game-box wide">
+      <div class="grid-3">
 
-      <div class="card">
-        <h3>🔤 Phonics</h3>
-        <p>Practice letter sounds and blending.</p>
-        <a class="btn" href="phonics.html">Play</a>
+        <div class="card">
+          <h3>🔤 Phonics</h3>
+          <p>Practice letter sounds and blending with quick mini games.</p>
+          <a class="btn" href="phonics.html">Play Phonics</a>
+        </div>
+
+        <div class="card">
+          <h3>📖 Reading</h3>
+          <p>Read short passages and answer fun questions with help.</p>
+          <a class="btn" href="reading.html">Play Reading</a>
+        </div>
+
+        <div class="card">
+          <h3>➕ Math</h3>
+          <p>Try quick math challenges and get instant feedback.</p>
+          <a class="btn" href="math.html">Play Math</a>
+        </div>
+
+        <div class="card">
+          <h3>✍️ Letter Tracing</h3>
+          <p>Uppercase + lowercase + numbers with voice directions.</p>
+          <a class="btn" href="resources.html#tracing">Go to Tracing</a>
+        </div>
+
+        <div class="card">
+          <h3>🎮 Character Games</h3>
+          <p>Play with Unicorn, Owl, and Dino to practice skills!</p>
+          <a class="btn" href="games.html">Play Games</a>
+        </div>
+
+        <div class="card">
+          <h3>📖 Sticker Book</h3>
+          <p>Earn stickers when you trace letters and collect them all.</p>
+          <a class="btn" href="sticker-book.html">Open Sticker Book</a>
+        </div>
+
+        <div class="card">
+          <h3>🎥 Kids Resources</h3>
+          <p>Phonics videos + tracing in one easy place.</p>
+          <a class="btn" href="resources.html">Open Resources</a>
+        </div>
+
+        <div class="card">
+          <h3>📊 My Progress</h3>
+          <p>See your points and stars across your games.</p>
+          <a class="btn" href="progress.html">View Progress</a>
+        </div>
+
+        <div class="card">
+          <h3>🧠 Diagnostic</h3>
+          <p>2nd grade and older — quick skill check and tips.</p>
+          <a class="btn" href="diagnostic.html">Take Diagnostic</a>
+        </div>
+
       </div>
-
-      <div class="card">
-        <h3>📖 Reading</h3>
-        <p>Read short passages and answer fun questions.</p>
-        <a class="btn" href="reading.html">Play</a>
-      </div>
-
-      <div class="card">
-        <h3>➕ Math</h3>
-        <p>Build strong number skills with quick challenges.</p>
-        <a class="btn" href="math.html">Play</a>
-      </div>
-
-      <div class="card">
-        <h3>✍️ Letter Tracing</h3>
-        <p>Trace uppercase and lowercase letters with voice help.</p>
-        <a class="btn" href="resources.html#tracing">Trace</a>
-      </div>
-
-      <div class="card">
-        <h3>📖 Sticker Book</h3>
-        <p>Collect stickers when you complete activities.</p>
-        <a class="btn" href="sticker-book.html">Open</a>
-      </div>
-
-      <div class="card">
-        <h3>📊 My Progress</h3>
-        <p>Track phonics, reading, and math scores.</p>
-        <a class="btn" href="progress.html">View</a>
-      </div>
-
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
+    <h2 class="section-title">Welcome to BloomELearning 🌱</h2>
     <div class="game-box">
-      <p class="kid-big">Welcome to BloomELearning! 🌱</p>
-      <p>Learn, play, trace letters, earn stickers, and grow your skills every day.</p>
-      <p class="small">Designed for Kindergarten through 2nd Grade learners.</p>
+      <p class="kid-big">Hi friends! 👋</p>
+      <p>BloomELearning is a fun place to practice reading, phonics, math, and handwriting.</p>
+      <p class="small">Tip: Start in <strong>Kids Resources</strong> for videos and letter tracing!</p>
+
+      <div class="game-row" style="margin-top:14px;">
+        <a class="btn" href="resources.html">Open Kids Resources</a>
+        <a class="btn secondary" href="progress.html">My Progress 📊</a>
+      </div>
     </div>
   </div>
 </section>
