@@ -180,7 +180,7 @@ nav a:hover{
   border: 2px solid var(--border);
 }
 
-/* Game rows */
+/* Rows */
 .game-row{
   display: flex;
   gap: 10px;
@@ -251,7 +251,7 @@ nav a:hover{
   font-weight: 900;
 }
 
-/* Student UI extras: characters + progress */
+/* Student UI: characters + progress */
 .char-grid{
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -321,7 +321,7 @@ nav a:hover{
   font-weight: 900;
 }
 
-/* Table (Parent Resources) */
+/* Tables */
 .table-wrap{
   overflow-x: auto;
 }
