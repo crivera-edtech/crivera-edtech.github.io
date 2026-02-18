@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Letter Formation | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="phonics.html">Phonics</a></li>
+        <li><a href="resources.html">Kids Resources</a></li>
+        <li><a href="progress.html">My Progress</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>✍️ Letter Formation Game</h1>
+    <p>Trace the letter and collect stars! Try to hit the dots in order.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Trace & Shine ⭐</h2>
+
+    <div class="game-box">
+      <div class="kid-big">Choose a letter:</div>
+      <div class="grade-row" id="letterButtons"></div>
+
+      <div class="game-row">
+        <button class="btn secondary" id="sayBtn">🔊 Say Instructions</button>
+        <button class="btn secondary" id="clearBtn">Clear</button>
+        <button class="btn secondary" id="nextBtn">Next Letter</button>
+      </div>
+
+      <div class="canvas-wrap" style="margin-top:14px;">
+        <canvas id="board" width="900" height="520"></canvas>
+      </div>
+
+      <div class="status" id="status">Tap a letter to begin!</div>
+      <div class="badge-row">
+        <span class="badge" id="stars">⭐ Stars: 0</span>
+        <span class="badge" id="dots">🟢 Dots: 0/0</span>
+      </div>
+
+      <p class="small" style="margin-top:10px;">
+        Tip: Use your finger on a tablet. Try to touch each green dot in order.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  // Simple “connect-the-dots” tracing letters.
+  // Each letter has guide dots. When the student hits dots in order -> earns a star.
+
+  const letters = [
+    {
+      name: "A",
+      model: "A",
+      dots: [
+        {x: 260, y: 420}, {x: 450, y: 120}, {x: 640, y: 420}, {x: 340, y: 300}, {x: 560, y: 300}
+      ]
+    },
+    {
+      name: "B",
+      model: "B",
+      dots: [
+        {x: 320, y: 120}, {x: 320, y: 420}, {x: 520, y: 170}, {x: 520, y: 270}, {x: 520, y: 340}, {x: 520, y: 410}
+      ]
+    },
+    {
+      name: "C",
+      model: "C",
+      dots: [
+        {x: 610, y: 170}, {x: 470, y: 120}, {x: 330, y: 200}, {x: 330, y: 340}, {x: 470, y: 420}, {x: 610, y: 370}
+      ]
+    },
+    {
+      name: "M",
+      model: "M",
+      dots: [
+        {x: 300, y: 420}, {x: 300, y: 120}, {x: 450, y: 260}, {x: 600, y: 120}, {x: 600, y: 420}
+      ]
+    },
+    {
+      name: "S",
+      model: "S",
+      dots: [
+        {x: 600, y: 170}, {x: 450, y: 120}, {x: 320, y: 200}, {x: 520, y: 280}, {x: 620, y: 360}, {x: 450, y: 420}
+      ]
+    }
+  ];
+
+  let idx = 0;
+  let current = null;
+  let dotIndex = 0;
+  let stars = parseInt(localStorage.getItem("bloom_tracing_stars") || "0", 10);
+
+  const canvas = document.getElementById("board");
+  const ctx = canvas.getContext("2d");
+  const statusEl = document.getElementById("status");
+  const starsEl = document.getElementById("stars");
+  const dotsEl = document.getElementById("dots");
+
+  function resizeForDisplay(){
+    // keep crisp on high DPI
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round((rect.width * (520/900)) * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
+    draw();
+  }
+
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1; u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
+  }
+
+  function setStars(n){
+    stars = n;
+    localStorage.setItem("bloom_tracing_stars", String(stars));
+    starsEl.textContent = `⭐ Stars: ${stars}`;
+  }
+
+  function setLetter(letter){
+    current = letter;
+    dotIndex = 0;
+    clearCanvas();
+    draw();
+    statusEl.textContent = `Trace letter ${current.name}! Touch the dots in order.`;
+    dotsEl.textContent = `🟢 Dots: ${dotIndex}/${current.dots.length}`;
+  }
+
+  function clearCanvas(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+
+  function draw(){
+    if (!current) return;
+
+    // background
+    ctx.save();
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+
+    // letter model
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = "#2f3a2f";
+    ctx.font = "260px 'Baloo 2', cursive";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(current.model, canvas.width/2, canvas.height/2);
+    ctx.restore();
+
+    // guide lines (handwriting-ish)
+    ctx.save();
+    ctx.strokeStyle = "rgba(58,143,107,0.18)";
+    ctx.lineWidth = 3;
+    const h = canvas.height;
+    ctx.beginPath();
+    ctx.moveTo(0, h*0.30); ctx.lineTo(canvas.width, h*0.30);
+    ctx.moveTo(0, h*0.70); ctx.lineTo(canvas.width, h*0.70);
+    ctx.stroke();
+    ctx.restore();
+
+    // dots
+    current.dots.forEach((d, i) => {
+      const done = i < dotIndex;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, 14, 0, Math.PI*2);
+      ctx.fillStyle = done ? "rgba(58,143,107,0.45)" : "rgba(58,143,107,0.95)";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+
+      // number
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "16px 'Baloo 2', cursive";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(i+1), d.x, d.y);
+    });
+
+    // update UI
+    dotsEl.textContent = `🟢 Dots: ${dotIndex}/${current.dots.length}`;
+    setStars(stars); // refresh
+  }
+
+  // drawing trace lines
+  let drawing = false;
+  let last = null;
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches && e.touches[0];
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  function dist(a,b){
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+    return Math.sqrt(dx*dx + dy*dy);
+  }
+
+  function hitDot(pos){
+    if (!current) return;
+    const target = current.dots[dotIndex];
+    if (!target) return;
+
+    // dot hit radius
+    if (dist(pos, target) < 22){
+      dotIndex++;
+      if (dotIndex >= current.dots.length){
+        // completed letter
+        setStars(stars + 1);
+        statusEl.textContent = `🎉 Great tracing! You earned a star! ⭐`;
+        speak(`Great job! You traced ${current.name} and earned a star.`);
+      } else {
+        statusEl.textContent = `✅ Nice! Keep going…`;
+      }
+      draw();
+    }
+  }
+
+  function start(e){
+    if (!current) return;
+    drawing = true;
+    last = getPos(e);
+    hitDot(last);
+    e.preventDefault();
+  }
+  function move(e){
+    if (!drawing || !current) return;
+    const pos = getPos(e);
+
+    // draw line
+    ctx.save();
+    ctx.strokeStyle = "rgba(106,174,214,0.95)";
+    ctx.lineWidth = 10;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    ctx.restore();
+
+    last = pos;
+    hitDot(pos);
+    e.preventDefault();
+  }
+  function end(){
+    drawing = false;
+    last = null;
+  }
+
+  canvas.addEventListener("mousedown", start);
+  canvas.addEventListener("mousemove", move);
+  window.addEventListener("mouseup", end);
+
+  canvas.addEventListener("touchstart", start, {passive:false});
+  canvas.addEventListener("touchmove", move, {passive:false});
+  canvas.addEventListener("touchend", end);
+
+  // buttons
+  document.getElementById("clearBtn").onclick = () => {
+    if (!current) return;
+    setLetter(current);
+  };
+
+  document.getElementById("nextBtn").onclick = () => {
+    idx = (idx + 1) % letters.length;
+    setLetter(letters[idx]);
+  };
+
+  document.getElementById("sayBtn").onclick = () => {
+    if (!current) speak("Pick a letter. Then trace it by touching the dots in order.");
+    else speak(`Trace letter ${current.name}. Touch the dots in order to earn a star.`);
+  };
+
+  // letter buttons
+  const letterButtons = document.getElementById("letterButtons");
+  letters.forEach((L, i) => {
+    const b = document.createElement("button");
+    b.className = "select";
+    b.textContent = L.name;
+    b.onclick = () => { idx = i; setLetter(L); };
+    letterButtons.appendChild(b);
+  });
+
+  // init
+  setStars(stars);
+  setLetter(letters[0]);
+  window.addEventListener("resize", resizeForDisplay);
+</script>
+
+</body>
+</html>
