@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Diagnostic Test | BloomELearning ✨</title>
+  <title>Diagnostic | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -18,7 +18,8 @@
         <li><a href="phonics.html">Phonics</a></li>
         <li><a href="reading.html">Reading</a></li>
         <li><a href="math.html">Math</a></li>
-        <li><a href="diagnostic.html">Diagnostic</a></li>
+        <li><a href="progress.html">My Progress</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
       </ul>
     </nav>
   </div>
@@ -36,8 +37,7 @@
     <h2 class="section-title">Start Diagnostic</h2>
 
     <div class="game-box">
-
-      <div style="font-weight:900;">Choose level:</div>
+      <div class="kid-big">Choose level:</div>
       <div class="grade-row">
         <button class="select" data-level="2-3">2nd–3rd Grade</button>
         <button class="select" data-level="4plus">4th Grade+</button>
@@ -46,185 +46,154 @@
       <div id="quiz" style="margin-top:20px;"></div>
 
       <div class="game-row">
-        <button class="btn secondary" id="readAloudBtn" disabled>🔊 Read Question</button>
+        <button class="btn secondary" id="readBtn" disabled>🔊 Read Question</button>
         <button class="btn secondary" id="prevBtn" disabled>⬅ Prev</button>
         <button class="btn secondary" id="nextBtn" disabled>Next ➡</button>
       </div>
 
       <div class="game-row">
-        <button class="btn" id="submitBtn" disabled>Submit Diagnostic</button>
+        <button class="btn" id="submitBtn" disabled>Submit</button>
         <button class="btn secondary" id="resetBtn" disabled>Reset</button>
-        <a class="btn secondary" href="index.html">Back Home</a>
       </div>
 
-      <div id="results" style="margin-top:20px;"></div>
-
+      <div id="results" style="margin-top:16px;"></div>
     </div>
   </div>
 </section>
 
-<footer>
-  © 2026 BloomELearning ✨ | Made with 💖
-</footer>
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-/* ---------------- Question Banks ---------------- */
+  const bank_2_3 = [
+    { domain:"Word Skills", q:"Which word has a long A sound?", options:["rain","ran","ring"], correct:0 },
+    { domain:"Word Skills", q:"Which word has an r-controlled vowel?", options:["car","cake","cap"], correct:0 },
+    { domain:"Reading", q:"Read: 'Sam packed a lunch for a field trip.' Why did Sam pack lunch?", options:["Field trip","Bedtime","Dinner party"], correct:0 },
+    { domain:"Reading", q:"Read: 'Maya wore a coat and mittens outside.' The weather is probably…", options:["Cold","Hot","Rainy and warm"], correct:0 },
+    { domain:"Math", q:"47 + 18 = ?", options:["65","55","75"], correct:0 },
+    { domain:"Math", q:"56 - 29 = ?", options:["27","37","25"], correct:0 }
+  ];
 
-const bank_2_3 = [
-  { domain:"Word Skills", q:"Which word has a long A sound?", options:["rain","ran","ring"], correct:0 },
-  { domain:"Word Skills", q:"Which word has an r-controlled vowel?", options:["car","cake","cap"], correct:0 },
-  { domain:"Reading", q:"Read: 'Sam packed a lunch for a field trip.' Why did Sam pack lunch?", options:["Field trip","Bedtime","Dinner party"], correct:0 },
-  { domain:"Reading", q:"Read: 'The dog ran to the door when it heard the bell.' What made it run?", options:["A bell","A cat","A sandwich"], correct:0 },
-  { domain:"Math", q:"47 + 18 = ?", options:["65","55","75"], correct:0 },
-  { domain:"Math", q:"56 - 29 = ?", options:["27","37","25"], correct:0 }
-];
+  const bank_4plus = [
+    { domain:"Word Skills", q:"Which word has a prefix meaning 'again'?", options:["redo","happy","played"], correct:0 },
+    { domain:"Word Skills", q:"Which word contains a silent letter?", options:["knight","kite","kit"], correct:0 },
+    { domain:"Reading", q:"Read: 'Ella forgot her homework, so she wrote it in her planner.' What lesson did she learn?", options:["Use a planner","Skip homework","Lose papers"], correct:0 },
+    { domain:"Reading", q:"Read: 'The main character felt nervous before the speech.' Nervous means…", options:["Worried","Sleepy","Hungry"], correct:0 },
+    { domain:"Math", q:"326 + 187 = ?", options:["513","413","503"], correct:0 },
+    { domain:"Math", q:"72 ÷ 8 = ?", options:["9","8","7"], correct:0 }
+  ];
 
-const bank_4plus = [
-  { domain:"Word Skills", q:"Which word has a prefix meaning 'again'?", options:["redo","happy","played"], correct:0 },
-  { domain:"Word Skills", q:"Which word contains a silent letter?", options:["knight","kite","kit"], correct:0 },
-  { domain:"Reading", q:"Read: 'Ella forgot her homework, so she wrote it in her planner.' What lesson did she learn?", options:["Use a planner","Skip homework","Lose papers"], correct:0 },
-  { domain:"Reading", q:"Read: 'Tom trained for weeks and improved.' What caused improvement?", options:["Training","A hat","Skipping practice"], correct:0 },
-  { domain:"Math", q:"326 + 187 = ?", options:["513","413","503"], correct:0 },
-  { domain:"Math", q:"72 ÷ 8 = ?", options:["9","8","7"], correct:0 }
-];
+  let level = null;
+  let questions = [];
+  let currentIndex = 0;
+  let answers = {};
 
-/* ---------------- State ---------------- */
+  const quizEl = document.getElementById("quiz");
+  const resultsEl = document.getElementById("results");
+  const readBtn = document.getElementById("readBtn");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const submitBtn = document.getElementById("submitBtn");
+  const resetBtn = document.getElementById("resetBtn");
 
-let level = null;
-let questions = [];
-let currentIndex = 0;
-let answers = {};
-
-/* ---------------- Elements ---------------- */
-
-const quizEl = document.getElementById("quiz");
-const resultsEl = document.getElementById("results");
-const readBtn = document.getElementById("readAloudBtn");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const submitBtn = document.getElementById("submitBtn");
-const resetBtn = document.getElementById("resetBtn");
-
-/* ---------------- Speech ---------------- */
-
-function speak(text) {
-  if (!("speechSynthesis" in window)) {
-    alert("Your browser does not support read aloud.");
-    return;
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1; u.pitch = 1.02;
+    window.speechSynthesis.speak(u);
   }
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 1;
-  window.speechSynthesis.speak(utter);
-}
 
-readBtn.addEventListener("click", () => {
-  if (!questions.length) return;
-  speak(questions[currentIndex].q);
-});
+  readBtn.onclick = () => {
+    if (!questions.length) return;
+    const q = questions[currentIndex];
+    speak(`${q.domain}. Question ${currentIndex+1}. ${q.q}`);
+  };
 
-/* ---------------- Rendering ---------------- */
+  function render(){
+    const q = questions[currentIndex];
+    quizEl.innerHTML = `
+      <div style="font-weight:900; margin-bottom:10px;">
+        ${q.domain} • Question ${currentIndex+1} of ${questions.length}
+      </div>
+      <div style="font-size:20px; font-weight:900; margin-bottom:12px;">
+        ${q.q}
+      </div>
+      <div class="game-row" id="opts"></div>
+      <div class="small" style="margin-top:10px;">Answered: ${Object.keys(answers).length}/${questions.length}</div>
+    `;
 
-function renderQuestion() {
-  const q = questions[currentIndex];
+    const opts = document.getElementById("opts");
+    q.options.forEach((opt, idx) => {
+      const b = document.createElement("button");
+      b.className = "pill";
+      b.textContent = opt;
 
-  quizEl.innerHTML = `
-    <div style="font-weight:900; margin-bottom:10px;">
-      ${q.domain} • Question ${currentIndex+1} of ${questions.length}
-    </div>
-    <div style="font-size:20px; font-weight:900; margin-bottom:14px;">
-      ${q.q}
-    </div>
-    <div class="game-row" id="optionsRow"></div>
-  `;
+      if (answers[currentIndex] === idx) {
+        b.style.background = "rgba(58,143,107,0.10)";
+      }
 
-  const optionsRow = document.getElementById("optionsRow");
+      b.onclick = () => {
+        answers[currentIndex] = idx;
+        render();
+        updateButtons();
+      };
+      opts.appendChild(b);
+    });
 
-  q.options.forEach((opt, idx) => {
-    const btn = document.createElement("button");
-    btn.className = "pill";
-    btn.textContent = opt;
+    updateButtons();
+  }
 
-    if (answers[currentIndex] === idx) {
-      btn.style.background = "rgba(247,213,215,0.4)";
-    }
+  function updateButtons(){
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === questions.length - 1;
+    submitBtn.disabled = Object.keys(answers).length !== questions.length;
+  }
 
-    btn.onclick = () => {
-      answers[currentIndex] = idx;
-      renderQuestion();
-      updateButtons();
-    };
+  prevBtn.onclick = () => { if (currentIndex>0){ currentIndex--; render(); } };
+  nextBtn.onclick = () => { if (currentIndex<questions.length-1){ currentIndex++; render(); } };
 
-    optionsRow.appendChild(btn);
-  });
+  submitBtn.onclick = () => {
+    let correct = 0;
+    const totals = {};
+    const corr = {};
 
-  updateButtons();
-}
+    questions.forEach((q,i)=>{
+      totals[q.domain] = (totals[q.domain]||0)+1;
+      corr[q.domain] = corr[q.domain]||0;
+      if (answers[i] === q.correct){ correct++; corr[q.domain]++; }
+    });
 
-function updateButtons() {
-  prevBtn.disabled = currentIndex === 0;
-  nextBtn.disabled = currentIndex === questions.length-1;
-  submitBtn.disabled = Object.keys(answers).length !== questions.length;
-}
+    const percent = Math.round((correct/questions.length)*100);
 
-/* ---------------- Navigation ---------------- */
+    const lines = Object.keys(totals).map(d=>{
+      const p = Math.round((corr[d]/totals[d])*100);
+      return `• ${d}: ${p}%`;
+    }).join("<br>");
 
-prevBtn.onclick = () => {
-  if (currentIndex > 0) currentIndex--;
-  renderQuestion();
-};
+    const payload = { level, percent, correct, total: questions.length, ts: new Date().toISOString() };
+    localStorage.setItem("bloom_diagnostic_latest", JSON.stringify(payload));
 
-nextBtn.onclick = () => {
-  if (currentIndex < questions.length-1) currentIndex++;
-  renderQuestion();
-};
+    resultsEl.innerHTML = `
+      <div class="status">Score: ${correct}/${questions.length} (${percent}%)</div>
+      <div style="margin-top:10px; line-height:1.6;">
+        <strong>By skill:</strong><br>${lines}
+      </div>
+      <div style="margin-top:10px;">
+        Next: try <a href="phonics.html">Phonics</a>, <a href="reading.html">Reading</a>, or <a href="math.html">Math</a>.
+      </div>
+    `;
+  };
 
-/* ---------------- Scoring ---------------- */
+  resetBtn.onclick = () => {
+    answers = {};
+    currentIndex = 0;
+    resultsEl.innerHTML = "";
+    render();
+  };
 
-submitBtn.onclick = () => {
-  let correct = 0;
-  let domainTotals = {};
-  let domainCorrect = {};
-
-  questions.forEach((q,i)=>{
-    domainTotals[q.domain] = (domainTotals[q.domain]||0)+1;
-    domainCorrect[q.domain] = domainCorrect[q.domain]||0;
-
-    if (answers[i] === q.correct) {
-      correct++;
-      domainCorrect[q.domain]++;
-    }
-  });
-
-  const percent = Math.round((correct/questions.length)*100);
-
-  let summary = `<div class="status">
-    Score: ${correct} / ${questions.length} (${percent}%)
-  </div><br>`;
-
-  Object.keys(domainTotals).forEach(d=>{
-    const pct = Math.round((domainCorrect[d]/domainTotals[d])*100);
-    summary += `• ${d}: ${pct}%<br>`;
-  });
-
-  resultsEl.innerHTML = summary;
-};
-
-/* ---------------- Reset ---------------- */
-
-resetBtn.onclick = () => {
-  answers = {};
-  currentIndex = 0;
-  resultsEl.innerHTML = "";
-  renderQuestion();
-};
-
-/* ---------------- Start ---------------- */
-
-document.querySelectorAll(".select").forEach(btn=>{
-  btn.onclick = ()=>{
-    level = btn.getAttribute("data-level");
-    questions = level==="2-3"? bank_2_3 : bank_4plus;
+  function start(lvl){
+    level = lvl;
+    questions = (level === "2-3") ? bank_2_3 : bank_4plus;
     answers = {};
     currentIndex = 0;
 
@@ -233,9 +202,12 @@ document.querySelectorAll(".select").forEach(btn=>{
     nextBtn.disabled = false;
     resetBtn.disabled = false;
 
-    renderQuestion();
-  };
-});
+    render();
+  }
+
+  document.querySelectorAll(".select").forEach(btn=>{
+    btn.onclick = () => start(btn.getAttribute("data-level"));
+  });
 </script>
 
 </body>
