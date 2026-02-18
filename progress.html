@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Progress | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Student Login</a></li>
+        <li><a href="games.html">Character Games</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>⭐ My Progress</h1>
+    <p>See your points and badges in one place.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Dashboard</h2>
+
+    <div class="game-box">
+      <div id="studentLine" class="kid-big"></div>
+
+      <div class="progress-list">
+        <div class="progress-item">
+          <div style="font-weight:900;">🔤 Phonics Points</div>
+          <div id="phonicsScore">0</div>
+          <div class="bar"><div id="phonicsBar"></div></div>
+          <div class="small">Goal: 10 points</div>
+        </div>
+
+        <div class="progress-item">
+          <div style="font-weight:900;">📖 Reading Points</div>
+          <div id="readingScore">0</div>
+          <div class="bar"><div id="readingBar"></div></div>
+          <div class="small">Goal: 10 points</div>
+        </div>
+
+        <div class="progress-item">
+          <div style="font-weight:900;">➕ Math Points</div>
+          <div id="mathScore">0</div>
+          <div class="bar"><div id="mathBar"></div></div>
+          <div class="small">Goal: 10 points</div>
+        </div>
+
+        <div class="progress-item">
+          <div style="font-weight:900;">🧠 Diagnostic</div>
+          <div id="diagStatus">Not taken yet</div>
+          <div class="small">Take it anytime: <a href="diagnostic.html">Diagnostic Test</a></div>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <a class="btn" href="phonics.html">Play Phonics</a>
+        <a class="btn" href="reading.html">Play Reading</a>
+        <a class="btn" href="math.html">Play Math</a>
+      </div>
+
+      <div class="game-row">
+        <button class="btn secondary" id="resetAllBtn">Reset ALL Progress</button>
+      </div>
+
+      <p class="small" style="margin-top:10px;">
+        Progress is saved on this device only.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 BloomELearning ✨ | Made with 💖
+</footer>
+
+<script>
+  const characters = {
+    bunny:"🐰 Bunny", panda:"🐼 Panda", fox:"🦊 Foxy", cat:"🐱 Kitty",
+    dog:"🐶 Puppy", owl:"🦉 Ollie Owl", unicorn:"🦄 Uni", dino:"🦖 Dino"
+  };
+
+  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+  function pct(score, goal) { return clamp(Math.round((score / goal) * 100), 0, 100); }
+
+  const readingScore = parseInt(localStorage.getItem("bloom_reading_score") || "0", 10);
+  const mathScore = parseInt(localStorage.getItem("bloom_math_score") || "0", 10);
+
+  const phonicsK = parseInt(localStorage.getItem("bloom_phonics_K_score") || "0", 10);
+  const phonics1 = parseInt(localStorage.getItem("bloom_phonics_1_score") || "0", 10);
+  const phonics2 = parseInt(localStorage.getItem("bloom_phonics_2_score") || "0", 10);
+  const phonicsTotal = phonicsK + phonics1 + phonics2;
+
+  const logged = localStorage.getItem("bloom_student_logged_in") === "true";
+  const charId = localStorage.getItem("bloom_student_character") || "bunny";
+  const charLabel = characters[charId] || characters.bunny;
+
+  document.getElementById("studentLine").textContent =
+    logged ? `Hi, ${charLabel}! 🌸` : `Hi! Go to Student Login and pick a buddy. 🌸`;
+
+  document.getElementById("phonicsScore").textContent = phonicsTotal;
+  document.getElementById("readingScore").textContent = readingScore;
+  document.getElementById("mathScore").textContent = mathScore;
+
+  document.getElementById("phonicsBar").style.width = pct(phonicsTotal, 10) + "%";
+  document.getElementById("readingBar").style.width = pct(readingScore, 10) + "%";
+  document.getElementById("mathBar").style.width = pct(mathScore, 10) + "%";
+
+  const diag = localStorage.getItem("bloom_diagnostic_latest");
+  if (diag) {
+    try {
+      const obj = JSON.parse(diag);
+      document.getElementById("diagStatus").textContent = `Last score: ${obj.percent}%`;
+    } catch {
+      document.getElementById("diagStatus").textContent = "Taken (saved)";
+    }
+  }
+
+  document.getElementById("resetAllBtn").addEventListener("click", () => {
+    localStorage.removeItem("bloom_reading_score");
+    localStorage.removeItem("bloom_math_score");
+    localStorage.removeItem("bloom_diagnostic_latest");
+
+    localStorage.removeItem("bloom_phonics_K_score");
+    localStorage.removeItem("bloom_phonics_1_score");
+    localStorage.removeItem("bloom_phonics_2_score");
+    localStorage.removeItem("bloom_phonics_K_streak");
+    localStorage.removeItem("bloom_phonics_1_streak");
+    localStorage.removeItem("bloom_phonics_2_streak");
+
+    location.reload();
+  });
+</script>
+
+</body>
+</html>
