@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unicorn Word Builder | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="games.html">Character Games</a></li>
+        <li><a href="progress.html">My Progress</a></li>
+        <li><a href="parent.html">Parent Resources</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>🦄 Unicorn Word Builder</h1>
+    <p>Drag the letters into the boxes to build the word!</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Build the Word ✨</h2>
+
+    <div class="game-box">
+      <div class="kid-big" id="hint">Hint: (loading)</div>
+
+      <div class="game-row" style="margin-top:12px;">
+        <button class="btn secondary" id="readBtn">🔊 Read</button>
+        <button class="btn secondary" id="newBtn">New Word</button>
+        <button class="btn secondary" id="resetBtn">Reset Score</button>
+      </div>
+
+      <div style="margin-top:16px; font-weight:900;">Drag letters here:</div>
+      <div class="game-row" id="slots" style="margin-top:10px;"></div>
+
+      <div style="margin-top:16px; font-weight:900;">Letters:</div>
+      <div class="game-row" id="letters" style="margin-top:10px;"></div>
+
+      <div class="status" id="status"></div>
+      <div class="small" id="scoreLine"></div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  // Saves score here:
+  const SCORE_KEY = "bloom_unicorn_score";
+
+  const words = [
+    { word: "CAT", hint: "A pet that says meow" },
+    { word: "SUN", hint: "It shines in the sky" },
+    { word: "FROG", hint: "It hops and says ribbit" },
+    { word: "SHIP", hint: "A big boat" },
+    { word: "RAIN", hint: "Water falling from clouds" },
+    { word: "STAR", hint: "Twinkles at night" }
+  ];
+
+  let score = parseInt(localStorage.getItem(SCORE_KEY) || "0", 10);
+  let current = null;
+
+  const hintEl = document.getElementById("hint");
+  const slotsEl = document.getElementById("slots");
+  const lettersEl = document.getElementById("letters");
+  const statusEl = document.getElementById("status");
+  const scoreLineEl = document.getElementById("scoreLine");
+
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1;
+    u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
+  }
+
+  function shuffle(arr){ return arr.slice().sort(() => Math.random() - 0.5); }
+  function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
+  function showScore(){ scoreLineEl.textContent = `Score: ${score} (saved)`; }
+
+  function buildSlots(len){
+    slotsEl.innerHTML = "";
+    for (let i = 0; i < len; i++) {
+      const slot = document.createElement("div");
+      slot.className = "pill";
+      slot.style.minWidth = "54px";
+      slot.style.textAlign = "center";
+      slot.style.fontSize = "22px";
+      slot.style.userSelect = "none";
+      slot.dataset.slotIndex = String(i);
+      slot.dataset.letter = "";
+
+      slot.textContent = "⬜";
+
+      slot.addEventListener("dragover", (e) => e.preventDefault());
+      slot.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const letterId = e.dataTransfer.getData("text/plain");
+        const letterBtn = document.getElementById(letterId);
+        if (!letterBtn) return;
+
+        // If this slot already has a letter, do nothing
+        if (slot.dataset.letter) return;
+
+        slot.dataset.letter = letterBtn.dataset.letter;
+        slot.textContent = letterBtn.dataset.letter;
+
+        // disable dragged letter
+        letterBtn.disabled = true;
+        letterBtn.style.opacity = "0.5";
+
+        checkAnswer();
+      });
+
+      slotsEl.appendChild(slot);
+    }
+  }
+
+  function buildLetters(word){
+    lettersEl.innerHTML = "";
+    const letters = shuffle(word.split(""));
+    letters.forEach((L, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "pill";
+      btn.textContent = L;
+      btn.id = `letter_${idx}_${Date.now()}`;
+      btn.dataset.letter = L;
+      btn.draggable = true;
+
+      btn.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", btn.id);
+      });
+
+      lettersEl.appendChild(btn);
+    });
+  }
+
+  function getBuiltWord(){
+    const slots = Array.from(slotsEl.children);
+    return slots.map(s => s.dataset.letter || "").join("");
+  }
+
+  function checkAnswer(){
+    const built = getBuiltWord();
+    if (built.length !== current.word.length) return;
+
+    if (built === current.word) {
+      score++;
+      save();
+      statusEl.textContent = `✅ Nice! You built "${current.word}"! +1 point 🌟`;
+      showScore();
+      setTimeout(newRound, 800);
+    } else {
+      statusEl.textContent = `❌ Almost! Try again.`;
+    }
+  }
+
+  function newRound(){
+    current = words[Math.floor(Math.random() * words.length)];
+    hintEl.textContent = `Hint: ${current.hint} (${current.word.length} letters)`;
+    statusEl.textContent = "";
+    buildSlots(current.word.length);
+    buildLetters(current.word);
+    showScore();
+  }
+
+  document.getElementById("readBtn").onclick = () => {
+    if (!current) return;
+    speak(`Unicorn Word Builder. Hint: ${current.hint}. Build the word with ${current.word.length} letters.`);
+  };
+
+  document.getElementById("newBtn").onclick = newRound;
+
+  document.getElementById("resetBtn").onclick = () => {
+    score = 0;
+    save();
+    statusEl.textContent = "Score reset!";
+    showScore();
+  };
+
+  newRound();
+</script>
+
+</body>
+</html>
