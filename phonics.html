@@ -9,6 +9,7 @@
 </head>
 <body>
 
+<!-- SAME DROPDOWN NAV -->
 <header>
   <div class="container">
     <div class="logo">BloomELearning ✨</div>
@@ -54,42 +55,78 @@
 <section class="hero">
   <div class="container">
     <h1>Phonics 🔤</h1>
-    <p>Pick a grade, listen to the sound, and choose the right letter!</p>
+    <p>First we do a quick diagnostic. Then you’ll play a game that matches what you need most!</p>
     <div class="quick-strip">
-      <button class="btn secondary" id="soundBtn">🔊 Read Question</button>
+      <button class="btn secondary" id="soundBtn">🔊 Read</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
+    <div class="hero-note">K–2: letter names + letter sounds</div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Pick a Grade 🌟</h2>
+    <h2 class="section-title">Start Here 🌟</h2>
 
     <div class="game-box wide">
+      <!-- Grade pick -->
       <div class="badge-row">
         <button class="pill active" data-grade="K">Kindergarten</button>
         <button class="pill" data-grade="1">Grade 1</button>
         <button class="pill" data-grade="2">Grade 2</button>
       </div>
 
-      <div class="game-box" style="margin-top:14px;">
-        <p class="kid-big" id="question">Question loads here…</p>
-        <p class="small" id="hint">Hint loads here…</p>
-
-        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
-
-        <p class="kid-big" id="result" style="margin-top:14px;"></p>
-
-        <div class="quick-strip">
-          <button class="btn" id="nextBtn">Next</button>
-          <button class="btn secondary" id="resetBtn">Reset Stars</button>
-        </div>
-
-        <p class="small" style="margin-top:10px;">
-          Earn ⭐ for correct answers. Saved on this device.
-        </p>
+      <!-- MODE TABS -->
+      <div class="quick-strip" style="margin-top:14px;">
+        <button class="btn" id="goDiagBtn">Take Diagnostic</button>
+        <button class="btn secondary" id="goGameBtn">Go to Game</button>
+        <button class="btn secondary" id="retakeBtn">Retake Diagnostic</button>
       </div>
+
+      <!-- DIAGNOSTIC PANEL -->
+      <div class="game-box" id="diagPanel" style="margin-top:14px;">
+        <p class="kid-big">Diagnostic ✅</p>
+        <p class="small" id="diagDesc">Answer a few letter name + sound questions.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="diagQ">Press “Take Diagnostic” to begin.</p>
+          <p class="small" id="diagHint"></p>
+
+          <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
+          <p class="kid-big" id="diagResult" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="diagNextBtn">Next</button>
+            <button class="btn secondary" id="diagSkipBtn">Skip</button>
+          </div>
+
+          <p class="small" style="margin-top:10px;">This helps BloomELearning choose the right game for you.</p>
+        </div>
+      </div>
+
+      <!-- GAME PANEL -->
+      <div class="game-box" id="gamePanel" style="margin-top:14px; display:none;">
+        <p class="kid-big">Mini Game 🎮</p>
+        <p class="small" id="gamePlan">Your game is based on your diagnostic.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="gameQ">Game question loads here…</p>
+          <p class="small" id="gameHint"></p>
+
+          <div class="grid-3" id="gameChoices" style="margin-top:14px;"></div>
+          <p class="kid-big" id="gameResult" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="gameNextBtn">Next</button>
+            <button class="btn secondary" id="resetStarsBtn">Reset Stars</button>
+          </div>
+
+          <p class="small" style="margin-top:10px;">
+            Correct answers earn ⭐ and show up in My Progress.
+          </p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -97,113 +134,423 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
+  // ---------- Storage Keys ----------
   const PROG_KEY = "bloom_progress";
+  const PHONICS_DIAG_KEY = "bloom_phonics_diag";
 
-  function loadProgress(){
-    try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); }
-    catch { return {}; }
+  // ---------- Helpers ----------
+  function load(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
   }
-  function saveProgress(p){
-    localStorage.setItem(PROG_KEY, JSON.stringify(p));
+  function save(key, obj) {
+    localStorage.setItem(key, JSON.stringify(obj));
   }
-  function speak(text){
+  function speak(text) {
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.rate = 1;
     speechSynthesis.speak(u);
   }
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 
-  const gradeSets = {
-    "K": [
-      { sound:"/m/", correct:"M", choices:["M","S","T"], hint:"M makes /m/ like 'moon'." },
-      { sound:"/s/", correct:"S", choices:["B","S","D"], hint:"S makes /s/ like 'sun'." },
-      { sound:"/t/", correct:"T", choices:["T","A","P"], hint:"T makes /t/ like 'top'." }
-    ],
-    "1": [
-      { sound:"/sh/", correct:"SH", choices:["CH","SH","TH"], hint:"SH like 'ship'." },
-      { sound:"/ch/", correct:"CH", choices:["CH","PH","WH"], hint:"CH like 'chop'." },
-      { sound:"/th/", correct:"TH", choices:["TH","SH","CH"], hint:"TH like 'this' or 'thumb'." }
-    ],
-    "2": [
-      { sound:"long A (ai/ay)", correct:"AI", choices:["AI","OA","EE"], hint:"AI like 'rain'." },
-      { sound:"long E (ee/ea)", correct:"EE", choices:["EE","OO","AI"], hint:"EE like 'feet'." },
-      { sound:"long O (oa/ow)", correct:"OA", choices:["OA","EE","AI"], hint:"OA like 'boat'." }
-    ]
-  };
-
+  // ---------- Grade Selection ----------
   let grade = "K";
-  let idx = 0;
-
   function renderGradeButtons(){
     document.querySelectorAll(".pill").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.grade === grade);
     });
   }
+  document.querySelectorAll(".pill").forEach(btn=>{
+    btn.onclick = ()=>{
+      grade = btn.dataset.grade;
+      renderGradeButtons();
+      // if diagnostic exists for another grade, keep it but note it
+      updateModeButtons();
+      showDiagnosticIntro();
+    };
+  });
 
-  function renderQuestion(){
-    const q = gradeSets[grade][idx % gradeSets[grade].length];
-    document.getElementById("question").textContent = `What letters make ${q.sound}?`;
-    document.getElementById("hint").textContent = q.hint;
-    document.getElementById("result").textContent = "";
+  // ---------- Content Banks (K–2) ----------
+  // Letter names: show letter -> choose name ("A" -> "A")
+  // Letter sounds: show sound -> choose letter (" /m/ " -> "M")
+  const gradeBanks = {
+    "K": {
+      nameItems: [
+        { letter:"A", correct:"A", choices:["A","B","D"] },
+        { letter:"M", correct:"M", choices:["N","M","W"] },
+        { letter:"S", correct:"S", choices:["S","C","G"] }
+      ],
+      soundItems: [
+        { sound:"/m/", correct:"M", choices:["M","S","T"], hint:"/m/ like moon" },
+        { sound:"/s/", correct:"S", choices:["B","S","D"], hint:"/s/ like sun" },
+        { sound:"/t/", correct:"T", choices:["T","A","P"], hint:"/t/ like top" }
+      ]
+    },
+    "1": {
+      nameItems: [
+        { letter:"B", correct:"B", choices:["B","D","P"] },
+        { letter:"R", correct:"R", choices:["R","K","H"] },
+        { letter:"T", correct:"T", choices:["T","F","E"] }
+      ],
+      soundItems: [
+        { sound:"/sh/", correct:"SH", choices:["CH","SH","TH"], hint:"SH like ship" },
+        { sound:"/ch/", correct:"CH", choices:["CH","PH","WH"], hint:"CH like chop" },
+        { sound:"/th/", correct:"TH", choices:["TH","SH","CH"], hint:"TH like this" }
+      ]
+    },
+    "2": {
+      nameItems: [
+        { letter:"G", correct:"G", choices:["G","J","Q"] },
+        { letter:"P", correct:"P", choices:["P","R","B"] },
+        { letter:"V", correct:"V", choices:["V","W","Y"] }
+      ],
+      soundItems: [
+        { sound:"long A (ai/ay)", correct:"AI", choices:["AI","OA","EE"], hint:"AI like rain" },
+        { sound:"long E (ee/ea)", correct:"EE", choices:["EE","OO","AI"], hint:"EE like feet" },
+        { sound:"long O (oa/ow)", correct:"OA", choices:["OA","EE","AI"], hint:"OA like boat" }
+      ]
+    }
+  };
 
-    const choices = document.getElementById("choices");
-    choices.innerHTML = "";
+  // ---------- Diagnostic Builder ----------
+  // We mix name + sound questions into one diagnostic.
+  function buildDiagnostic(grade){
+    const b = gradeBanks[grade];
+    const nameQs = b.nameItems.map(x => ({
+      type:"name",
+      prompt:`What is the NAME of this letter: ${x.letter}?`,
+      hint:"Say the letter name out loud.",
+      correct:x.correct,
+      choices:shuffle(x.choices),
+      focusKey:`name:${x.letter}`
+    }));
+    const soundQs = b.soundItems.map(x => ({
+      type:"sound",
+      prompt:`Which letter(s) make ${x.sound}?`,
+      hint:x.hint || "Listen for the sound.",
+      correct:x.correct,
+      choices:shuffle(x.choices),
+      focusKey:`sound:${x.correct}`
+    }));
+    // 6 questions total (3 name + 3 sound)
+    return shuffle([...nameQs, ...soundQs]);
+  }
+
+  // ---------- Targeted Game Builder ----------
+  // Use missed focusKeys first. If none missed, mix practice.
+  function buildGame(grade, missedFocusKeys){
+    const b = gradeBanks[grade];
+
+    const nameQs = b.nameItems.map(x => ({
+      prompt:`Letter NAME: ${x.letter} is called…`,
+      hint:"Pick the correct letter name.",
+      correct:x.correct,
+      choices:shuffle(x.choices),
+      focusKey:`name:${x.letter}`
+    }));
+
+    const soundQs = b.soundItems.map(x => ({
+      prompt:`Letter SOUND: Which makes ${x.sound}?`,
+      hint:x.hint || "Listen for the sound.",
+      correct:x.correct,
+      choices:shuffle(x.choices),
+      focusKey:`sound:${x.correct}`
+    }));
+
+    // Pool
+    const pool = [...nameQs, ...soundQs];
+
+    // Prioritize missed items
+    const missed = pool.filter(q => missedFocusKeys.includes(q.focusKey));
+    const rest   = pool.filter(q => !missedFocusKeys.includes(q.focusKey));
+
+    // Build 10 rounds: missed first, then fill
+    const game = [];
+    while (game.length < 10) {
+      if (missed.length) game.push(missed.shift());
+      else game.push(rest[game.length % rest.length]);
+    }
+    return game;
+  }
+
+  // ---------- State ----------
+  let diagQs = [];
+  let diagIndex = 0;
+  let diagCorrect = 0;
+  let diagMissed = []; // focusKey list
+
+  let gameQs = [];
+  let gameIndex = 0;
+
+  // ---------- UI refs ----------
+  const diagPanel = document.getElementById("diagPanel");
+  const gamePanel = document.getElementById("gamePanel");
+
+  const diagQ = document.getElementById("diagQ");
+  const diagHint = document.getElementById("diagHint");
+  const diagChoices = document.getElementById("diagChoices");
+  const diagResult = document.getElementById("diagResult");
+
+  const gameQ = document.getElementById("gameQ");
+  const gameHint = document.getElementById("gameHint");
+  const gameChoices = document.getElementById("gameChoices");
+  const gameResult = document.getElementById("gameResult");
+  const gamePlan = document.getElementById("gamePlan");
+
+  // ---------- Mode buttons ----------
+  const goDiagBtn = document.getElementById("goDiagBtn");
+  const goGameBtn = document.getElementById("goGameBtn");
+  const retakeBtn = document.getElementById("retakeBtn");
+
+  function updateModeButtons(){
+    const saved = load(PHONICS_DIAG_KEY, null);
+    // Show Go to Game if saved diag for current grade
+    const hasCurrent = saved && saved.grade === grade;
+    goGameBtn.disabled = !hasCurrent;
+    goGameBtn.style.opacity = hasCurrent ? "1" : ".6";
+  }
+
+  // ---------- Diagnostic UI ----------
+  function showDiagnosticIntro(){
+    diagQ.textContent = "Press “Take Diagnostic” to begin.";
+    diagHint.textContent = "";
+    diagChoices.innerHTML = "";
+    diagResult.textContent = "";
+    diagPanel.style.display = "block";
+    gamePanel.style.display = "none";
+  }
+
+  function renderDiagQuestion(){
+    const q = diagQs[diagIndex];
+    diagQ.textContent = q.prompt;
+    diagHint.textContent = q.hint || "";
+    diagResult.textContent = "";
+
+    diagChoices.innerHTML = "";
     q.choices.forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
-      card.onclick = ()=> checkAnswer(c, q.correct);
-      choices.appendChild(card);
+      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> checkDiagAnswer(c);
+      diagChoices.appendChild(card);
     });
   }
 
-  function addStar(){
-    const p = loadProgress();
-    p.phonicsStars = (p.phonicsStars || 0) + 1;
-    saveProgress(p);
-  }
+  function checkDiagAnswer(choice){
+    // prevent double answering
+    if (diagResult.textContent) return;
 
-  function checkAnswer(choice, correct){
-    if (choice === correct){
-      document.getElementById("result").textContent = "Correct! ⭐";
-      addStar();
+    const q = diagQs[diagIndex];
+    if (choice === q.correct){
+      diagCorrect++;
+      diagResult.textContent = "Correct! ⭐";
       speak("Correct!");
     } else {
-      document.getElementById("result").textContent = "Try again 🙂";
+      diagMissed.push(q.focusKey);
+      diagResult.textContent = `Good try! Answer: ${q.correct}`;
+      speak("Good try.");
+    }
+  }
+
+  function finishDiagnostic(){
+    const total = diagQs.length || 1;
+    const score = Math.round((diagCorrect / total) * 100);
+
+    // Save diagnostic result
+    const resultObj = {
+      grade,
+      score,
+      missed: diagMissed,
+      date: Date.now()
+    };
+    save(PHONICS_DIAG_KEY, resultObj);
+
+    // Build targeted game
+    gameQs = buildGame(grade, diagMissed);
+    gameIndex = 0;
+
+    // UI: show plan
+    const missedNames = diagMissed.filter(x=>x.startsWith("name:")).length;
+    const missedSounds = diagMissed.filter(x=>x.startsWith("sound:")).length;
+
+    let planText = `Diagnostic score: ${score}% — `;
+    if (missedNames === 0 && missedSounds === 0) planText += "Awesome! We'll do a fun mix of practice.";
+    else {
+      planText += "We will practice: ";
+      const parts = [];
+      if (missedNames) parts.push(`letter names (${missedNames})`);
+      if (missedSounds) parts.push(`letter sounds (${missedSounds})`);
+      planText += parts.join(" and ") + ".";
+    }
+    gamePlan.textContent = planText;
+
+    updateModeButtons();
+    startGameFromSaved();
+  }
+
+  // ---------- Game UI ----------
+  function renderGameQuestion(){
+    const q = gameQs[gameIndex % gameQs.length];
+    gameQ.textContent = q.prompt;
+    gameHint.textContent = q.hint || "";
+    gameResult.textContent = "";
+
+    gameChoices.innerHTML = "";
+    q.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> checkGameAnswer(c);
+      gameChoices.appendChild(card);
+    });
+  }
+
+  function addPhonicsStar(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    p.phonicsStars = (p.phonicsStars || 0) + 1;
+    save(PROG_KEY, p);
+  }
+
+  function checkGameAnswer(choice){
+    if (gameResult.textContent) return;
+
+    const q = gameQs[gameIndex % gameQs.length];
+    if (choice === q.correct){
+      gameResult.textContent = "Correct! ⭐";
+      addPhonicsStar();
+      speak("Correct!");
+    } else {
+      gameResult.textContent = "Try again 🙂";
       speak("Try again.");
     }
   }
 
-  document.querySelectorAll(".pill").forEach(btn=>{
-    btn.onclick = ()=>{
-      grade = btn.dataset.grade;
-      idx = 0;
-      renderGradeButtons();
-      renderQuestion();
-    };
-  });
+  function startGameFromSaved(){
+    // ensure we have saved diag and matching grade
+    const savedDiag = load(PHONICS_DIAG_KEY, null);
+    if (!savedDiag || savedDiag.grade !== grade){
+      // if not present, keep diagnostic visible
+      showDiagnosticIntro();
+      return;
+    }
 
-  document.getElementById("nextBtn").onclick = ()=>{
-    idx++;
-    renderQuestion();
+    // build game from saved diag
+    gameQs = buildGame(grade, savedDiag.missed || []);
+    gameIndex = 0;
+
+    // show plan
+    const missedNames = (savedDiag.missed || []).filter(x=>x.startsWith("name:")).length;
+    const missedSounds = (savedDiag.missed || []).filter(x=>x.startsWith("sound:")).length;
+
+    let planText = `Diagnostic score: ${savedDiag.score}% — `;
+    if (missedNames === 0 && missedSounds === 0) planText += "Awesome! We'll do a fun mix of practice.";
+    else {
+      planText += "We will practice: ";
+      const parts = [];
+      if (missedNames) parts.push(`letter names (${missedNames})`);
+      if (missedSounds) parts.push(`letter sounds (${missedSounds})`);
+      planText += parts.join(" and ") + ".";
+    }
+    gamePlan.textContent = planText;
+
+    // switch panels
+    diagPanel.style.display = "none";
+    gamePanel.style.display = "block";
+    renderGameQuestion();
+  }
+
+  // ---------- Buttons ----------
+  goDiagBtn.onclick = ()=>{
+    diagQs = buildDiagnostic(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagMissed = [];
+    diagPanel.style.display = "block";
+    gamePanel.style.display = "none";
+    renderDiagQuestion();
   };
 
-  document.getElementById("resetBtn").onclick = ()=>{
-    const p = loadProgress();
+  document.getElementById("diagNextBtn").onclick = ()=>{
+    if (!diagQs.length) return;
+    // if question wasn't answered, treat as missed
+    if (!diagResult.textContent){
+      diagMissed.push(diagQs[diagIndex].focusKey);
+    }
+    diagIndex++;
+    if (diagIndex >= diagQs.length){
+      finishDiagnostic();
+    } else {
+      renderDiagQuestion();
+    }
+  };
+
+  document.getElementById("diagSkipBtn").onclick = ()=>{
+    if (!diagQs.length) return;
+    diagMissed.push(diagQs[diagIndex].focusKey);
+    diagIndex++;
+    if (diagIndex >= diagQs.length){
+      finishDiagnostic();
+    } else {
+      renderDiagQuestion();
+    }
+  };
+
+  goGameBtn.onclick = ()=> startGameFromSaved();
+
+  retakeBtn.onclick = ()=>{
+    // clear saved diagnostic for current grade (only)
+    const savedDiag = load(PHONICS_DIAG_KEY, null);
+    if (savedDiag && savedDiag.grade === grade){
+      localStorage.removeItem(PHONICS_DIAG_KEY);
+    }
+    updateModeButtons();
+    showDiagnosticIntro();
+    alert("Diagnostic cleared. Press “Take Diagnostic” to start again!");
+  };
+
+  document.getElementById("gameNextBtn").onclick = ()=>{
+    gameIndex++;
+    renderGameQuestion();
+  };
+
+  document.getElementById("resetStarsBtn").onclick = ()=>{
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
     p.phonicsStars = 0;
-    saveProgress(p);
+    save(PROG_KEY, p);
     alert("Phonics stars reset!");
   };
 
+  // 🔊 read current prompt (diagnostic or game)
   document.getElementById("soundBtn").onclick = ()=>{
-    const qText = document.getElementById("question").textContent;
-    speak(qText);
+    const isGameVisible = gamePanel.style.display !== "none";
+    const text = isGameVisible
+      ? (gameQ.textContent || "Phonics game.")
+      : (diagQ.textContent || "Phonics diagnostic.");
+    speak(text);
   };
 
+  // ---------- Initialize ----------
   renderGradeButtons();
-  renderQuestion();
+  updateModeButtons();
+  showDiagnosticIntro();
+
+  // If they already took diagnostic for this grade, allow game
+  // (we don't auto-jump; they can tap “Go to Game”)
 </script>
 
 </body>
