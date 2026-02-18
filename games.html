@@ -5,7 +5,7 @@
   <title>Character Games | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
@@ -15,9 +15,33 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="login.html">Student Login</a></li>
-        <li><a href="progress.html">My Progress</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
+        <li class="dropdown">
+          <a href="#">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -25,48 +49,138 @@
 
 <section class="hero">
   <div class="container">
-    <h1>🎮 Character Games</h1>
-    <p>These games add points to Reading or Math!</p>
+    <h1>Character Games 🎮</h1>
+    <p>Choose a friend and play a quick challenge!</p>
+    <div class="quick-strip">
+      <button class="btn secondary" id="soundBtn">🔊 Read</button>
+      <a class="btn secondary" href="progress.html">My Progress</a>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Choose a Game 🌟</h2>
+    <h2 class="section-title">Pick Your Character 🦄🦉🦖</h2>
 
     <div class="game-box wide">
       <div class="grid-3">
-
         <div class="card">
-          <h3>🦄 Unicorn Word Builder</h3>
-          <p>Drag letters to build the word. (+Reading points)</p>
-          <a class="btn" href="unicorn.html">Play Unicorn</a>
+          <h3>🦄 Unicorn</h3>
+          <p>Phonics pop quiz!</p>
+          <button class="btn" onclick="start('unicorn')">Play</button>
         </div>
-
         <div class="card">
-          <h3>🦉 Owl Sentence Fixer</h3>
-          <p>Pick the best sentence. (+Reading points)</p>
-          <a class="btn" href="owl.html">Play Owl</a>
+          <h3>🦉 Owl</h3>
+          <p>Reading question!</p>
+          <button class="btn" onclick="start('owl')">Play</button>
         </div>
-
         <div class="card">
-          <h3>🦖 Dino Number Treasure</h3>
-          <p>Choose the right answer. (+Math points)</p>
-          <a class="btn" href="dino.html">Play Dino</a>
+          <h3>🦖 Dino</h3>
+          <p>Math quick challenge!</p>
+          <button class="btn" onclick="start('dino')">Play</button>
         </div>
-
       </div>
 
-      <div class="game-box" style="margin-top:16px; max-width:1100px;">
-        <div class="kid-big">Want more games?</div>
-        <p style="margin-top:8px; line-height:1.6;">
-          Next we can add: a memory matching game, a spelling race, and a shape builder!
-        </p>
+      <div class="game-box" style="margin-top:14px;">
+        <p class="kid-big" id="gameTitle">Choose a character to start!</p>
+        <p class="small" id="prompt"></p>
+
+        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+        <p class="kid-big" id="result" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="nextBtn">Next Challenge</button>
+        </div>
+
+        <p class="small" style="margin-top:10px;">Correct = ⭐ added to Games.</p>
       </div>
     </div>
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  const PROG_KEY = "bloom_progress";
+  function loadProgress(){ try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); } catch { return {}; } }
+  function saveProgress(p){ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }
+  function addGameStar(){
+    const p = loadProgress();
+    p.gamesStars = (p.gamesStars || 0) + 1;
+    saveProgress(p);
+  }
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1;
+    speechSynthesis.speak(u);
+  }
+
+  const bank = {
+    unicorn: [
+      { q:"Which letters make /sh/?", correct:"SH", choices:["CH","SH","TH"] },
+      { q:"Which letter makes /m/?", correct:"M", choices:["M","S","T"] },
+    ],
+    owl: [
+      { q:"In the story, what did Mia have?", correct:"A kite", choices:["A kite","A dog","A bike"] },
+      { q:"What is the weather?", correct:"Sunny", choices:["Sunny","Snowy","Rainy"] },
+    ],
+    dino: [
+      { q:"6 + 2 = ?", correct:"8", choices:["7","8","9"] },
+      { q:"9 − 3 = ?", correct:"6", choices:["6","5","7"] },
+    ]
+  };
+
+  let mode = null;
+  let idx = 0;
+
+  function render(){
+    if (!mode) return;
+
+    const it = bank[mode][idx % bank[mode].length];
+    const titleMap = { unicorn:"🦄 Unicorn Challenge", owl:"🦉 Owl Challenge", dino:"🦖 Dino Challenge" };
+    document.getElementById("gameTitle").textContent = titleMap[mode];
+    document.getElementById("prompt").textContent = it.q;
+    document.getElementById("result").textContent = "";
+
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
+    it.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:28px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> check(c, it.correct);
+      choices.appendChild(card);
+    });
+  }
+
+  function check(choice, correct){
+    if (choice === correct){
+      document.getElementById("result").textContent = "Correct! ⭐";
+      addGameStar();
+      speak("Correct!");
+    } else {
+      document.getElementById("result").textContent = "Try again 🙂";
+      speak("Try again.");
+    }
+  }
+
+  function start(which){
+    mode = which;
+    idx = 0;
+    render();
+  }
+
+  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
+  document.getElementById("soundBtn").onclick = ()=>{
+    const t = document.getElementById("prompt").textContent || "Choose a character to start!";
+    speak(t);
+  };
+
+  window.start = start;
+</script>
+
 </body>
 </html>
