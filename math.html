@@ -18,7 +18,7 @@
         <li><a href="phonics.html">Phonics</a></li>
         <li><a href="reading.html">Reading</a></li>
         <li><a href="progress.html">My Progress</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
+        <li><a href="games.html">Character Games</a></li>
       </ul>
     </nav>
   </div>
@@ -41,12 +41,12 @@
       <div class="game-row">
         <button class="btn secondary" id="readBtn">🔊 Read</button>
         <button class="btn secondary" id="newBtn">New</button>
-        <button class="btn secondary" id="resetBtn">Reset Score</button>
+        <button class="btn secondary" id="resetBtn">Reset Math Score</button>
       </div>
 
       <div class="game-row" id="choices"></div>
 
-      <div class="status" id="status">Score: 0</div>
+      <div class="status" id="status">Math Score: 0</div>
       <div class="badge-row">
         <div class="badge" id="b5">⭐ 5 correct: Locked</div>
         <div class="badge" id="b10">🏅 10 correct: Locked</div>
@@ -58,7 +58,9 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  let score = parseInt(localStorage.getItem("bloom_math_score") || "0", 10);
+  const SCORE_KEY = "bloom_math_score";
+
+  let score = parseInt(localStorage.getItem(SCORE_KEY) || "0", 10);
   let currentText = "";
   let answer = 0;
 
@@ -74,7 +76,7 @@
     window.speechSynthesis.speak(u);
   }
 
-  function save(){ localStorage.setItem("bloom_math_score", String(score)); }
+  function save(){ localStorage.setItem(SCORE_KEY, String(score)); }
 
   function updateBadges(){
     document.getElementById("b5").textContent = score >= 5 ? "⭐ 5 correct: Unlocked!" : "⭐ 5 correct: Locked";
@@ -108,23 +110,23 @@
         if (v === answer) {
           score++;
           save();
-          statusEl.textContent = `✅ Correct! Score: ${score}`;
+          statusEl.textContent = `✅ Correct! Math Score: ${score}`;
           updateBadges();
           setTimeout(newProblem, 650);
         } else {
-          statusEl.textContent = `❌ Try again! Score: ${score}`;
+          statusEl.textContent = `❌ Try again! Math Score: ${score}`;
         }
       };
       choicesEl.appendChild(btn);
     });
 
-    statusEl.textContent = `Score: ${score}`;
+    statusEl.textContent = `Math Score: ${score}`;
     updateBadges();
   }
 
   document.getElementById("readBtn").onclick = () => speak(currentText);
   document.getElementById("newBtn").onclick = newProblem;
-  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Score: 0"; updateBadges(); };
+  document.getElementById("resetBtn").onclick = () => { score = 0; save(); statusEl.textContent = "Math Score: 0"; updateBadges(); };
 
   newProblem();
 </script>
