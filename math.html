@@ -15,6 +15,7 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
+
         <li class="dropdown">
           <a href="#">Subjects</a>
           <div class="dropdown-menu">
@@ -24,6 +25,7 @@
             <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
+
         <li class="dropdown">
           <a href="#">Resources</a>
           <div class="dropdown-menu">
@@ -32,6 +34,7 @@
             <a href="standards.html">📘 Standards (K–2)</a>
           </div>
         </li>
+
         <li class="dropdown">
           <a href="#">Student</a>
           <div class="dropdown-menu">
@@ -40,6 +43,7 @@
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
+
         <li><a href="games.html">🎮 Games</a></li>
         <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
@@ -49,35 +53,134 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Math ➕</h1>
-    <p>Solve the problem and choose the right answer!</p>
+    <h1>Math ➕🌿</h1>
+    <p>Pick a grade, pick a game, and earn ⭐ for correct answers!</p>
+
     <div class="quick-strip">
       <button class="btn secondary" id="soundBtn">🔊 Read Question</button>
+      <button class="btn secondary" id="stopBtn">⏹ Stop</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
+
+    <div class="hero-note">Tip: Try “Number Line Hop” for a fun tap game!</div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Quick Math Game 🌟</h2>
+    <h2 class="section-title">Math Mini Games 🌟</h2>
 
     <div class="game-box wide">
-      <div class="game-box">
-        <p class="kid-big" id="question">Question loads here…</p>
-        <p class="small" id="hint">Hint loads here…</p>
 
-        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
-
-        <p class="kid-big" id="result" style="margin-top:14px;"></p>
-
-        <div class="quick-strip">
-          <button class="btn" id="nextBtn">Next</button>
-          <button class="btn secondary" id="resetBtn">Reset Stars</button>
+      <!-- Grade picker -->
+      <div class="game-box" style="margin-bottom:14px;">
+        <p class="kid-big" style="margin-bottom:10px;">Pick a Grade</p>
+        <div class="badge-row">
+          <button class="pill active" data-grade="K">Kindergarten</button>
+          <button class="pill" data-grade="1">Grade 1</button>
+          <button class="pill" data-grade="2">Grade 2</button>
         </div>
 
-        <p class="small" style="margin-top:10px;">Earn ⭐ for correct answers.</p>
+        <div class="quick-strip" style="margin-top:14px;">
+          <button class="btn" id="tabQuick">🧠 Quick Solve</button>
+          <button class="btn secondary" id="tabLine">🦘 Number Line Hop</button>
+          <button class="btn secondary" id="tabCount">🍓 Count Pictures</button>
+          <button class="btn secondary" id="tabMissing">🧩 Missing Number</button>
+          <button class="btn secondary" id="resetBtn">Reset Stars</button>
+        </div>
       </div>
+
+      <!-- QUICK SOLVE PANEL -->
+      <div class="game-box" id="panelQuick">
+        <p class="kid-big">🧠 Quick Solve</p>
+        <p class="small">Solve and choose the right answer.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qQuick">Question loads here…</p>
+          <p class="small" id="hintQuick">Hint loads here…</p>
+          <div class="grid-3" id="choicesQuick" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultQuick" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="nextQuick">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- NUMBER LINE HOP PANEL -->
+      <div class="game-box" id="panelLine" style="display:none;">
+        <p class="kid-big">🦘 Number Line Hop</p>
+        <p class="small">Tap the hops to move on the number line. Then pick the answer.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qLine">Line question loads here…</p>
+          <p class="small" id="hintLine">Tap the hop buttons in order!</p>
+
+          <div class="game-box" style="margin-top:12px;">
+            <div class="small" style="margin-bottom:8px;">Number line</div>
+            <div id="lineTrack" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+
+            <div class="small" style="margin-top:12px;">Hops</div>
+            <div class="game-row" id="hopButtons" style="gap:10px; flex-wrap:wrap;"></div>
+
+            <div class="small" style="margin-top:12px;">Your landing number:</div>
+            <div class="kid-big" id="landingNum" style="margin-top:6px;">—</div>
+          </div>
+
+          <div class="grid-3" id="choicesLine" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultLine" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="nextLine">Next</button>
+            <button class="btn secondary" id="resetHops">Reset Hops</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNT PICTURES PANEL -->
+      <div class="game-box" id="panelCount" style="display:none;">
+        <p class="kid-big">🍓 Count Pictures</p>
+        <p class="small">Count the pictures and choose the right number.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qCount">Count question loads here…</p>
+          <p class="small" id="hintCount">Touch each picture as you count!</p>
+
+          <div class="game-box" style="margin-top:12px; text-align:center;">
+            <div id="picPile" style="font-size:44px; line-height:1.2; letter-spacing:6px;"></div>
+            <div class="small" id="tapCount" style="margin-top:10px;">Tapped: 0</div>
+          </div>
+
+          <div class="grid-3" id="choicesCount" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultCount" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="nextCount">Next</button>
+            <button class="btn secondary" id="resetTap">Reset Taps</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISSING NUMBER PANEL -->
+      <div class="game-box" id="panelMissing" style="display:none;">
+        <p class="kid-big">🧩 Missing Number</p>
+        <p class="small">Fill in the missing number.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qMissing">Missing question loads here…</p>
+          <p class="small" id="hintMissing">Look for the pattern!</p>
+
+          <div class="grid-3" id="choicesMissing" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultMissing" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="nextMissing">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="small" style="margin-top:12px;">Earn ⭐ for correct answers. Stars save on this device.</p>
+
     </div>
   </div>
 </section>
@@ -85,70 +188,459 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
+  // ======================
+  // Progress + helpers
+  // ======================
   const PROG_KEY = "bloom_progress";
-  function loadProgress(){ try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); } catch { return {}; } }
-  function saveProgress(p){ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }
+
+  function load(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
+  }
+  function save(key, obj) { localStorage.setItem(key, JSON.stringify(obj)); }
+
+  function addStar(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    p.mathStars = (p.mathStars || 0) + 1;
+    save(PROG_KEY, p);
+  }
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i=a.length-1; i>0; i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // TTS
   function speak(text){
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1;
+    u.rate = 0.95;
+    u.pitch = 1.08;
     speechSynthesis.speak(u);
   }
+  function stopSpeak(){
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+  }
 
-  const items = [
-    { q: "5 + 3 = ?", correct: 8, choices: [7,8,9], hint:"Count up 3 from 5." },
-    { q: "10 − 4 = ?", correct: 6, choices: [6,5,7], hint:"Count back 4 from 10." },
-    { q: "7 + 7 = ?", correct: 14, choices: [12,14,16], hint:"Double 7." }
-  ];
+  // ======================
+  // Grade selection
+  // ======================
+  let grade = "K";
+  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
+    btn.onclick = ()=>{
+      grade = btn.dataset.grade;
+      document.querySelectorAll(".pill[data-grade]").forEach(b=>b.classList.toggle("active", b.dataset.grade===grade));
+      resetAllStates();
+      renderAll();
+    };
+  });
 
-  let idx = 0;
+  // ======================
+  // Panels/tabs
+  // ======================
+  const panelQuick = document.getElementById("panelQuick");
+  const panelLine = document.getElementById("panelLine");
+  const panelCount = document.getElementById("panelCount");
+  const panelMissing = document.getElementById("panelMissing");
 
-  function render(){
-    const it = items[idx % items.length];
-    document.getElementById("question").textContent = it.q;
-    document.getElementById("hint").textContent = it.hint;
-    document.getElementById("result").textContent = "";
+  let activePanel = "quick";
+  function showPanel(name){
+    activePanel = name;
+    panelQuick.style.display   = (name==="quick") ? "block" : "none";
+    panelLine.style.display    = (name==="line") ? "block" : "none";
+    panelCount.style.display   = (name==="count") ? "block" : "none";
+    panelMissing.style.display = (name==="missing") ? "block" : "none";
+  }
 
-    const choices = document.getElementById("choices");
-    choices.innerHTML = "";
-    it.choices.forEach(c=>{
+  document.getElementById("tabQuick").onclick = ()=> showPanel("quick");
+  document.getElementById("tabLine").onclick = ()=> showPanel("line");
+  document.getElementById("tabCount").onclick = ()=> showPanel("count");
+  document.getElementById("tabMissing").onclick = ()=> showPanel("missing");
+
+  // Sound button reads current question
+  document.getElementById("soundBtn").onclick = ()=>{
+    const txt =
+      activePanel==="quick"   ? document.getElementById("qQuick").textContent :
+      activePanel==="line"    ? document.getElementById("qLine").textContent :
+      activePanel==="count"   ? document.getElementById("qCount").textContent :
+                                document.getElementById("qMissing").textContent;
+    speak(txt);
+  };
+  document.getElementById("stopBtn").onclick = stopSpeak;
+
+  // Reset stars
+  document.getElementById("resetBtn").onclick = ()=>{
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    p.mathStars = 0;
+    save(PROG_KEY, p);
+    alert("Math stars reset!");
+  };
+
+  // ======================
+  // GAME BANKS (K–2)
+  // ======================
+  const banks = {
+    "K": {
+      quick: [
+        { q:"1 + 1 = ?", correct:2, choices:[1,2,3], hint:"Count two blocks." },
+        { q:"3 + 2 = ?", correct:5, choices:[4,5,6], hint:"Count up 2 from 3." },
+        { q:"5 − 1 = ?", correct:4, choices:[4,3,5], hint:"Take 1 away." },
+        { q:"2 + 4 = ?", correct:6, choices:[6,5,7], hint:"Count up 4 from 2." },
+        { q:"6 − 2 = ?", correct:4, choices:[3,4,5], hint:"Count back 2." },
+        { q:"How many? 🍎🍎🍎", correct:3, choices:[2,3,4], hint:"Count the apples." }
+      ],
+      line: [
+        { start:3, hops:[+2], prompt:"Start at 3. Hop +2. Where do you land?" },
+        { start:5, hops:[-1], prompt:"Start at 5. Hop −1. Where do you land?" },
+        { start:2, hops:[+3], prompt:"Start at 2. Hop +3. Where do you land?" }
+      ],
+      count: [
+        { emoji:"🍓", count:5, prompt:"Count the strawberries." },
+        { emoji:"🐸", count:4, prompt:"Count the frogs." },
+        { emoji:"⭐", count:6, prompt:"Count the stars." }
+      ],
+      missing: [
+        { seq:["1","2","__","4"], answer:3, choices:[3,5,2] },
+        { seq:["2","4","__","8"], answer:6, choices:[6,7,5] },
+        { seq:["5","__","7","8"], answer:6, choices:[6,4,9] }
+      ]
+    },
+
+    "1": {
+      quick: [
+        { q:"5 + 3 = ?", correct:8, choices:[7,8,9], hint:"Count up 3 from 5." },
+        { q:"10 − 4 = ?", correct:6, choices:[6,5,7], hint:"Count back 4 from 10." },
+        { q:"7 + 7 = ?", correct:14, choices:[12,14,16], hint:"Double 7." },
+        { q:"9 + 2 = ?", correct:11, choices:[11,10,12], hint:"Count on 2." },
+        { q:"12 − 5 = ?", correct:7, choices:[7,8,6], hint:"Take away 5." },
+        { q:"8 + 6 = ?", correct:14, choices:[13,14,15], hint:"Make 10: 8+2 then +4." }
+      ],
+      line: [
+        { start:7, hops:[+3], prompt:"Start at 7. Hop +3. Where do you land?" },
+        { start:10, hops:[-4], prompt:"Start at 10. Hop −4. Where do you land?" },
+        { start:6, hops:[+2,+2], prompt:"Start at 6. Hop +2 then +2. Where do you land?" }
+      ],
+      count: [
+        { emoji:"🍪", count:7, prompt:"Count the cookies." },
+        { emoji:"🦋", count:8, prompt:"Count the butterflies." },
+        { emoji:"🧁", count:9, prompt:"Count the cupcakes." }
+      ],
+      missing: [
+        { seq:["10","11","__","13"], answer:12, choices:[12,14,9] },
+        { seq:["2","4","6","__"], answer:8, choices:[7,8,10] },
+        { seq:["5","10","__","20"], answer:15, choices:[15,25,10] }
+      ]
+    },
+
+    "2": {
+      quick: [
+        { q:"23 + 10 = ?", correct:33, choices:[33,32,34], hint:"Add ten: 23 → 33." },
+        { q:"30 − 12 = ?", correct:18, choices:[18,20,16], hint:"30−10=20, then −2=18." },
+        { q:"14 + 9 = ?", correct:23, choices:[23,24,22], hint:"Make 10: 9+1, then +13." },
+        { q:"42 − 20 = ?", correct:22, choices:[22,24,20], hint:"Subtract two tens." },
+        { q:"15 + 15 = ?", correct:30, choices:[28,30,32], hint:"Double 15." },
+        { q:"27 + 8 = ?", correct:35, choices:[35,34,36], hint:"Add 3 to make 30, then +5." }
+      ],
+      line: [
+        { start:12, hops:[+10], prompt:"Start at 12. Hop +10. Where do you land?" },
+        { start:25, hops:[-5], prompt:"Start at 25. Hop −5. Where do you land?" },
+        { start:18, hops:[+2,+3], prompt:"Start at 18. Hop +2 then +3. Where do you land?" }
+      ],
+      count: [
+        { emoji:"🍇", count:10, prompt:"Count the grapes (10)." },
+        { emoji:"🟩", count:12, prompt:"Count the blocks (12)." },
+        { emoji:"🐟", count:11, prompt:"Count the fish (11)." }
+      ],
+      missing: [
+        { seq:["21","22","__","24"], answer:23, choices:[23,25,20] },
+        { seq:["5","10","15","__"], answer:20, choices:[20,25,18] },
+        { seq:["30","__","32","33"], answer:31, choices:[31,29,34] }
+      ]
+    }
+  };
+
+  // ======================
+  // QUICK SOLVE
+  // ======================
+  let quickIdx = 0;
+  let currentQuick = null;
+
+  const qQuick = document.getElementById("qQuick");
+  const hintQuick = document.getElementById("hintQuick");
+  const choicesQuick = document.getElementById("choicesQuick");
+  const resultQuick = document.getElementById("resultQuick");
+
+  function renderQuick(){
+    const bank = banks[grade].quick;
+    currentQuick = bank[quickIdx % bank.length];
+
+    qQuick.textContent = currentQuick.q;
+    hintQuick.textContent = "Hint: " + currentQuick.hint;
+    resultQuick.textContent = "";
+    choicesQuick.innerHTML = "";
+
+    shuffle(currentQuick.choices).forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
-      card.onclick = ()=> check(c, it.correct);
-      choices.appendChild(card);
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> {
+        if (resultQuick.textContent) return;
+        if (c === currentQuick.correct){
+          resultQuick.textContent = "Correct! ⭐";
+          addStar();
+          speak("Correct!");
+        } else {
+          resultQuick.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesQuick.appendChild(card);
     });
   }
 
-  function addStar(){
-    const p = loadProgress();
-    p.mathStars = (p.mathStars || 0) + 1;
-    saveProgress(p);
-  }
+  document.getElementById("nextQuick").onclick = ()=>{ quickIdx++; renderQuick(); };
 
-  function check(choice, correct){
-    if (choice === correct){
-      document.getElementById("result").textContent = "Correct! ⭐";
-      addStar();
-      speak("Correct!");
-    } else {
-      document.getElementById("result").textContent = "Try again 🙂";
-      speak("Try again.");
+  // ======================
+  // NUMBER LINE HOP
+  // ======================
+  let lineIdx = 0;
+  let currentLine = null;
+  let hopStep = 0;
+  let landing = null;
+
+  const qLine = document.getElementById("qLine");
+  const lineTrack = document.getElementById("lineTrack");
+  const hopButtons = document.getElementById("hopButtons");
+  const landingNum = document.getElementById("landingNum");
+  const choicesLine = document.getElementById("choicesLine");
+  const resultLine = document.getElementById("resultLine");
+
+  function buildLineTrack(min, max, highlight){
+    lineTrack.innerHTML = "";
+    for (let n=min; n<=max; n++){
+      const chip = document.createElement("div");
+      chip.className = "pill";
+      chip.textContent = n;
+      chip.style.padding = "10px 14px";
+      chip.style.opacity = (n===highlight) ? "1" : ".7";
+      chip.style.border = (n===highlight) ? "3px solid rgba(0,0,0,.1)" : "2px solid rgba(0,0,0,.05)";
+      lineTrack.appendChild(chip);
     }
   }
 
-  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
-  document.getElementById("resetBtn").onclick = ()=>{
-    const p = loadProgress();
-    p.mathStars = 0;
-    saveProgress(p);
-    alert("Math stars reset!");
-  };
-  document.getElementById("soundBtn").onclick = ()=> speak(document.getElementById("question").textContent);
+  function renderLine(){
+    const bank = banks[grade].line;
+    currentLine = bank[lineIdx % bank.length];
+    hopStep = 0;
+    landing = currentLine.start;
 
-  render();
+    qLine.textContent = currentLine.prompt;
+    resultLine.textContent = "";
+    landingNum.textContent = "—";
+
+    const min = Math.max(0, currentLine.start - 6);
+    const max = currentLine.start + 14;
+    buildLineTrack(min, max, currentLine.start);
+
+    // Hop buttons
+    hopButtons.innerHTML = "";
+    currentLine.hops.forEach((h, i)=>{
+      const b = document.createElement("button");
+      b.className = "btn secondary";
+      b.textContent = (h>=0) ? `+${h}` : `${h}`;
+      b.onclick = ()=>{
+        if (i !== hopStep) {
+          speak("Tap the hops in order.");
+          resultLine.textContent = "Tap the hops in order 🙂";
+          return;
+        }
+        landing += h;
+        hopStep++;
+        buildLineTrack(min, max, landing);
+        landingNum.textContent = landing;
+
+        if (hopStep >= currentLine.hops.length){
+          speak("Now choose your answer.");
+        }
+      };
+      hopButtons.appendChild(b);
+    });
+
+    // Choices
+    const correct = currentLine.start + currentLine.hops.reduce((a,b)=>a+b,0);
+    const options = shuffle([correct, correct+1, Math.max(0, correct-1)]);
+    choicesLine.innerHTML = "";
+    options.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultLine.textContent.includes("Correct")) return;
+        if (hopStep < currentLine.hops.length){
+          resultLine.textContent = "Do the hops first! 🦘";
+          speak("Do the hops first.");
+          return;
+        }
+        if (c === correct){
+          resultLine.textContent = "Correct! ⭐";
+          addStar();
+          speak("Correct!");
+        } else {
+          resultLine.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesLine.appendChild(card);
+    });
+  }
+
+  document.getElementById("nextLine").onclick = ()=>{ lineIdx++; renderLine(); };
+  document.getElementById("resetHops").onclick = ()=>{ renderLine(); };
+
+  // ======================
+  // COUNT PICTURES
+  // ======================
+  let countIdx = 0;
+  let currentCount = null;
+  let tapped = 0;
+  let tappedSet = new Set();
+
+  const qCount = document.getElementById("qCount");
+  const picPile = document.getElementById("picPile");
+  const tapCount = document.getElementById("tapCount");
+  const choicesCount = document.getElementById("choicesCount");
+  const resultCount = document.getElementById("resultCount");
+
+  function renderCount(){
+    const bank = banks[grade].count;
+    currentCount = bank[countIdx % bank.length];
+
+    tapped = 0;
+    tappedSet = new Set();
+    tapCount.textContent = "Tapped: 0";
+    resultCount.textContent = "";
+
+    qCount.textContent = currentCount.prompt;
+
+    // Build clickable emojis
+    picPile.innerHTML = "";
+    const pieces = [];
+    for (let i=0; i<currentCount.count; i++){
+      pieces.push(`<span class="count-pic" data-i="${i}" style="cursor:pointer; user-select:none;">${currentCount.emoji}</span>`);
+    }
+    picPile.innerHTML = pieces.join(" ");
+
+    picPile.querySelectorAll(".count-pic").forEach(el=>{
+      el.onclick = ()=>{
+        const id = el.getAttribute("data-i");
+        if (tappedSet.has(id)) return;
+        tappedSet.add(id);
+        tapped++;
+        el.style.opacity = "0.45";
+        tapCount.textContent = "Tapped: " + tapped;
+      };
+    });
+
+    // Choices
+    const correct = currentCount.count;
+    const opts = shuffle([correct, correct+1, Math.max(0, correct-1)]);
+    choicesCount.innerHTML = "";
+    opts.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultCount.textContent.includes("Correct")) return;
+        if (c === correct){
+          resultCount.textContent = "Correct! ⭐";
+          addStar();
+          speak("Correct!");
+        } else {
+          resultCount.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesCount.appendChild(card);
+    });
+  }
+
+  document.getElementById("nextCount").onclick = ()=>{ countIdx++; renderCount(); };
+  document.getElementById("resetTap").onclick = ()=>{
+    // just re-render this question
+    renderCount();
+  };
+
+  // ======================
+  // MISSING NUMBER
+  // ======================
+  let missIdx = 0;
+  let currentMiss = null;
+
+  const qMissing = document.getElementById("qMissing");
+  const choicesMissing = document.getElementById("choicesMissing");
+  const resultMissing = document.getElementById("resultMissing");
+
+  function renderMissing(){
+    const bank = banks[grade].missing;
+    currentMiss = bank[missIdx % bank.length];
+
+    resultMissing.textContent = "";
+    qMissing.textContent = currentMiss.seq.join("  ");
+
+    choicesMissing.innerHTML = "";
+    shuffle(currentMiss.choices).forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultMissing.textContent.includes("Correct")) return;
+        if (c === currentMiss.answer){
+          resultMissing.textContent = "Correct! ⭐";
+          addStar();
+          speak("Correct!");
+        } else {
+          resultMissing.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesMissing.appendChild(card);
+    });
+  }
+
+  document.getElementById("nextMissing").onclick = ()=>{ missIdx++; renderMissing(); };
+
+  // ======================
+  // Init
+  // ======================
+  function resetAllStates(){
+    quickIdx = 0;
+    lineIdx = 0;
+    countIdx = 0;
+    missIdx = 0;
+  }
+  function renderAll(){
+    renderQuick();
+    renderLine();
+    renderCount();
+    renderMissing();
+  }
+
+  showPanel("quick");
+  renderAll();
 </script>
 
 </body>
