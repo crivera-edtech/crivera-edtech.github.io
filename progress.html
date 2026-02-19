@@ -54,128 +54,111 @@
 <section class="hero">
   <div class="container">
     <h1>My Progress 📊</h1>
-    <p id="welcomeLine">Loading student…</p>
+    <p>Stars and daily missions save on this device.</p>
     <div class="quick-strip">
-      <a class="btn secondary" href="sticker-book.html">📖 Sticker Book</a>
-      <button class="btn secondary" id="logoutBtn">🚪 Logout</button>
+      <a class="btn" href="phonics.html">Go to Phonics</a>
+      <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
+      <button class="btn secondary" id="resetAllBtn">Reset All</button>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Stars ⭐</h2>
 
-    <div class="grid-3">
-      <div class="card">
-        <h3>🔤 Phonics Stars</h3>
-        <p class="kid-big" id="pStars">0</p>
-        <button class="btn secondary" id="resetPhonics">Reset</button>
-      </div>
+    <div class="progress-layout">
 
-      <div class="card">
-        <h3>📖 Reading Stars</h3>
-        <p class="kid-big" id="rStars">0</p>
-        <button class="btn secondary" id="resetReading">Reset</button>
-      </div>
+      <!-- LEFT: Progress panel -->
+      <aside class="progress-left">
+        <div class="card">
+          <p class="kid-big">⭐ Stars</p>
+          <p class="small">Earn stars by answering correctly.</p>
 
-      <div class="card">
-        <h3>➕ Math Stars</h3>
-        <p class="kid-big" id="mStars">0</p>
-        <button class="btn secondary" id="resetMath">Reset</button>
-      </div>
-    </div>
-
-    <div class="game-box wide" style="margin-top:16px;">
-      <h2 class="section-title">Today’s Mission 🌟</h2>
-
-      <div class="mission">
-        <div>
-          <div class="mission-item">
-            <div class="left">
-              <div class="chk" id="m1chk">✓</div>
-              <div>Answer 2 phonics questions</div>
+          <div class="stat-row">
+            <div class="stat">
+              <div class="num" id="phonicsStars">0</div>
+              <div class="label">Phonics</div>
             </div>
-            <div class="small" id="m1txt">0 / 2</div>
+            <div class="stat">
+              <div class="num" id="readingStars">0</div>
+              <div class="label">Reading</div>
+            </div>
+            <div class="stat">
+              <div class="num" id="mathStars">0</div>
+              <div class="label">Math</div>
+            </div>
+            <div class="stat">
+              <div class="num" id="gamesStars">0</div>
+              <div class="label">Games</div>
+            </div>
           </div>
 
-          <div class="mission-item">
-            <div class="left">
-              <div class="chk" id="m2chk">✓</div>
-              <div>Read 1 passage</div>
-            </div>
-            <div class="small" id="m2txt">0 / 1</div>
+          <div class="mission">
+            <h3>Today’s Mission 🌿</h3>
+            <p class="small">Goal: 3 Phonics + 2 Reading + 2 Math</p>
+
+            <p class="small" style="margin-top:10px;">Phonics</p>
+            <div class="meter"><div id="mPhonics"></div></div>
+
+            <p class="small" style="margin-top:10px;">Reading</p>
+            <div class="meter"><div id="mReading"></div></div>
+
+            <p class="small" style="margin-top:10px;">Math</p>
+            <div class="meter"><div id="mMath"></div></div>
+
+            <p class="small" style="margin-top:10px;" id="missionNote"></p>
           </div>
 
-          <div class="mission-item">
-            <div class="left">
-              <div class="chk" id="m3chk">✓</div>
-              <div>Solve 2 math questions</div>
-            </div>
-            <div class="small" id="m3txt">0 / 2</div>
+          <div class="quick-strip" style="margin-top:12px;">
+            <button class="btn secondary" id="resetMissionBtn">Reset Today</button>
           </div>
-
-          <div class="small" style="margin-top:10px;">Mission Progress</div>
-          <div class="progressbar"><div id="missionBar"></div></div>
-          <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
         </div>
+      </aside>
 
-        <div>
-          <div class="helper">
-            <div class="face" id="helperFace">🦄</div>
-            <div>
-              <div class="title" id="helperTitle">Unicorn Coach</div>
-              <div class="msg" id="helperMsg">Earn stars and unlock stickers!</div>
+      <!-- RIGHT: Centered content -->
+      <main class="progress-right">
+        <div class="game-box wide">
+          <h2 class="section-title" style="margin-bottom:8px;">Keep Going! 🌟</h2>
+          <p class="small">Try a quick activity and come back to see your stars grow.</p>
+
+          <div class="grid-3" style="margin-top:16px;">
+            <div class="card" style="text-align:center;">
+              <h3>🔤 Phonics</h3>
+              <p class="small">Sounds + names + fun games.</p>
+              <a class="btn" href="phonics.html">Play</a>
+            </div>
+
+            <div class="card" style="text-align:center;">
+              <h3>📖 Reading</h3>
+              <p class="small">Short passages + questions.</p>
+              <a class="btn" href="reading.html">Read</a>
+            </div>
+
+            <div class="card" style="text-align:center;">
+              <h3>➕ Math</h3>
+              <p class="small">Quick math practice.</p>
+              <a class="btn" href="math.html">Solve</a>
             </div>
           </div>
 
-          <div class="game-box" style="margin-top:12px;">
-            <div class="kid-big">Unlocked Rewards 🎁</div>
-            <p class="small">Sticker packs unlock when you earn enough stars.</p>
-
-            <div class="badges" style="margin-top:12px;">
-              <div class="badge-tile" id="bMath">
-                <div class="top">
-                  <div class="icon">➕</div>
-                  <div class="name">Math Sticker Pack</div>
-                </div>
-                <div class="req" id="bMathReq"></div>
-              </div>
-
-              <div class="badge-tile" id="bRead">
-                <div class="top">
-                  <div class="icon">📖</div>
-                  <div class="name">Reading Sticker Pack</div>
-                </div>
-                <div class="req" id="bReadReq"></div>
-              </div>
-
-              <div class="badge-tile" id="bPhonics">
-                <div class="top">
-                  <div class="icon">🔤</div>
-                  <div class="name">Phonics Sticker Pack</div>
-                </div>
-                <div class="req" id="bPhonicsReq"></div>
-              </div>
-            </div>
-
-            <div class="quick-strip" style="margin-top:12px;">
-              <a class="btn" href="sticker-book.html">Open Sticker Book</a>
-              <a class="btn secondary" href="index.html">Back Home</a>
+          <div class="game-box" style="margin-top:16px; text-align:center;">
+            <p class="kid-big">Sticker Tip 🎁</p>
+            <p class="small">When you earn stars, you can “celebrate” in the Sticker Book.</p>
+            <div class="quick-strip">
+              <a class="btn secondary" href="sticker-book.html">Open Sticker Book</a>
             </div>
           </div>
 
         </div>
-      </div>
-    </div>
+      </main>
 
+    </div>
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const STUDENT_KEY = "bloom_student";
   const PROG_KEY = "bloom_progress";
   const MISSION_KEY = "bloom_daily_mission";
 
@@ -203,107 +186,46 @@
     return ms;
   }
 
-  // Gate: require "student login"
-  const student = load(STUDENT_KEY, null);
-  if (!student || !student.name){
-    window.location.href = "student-login.html";
-  } else {
-    document.getElementById("welcomeLine").textContent = `Welcome, ${student.buddy || "🦄"} ${student.name}!`;
+  function pct(val, goal){
+    const p = Math.min(100, Math.round((val / goal) * 100));
+    return p;
   }
 
-  function getProgress(){
-    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null });
-  }
+  function render(){
+    const p = load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0, gamesStars:0 });
 
-  function renderStars(){
-    const p = getProgress();
-    document.getElementById("pStars").textContent = p.phonicsStars || 0;
-    document.getElementById("rStars").textContent = p.readingStars || 0;
-    document.getElementById("mStars").textContent = p.mathStars || 0;
-  }
+    document.getElementById("phonicsStars").textContent = p.phonicsStars || 0;
+    document.getElementById("readingStars").textContent = p.readingStars || 0;
+    document.getElementById("mathStars").textContent = p.mathStars || 0;
+    document.getElementById("gamesStars").textContent = p.gamesStars || 0;
 
-  function renderMission(){
     const ms = ensureMission();
-    const g1=2, g2=1, g3=2;
+    const gP = 3, gR = 2, gM = 2;
 
-    document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
-    document.getElementById("m2txt").textContent = `${Math.min(ms.reading,g2)} / ${g2}`;
-    document.getElementById("m3txt").textContent = `${Math.min(ms.math,g3)} / ${g3}`;
+    document.getElementById("mPhonics").style.width = pct(ms.phonics || 0, gP) + "%";
+    document.getElementById("mReading").style.width = pct(ms.reading || 0, gR) + "%";
+    document.getElementById("mMath").style.width = pct(ms.math || 0, gM) + "%";
 
-    const done1 = ms.phonics >= g1;
-    const done2 = ms.reading >= g2;
-    const done3 = ms.math >= g3;
-
-    document.getElementById("m1chk").classList.toggle("done", done1);
-    document.getElementById("m2chk").classList.toggle("done", done2);
-    document.getElementById("m3chk").classList.toggle("done", done3);
-
-    const pct = Math.round(((done1?1:0)+(done2?1:0)+(done3?1:0))/3 * 100);
-    document.getElementById("missionBar").style.width = pct + "%";
-    document.getElementById("missionPct").textContent = `${pct}% complete`;
-
-    const face = document.getElementById("helperFace");
-    const title = document.getElementById("helperTitle");
-    const msg = document.getElementById("helperMsg");
-
-    if (pct === 100){
-      face.textContent = "🎉";
-      title.textContent = "Mission Complete!";
-      msg.textContent = "Woohoo! You finished today’s mission!";
-    } else if (pct >= 34){
-      face.textContent = "🦉";
-      title.textContent = "Owl Helper";
-      msg.textContent = "Great job! Keep going!";
-    } else {
-      face.textContent = "🦄";
-      title.textContent = "Unicorn Coach";
-      msg.textContent = "Let’s start learning and earn stars!";
-    }
+    const done = (ms.phonics>=gP && ms.reading>=gR && ms.math>=gM);
+    document.getElementById("missionNote").textContent = done
+      ? "✅ Mission complete! Great job!"
+      : `Progress today: Phonics ${ms.phonics||0}/${gP}, Reading ${ms.reading||0}/${gR}, Math ${ms.math||0}/${gM}`;
   }
 
-  function renderBadges(){
-    const p = getProgress();
-
-    const mathUnlocked = (p.mathStars || 0) >= 10;
-    const readUnlocked = (p.readingStars || 0) >= 5;
-    const phonicsUnlocked = (p.phonicsStars || 0) >= 10;
-
-    const bMath = document.getElementById("bMath");
-    const bRead = document.getElementById("bRead");
-    const bPhon = document.getElementById("bPhonics");
-
-    bMath.classList.toggle("locked", !mathUnlocked);
-    bRead.classList.toggle("locked", !readUnlocked);
-    bPhon.classList.toggle("locked", !phonicsUnlocked);
-
-    document.getElementById("bMathReq").textContent = mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
-    document.getElementById("bReadReq").textContent = readUnlocked ? "Unlocked ✅" : `Unlock at 5 Reading ⭐ (you have ${p.readingStars||0})`;
-    document.getElementById("bPhonicsReq").textContent = phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
-  }
-
-  // Reset buttons
-  document.getElementById("resetPhonics").onclick = ()=>{
-    const p = getProgress(); p.phonicsStars = 0; save(PROG_KEY, p);
-    renderStars(); renderBadges();
-  };
-  document.getElementById("resetReading").onclick = ()=>{
-    const p = getProgress(); p.readingStars = 0; save(PROG_KEY, p);
-    renderStars(); renderBadges();
-  };
-  document.getElementById("resetMath").onclick = ()=>{
-    const p = getProgress(); p.mathStars = 0; save(PROG_KEY, p);
-    renderStars(); renderBadges();
+  document.getElementById("resetAllBtn").onclick = ()=>{
+    if (!confirm("Reset ALL saved stars and today’s mission on this device?")) return;
+    localStorage.removeItem(PROG_KEY);
+    localStorage.removeItem(MISSION_KEY);
+    render();
   };
 
-  // Logout
-  document.getElementById("logoutBtn").onclick = ()=>{
-    localStorage.removeItem(STUDENT_KEY);
-    window.location.href = "student-login.html";
+  document.getElementById("resetMissionBtn").onclick = ()=>{
+    if (!confirm("Reset today’s mission only?")) return;
+    localStorage.removeItem(MISSION_KEY);
+    render();
   };
 
-  renderStars();
-  renderMission();
-  renderBadges();
+  render();
 </script>
 
 </body>
