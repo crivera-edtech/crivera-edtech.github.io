@@ -58,6 +58,7 @@
 
     <div class="game-box wide" style="margin-top:16px;">
       <div class="kid-big">Start Here (Pick a Grade)</div>
+
       <div class="badge-row">
         <button class="pill active" data-grade="K">Kindergarten</button>
         <button class="pill" data-grade="1">Grade 1</button>
@@ -94,7 +95,7 @@
     <h2 class="section-title">Today’s Mission 🌟</h2>
 
     <div class="mission game-box wide">
-      <div class="mission-list">
+      <div>
         <div class="mission-item">
           <div class="left">
             <div class="chk" id="m1chk">✓</div>
@@ -119,7 +120,7 @@
           <div class="small" id="m3txt">0 / 2</div>
         </div>
 
-        <div class="small">Mission Progress</div>
+        <div class="small" style="margin-top:10px;">Mission Progress</div>
         <div class="progressbar"><div id="missionBar"></div></div>
         <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
       </div>
@@ -190,7 +191,7 @@
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
-    // Pass grade via query string (your pages can optionally read it later)
+    // Pass grade in URL (optional use on other pages)
     document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
@@ -233,7 +234,6 @@
   function renderMission(){
     const ms = ensureMission();
 
-    // Goals
     const g1 = 2, g2 = 1, g3 = 2;
 
     document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
@@ -260,7 +260,7 @@
     if (pct === 100){
       face.textContent = "🎉";
       title.textContent = "Mission Complete!";
-      msg.textContent = "Woohoo! You finished today’s mission. Time for stickers!";
+      msg.textContent = "Yay! You finished today’s mission. Go get stickers!";
     } else if (pct >= 34){
       face.textContent = "🦉";
       title.textContent = "Owl Helper";
@@ -296,9 +296,14 @@
     bRead.classList.toggle("locked", !readUnlocked);
     bPhon.classList.toggle("locked", !phonicsUnlocked);
 
-    document.getElementById("bMathReq").textContent = mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
-    document.getElementById("bReadReq").textContent = readUnlocked ? "Unlocked ✅" : `Unlock at 5 Reading ⭐ (you have ${p.readingStars||0})`;
-    document.getElementById("bPhonicsReq").textContent = phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
+    document.getElementById("bMathReq").textContent =
+      mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
+
+    document.getElementById("bReadReq").textContent =
+      readUnlocked ? "Unlocked ✅" : `Unlock at 5 Reading ⭐ (you have ${p.readingStars||0})`;
+
+    document.getElementById("bPhonicsReq").textContent =
+      phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
   }
 
   // Init
