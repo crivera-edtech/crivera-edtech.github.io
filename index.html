@@ -53,59 +53,259 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Learn & Play! 🌿✨</h1>
-    <p>Tap a bubble to start fast — phonics, reading, math, tracing, resources, and student fun!</p>
+    <h1>Learn & Play 🌿✨</h1>
+    <p>Pick a bubble to start fast — phonics, reading, math, tracing, and fun rewards!</p>
+
+    <div class="game-box wide" style="margin-top:16px;">
+      <div class="kid-big">Start Here (Pick a Grade)</div>
+      <div class="badge-row">
+        <button class="pill active" data-grade="K">Kindergarten</button>
+        <button class="pill" data-grade="1">Grade 1</button>
+        <button class="pill" data-grade="2">Grade 2</button>
+      </div>
+
+      <div class="quick-strip">
+        <a class="btn" id="startPhonics" href="phonics.html">Start Phonics</a>
+        <a class="btn secondary" id="startReading" href="reading.html">Start Reading</a>
+        <a class="btn secondary" id="startMath" href="math.html">Start Math</a>
+        <a class="btn secondary" href="resources.html#tracing">Trace a Letter</a>
+      </div>
+
+      <div class="hero-note">Tip: Your grade choice is saved on this device.</div>
+    </div>
 
     <div class="bubbles">
       <a class="bubble" href="phonics.html"><span class="emoji">🔤</span><span class="text">Phonics</span></a>
       <a class="bubble" href="reading.html"><span class="emoji">📖</span><span class="text">Reading</span></a>
       <a class="bubble" href="math.html"><span class="emoji">➕</span><span class="text">Math</span></a>
-      <a class="bubble" href="resources.html#tracing"><span class="emoji">✍️</span><span class="text">Tracing</span></a>
+      <a class="bubble" href="resources.html#tracing"><span class="emoji">✍️</span><span class="text">Letter Tracing</span></a>
 
       <a class="bubble" href="resources.html"><span class="emoji">🎥</span><span class="text">Kids Resources</span></a>
-      <a class="bubble" href="student-login.html"><span class="emoji">🧒</span><span class="text">Student Login</span></a>
-      <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Sticker Book</span></a>
       <a class="bubble" href="progress.html"><span class="emoji">📊</span><span class="text">My Progress</span></a>
+      <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Sticker Book</span></a>
+      <a class="bubble" href="diagnostic.html"><span class="emoji">🧠</span><span class="text">Diagnostic</span></a>
     </div>
 
-    <div class="hero-note">Tip: Use the top menu ▾ to find everything fast.</div>
-
-    <div class="quick-strip">
-      <a class="btn" href="phonics.html">Start Learning</a>
-      <a class="btn secondary" href="resources.html">Kids Resources</a>
-      <a class="btn secondary" href="parent-resources.html">Parent Hub</a>
-    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Quick Picks 🌟</h2>
+    <h2 class="section-title">Today’s Mission 🌟</h2>
 
-    <div class="game-box wide">
-      <div class="grid-3">
-        <div class="card">
-          <h3>🔤 Phonics Practice</h3>
-          <p>Pick a grade and practice sounds. Earn stars for correct answers.</p>
-          <a class="btn" href="phonics.html">Go</a>
+    <div class="mission game-box wide">
+      <div class="mission-list">
+        <div class="mission-item">
+          <div class="left">
+            <div class="chk" id="m1chk">✓</div>
+            <div>Answer 2 phonics questions</div>
+          </div>
+          <div class="small" id="m1txt">0 / 2</div>
         </div>
 
-        <div class="card">
-          <h3>✍️ Trace a Letter</h3>
-          <p>Uppercase, lowercase, or numbers. Earn a sticker when finished!</p>
-          <a class="btn" href="resources.html#tracing">Go</a>
+        <div class="mission-item">
+          <div class="left">
+            <div class="chk" id="m2chk">✓</div>
+            <div>Read 1 passage</div>
+          </div>
+          <div class="small" id="m2txt">0 / 1</div>
         </div>
 
-        <div class="card">
-          <h3>🎮 Character Games</h3>
-          <p>Play quick challenges with Unicorn, Owl, and Dino.</p>
-          <a class="btn" href="games.html">Go</a>
+        <div class="mission-item">
+          <div class="left">
+            <div class="chk" id="m3chk">✓</div>
+            <div>Solve 2 math questions</div>
+          </div>
+          <div class="small" id="m3txt">0 / 2</div>
+        </div>
+
+        <div class="small">Mission Progress</div>
+        <div class="progressbar"><div id="missionBar"></div></div>
+        <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
+      </div>
+
+      <div>
+        <div class="helper">
+          <div class="face" id="helperFace">🦄</div>
+          <div>
+            <div class="title" id="helperTitle">Unicorn Coach</div>
+            <div class="msg" id="helperMsg">Pick a bubble, earn stars, and unlock stickers!</div>
+          </div>
+        </div>
+
+        <div class="game-box" style="margin-top:12px;">
+          <div class="kid-big">Rewards Preview 🎁</div>
+          <p class="small">Earn ⭐ to unlock sticker packs.</p>
+
+          <div class="badges" style="margin-top:12px;">
+            <div class="badge-tile" id="bMath">
+              <div class="top">
+                <div class="icon">➕</div>
+                <div class="name">Math Sticker Pack</div>
+              </div>
+              <div class="req" id="bMathReq">Unlock at 10 Math ⭐</div>
+            </div>
+
+            <div class="badge-tile" id="bRead">
+              <div class="top">
+                <div class="icon">📖</div>
+                <div class="name">Reading Sticker Pack</div>
+              </div>
+              <div class="req" id="bReadReq">Unlock at 5 Reading ⭐</div>
+            </div>
+
+            <div class="badge-tile" id="bPhonics">
+              <div class="top">
+                <div class="icon">🔤</div>
+                <div class="name">Phonics Sticker Pack</div>
+              </div>
+              <div class="req" id="bPhonicsReq">Unlock at 10 Phonics ⭐</div>
+            </div>
+          </div>
+
+          <div class="quick-strip" style="margin-top:12px;">
+            <a class="btn secondary" href="sticker-book.html">Open Sticker Book</a>
+            <a class="btn secondary" href="progress.html">View Progress</a>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script>
+  // -----------------------------
+  // Grade preference
+  // -----------------------------
+  const PREF_GRADE_KEY = "bloom_pref_grade";
+  let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
+
+  function setGrade(g){
+    grade = g;
+    localStorage.setItem(PREF_GRADE_KEY, g);
+    document.querySelectorAll(".pill[data-grade]").forEach(b=>{
+      b.classList.toggle("active", b.dataset.grade === grade);
+    });
+
+    // Pass grade via query string (your pages can optionally read it later)
+    document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
+    document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
+    document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
+  }
+
+  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
+    btn.onclick = ()=> setGrade(btn.dataset.grade);
+  });
+
+  // -----------------------------
+  // Missions (Daily)
+  // -----------------------------
+  const MISSION_KEY = "bloom_daily_mission";
+  const PROG_KEY = "bloom_progress";
+
+  function todayKey(){
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function load(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
+  }
+  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+
+  function ensureMission(){
+    const t = todayKey();
+    let ms = load(MISSION_KEY, null);
+    if (!ms || ms.date !== t){
+      ms = { date: t, phonics:0, reading:0, math:0 };
+      save(MISSION_KEY, ms);
+    }
+    return ms;
+  }
+
+  function renderMission(){
+    const ms = ensureMission();
+
+    // Goals
+    const g1 = 2, g2 = 1, g3 = 2;
+
+    document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
+    document.getElementById("m2txt").textContent = `${Math.min(ms.reading,g2)} / ${g2}`;
+    document.getElementById("m3txt").textContent = `${Math.min(ms.math,g3)} / ${g3}`;
+
+    const done1 = ms.phonics >= g1;
+    const done2 = ms.reading >= g2;
+    const done3 = ms.math >= g3;
+
+    document.getElementById("m1chk").classList.toggle("done", done1);
+    document.getElementById("m2chk").classList.toggle("done", done2);
+    document.getElementById("m3chk").classList.toggle("done", done3);
+
+    const pct = Math.round(((done1?1:0)+(done2?1:0)+(done3?1:0))/3 * 100);
+    document.getElementById("missionBar").style.width = pct + "%";
+    document.getElementById("missionPct").textContent = `${pct}% complete`;
+
+    // Helper reacts
+    const face = document.getElementById("helperFace");
+    const title = document.getElementById("helperTitle");
+    const msg = document.getElementById("helperMsg");
+
+    if (pct === 100){
+      face.textContent = "🎉";
+      title.textContent = "Mission Complete!";
+      msg.textContent = "Woohoo! You finished today’s mission. Time for stickers!";
+    } else if (pct >= 34){
+      face.textContent = "🦉";
+      title.textContent = "Owl Helper";
+      msg.textContent = "Nice work! Keep going — you’re almost there.";
+    } else {
+      face.textContent = "🦄";
+      title.textContent = "Unicorn Coach";
+      msg.textContent = "Pick a game and start earning stars today!";
+    }
+  }
+
+  // -----------------------------
+  // Badge preview (unlocks)
+  // -----------------------------
+  function getProgress(){
+    return load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+  }
+
+  function renderBadges(){
+    const p = getProgress();
+
+    const mathUnlocked = (p.mathStars || 0) >= 10;
+    const readUnlocked = (p.readingStars || 0) >= 5;
+    const phonicsUnlocked = (p.phonicsStars || 0) >= 10;
+
+    const bMath = document.getElementById("bMath");
+    const bRead = document.getElementById("bRead");
+    const bPhon = document.getElementById("bPhonics");
+
+    bMath.classList.toggle("locked", !mathUnlocked);
+    bRead.classList.toggle("locked", !readUnlocked);
+    bPhon.classList.toggle("locked", !phonicsUnlocked);
+
+    document.getElementById("bMathReq").textContent = mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
+    document.getElementById("bReadReq").textContent = readUnlocked ? "Unlocked ✅" : `Unlock at 5 Reading ⭐ (you have ${p.readingStars||0})`;
+    document.getElementById("bPhonicsReq").textContent = phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
+  }
+
+  // Init
+  setGrade(grade);
+  renderMission();
+  renderBadges();
+</script>
+
 </body>
 </html>
