@@ -54,39 +54,44 @@
 <section class="hero">
   <div class="container">
     <h1>Student Login 🧒</h1>
-    <p>Type your name (or nickname). This saves on this device.</p>
+    <p>Pick your animal buddy and type your name. This is a fun “pretend login” for young learners.</p>
+    <div class="hero-note">Tip: Your progress saves on this device.</div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <div class="game-box">
-      <p class="kid-big">What’s your name? 🌈</p>
+    <h2 class="section-title">Let’s Start! 🌟</h2>
 
-      <div class="game-row">
-        <input class="input" id="studentName" placeholder="Example: Mia" />
-        <button class="btn" id="startBtn">Start</button>
-      </div>
-
-      <div id="helloBox" style="display:none; margin-top:16px;">
-        <div class="game-box">
-          <p class="kid-big" id="helloText">Hi!</p>
-          <div class="quick-strip">
-            <a class="btn" href="phonics.html">Phonics</a>
-            <a class="btn" href="reading.html">Reading</a>
-            <a class="btn" href="math.html">Math</a>
-            <a class="btn secondary" href="resources.html#tracing">Tracing</a>
-          </div>
-          <div class="quick-strip">
-            <a class="btn secondary" href="progress.html">My Progress</a>
-            <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
-          </div>
+    <div class="game-box wide">
+      <div class="grid-3">
+        <div class="card" style="cursor:pointer;" data-buddy="🦄">
+          <h3 style="font-size:26px;">🦄</h3>
+          <p>Unicorn Buddy</p>
+        </div>
+        <div class="card" style="cursor:pointer;" data-buddy="🦉">
+          <h3 style="font-size:26px;">🦉</h3>
+          <p>Owl Buddy</p>
+        </div>
+        <div class="card" style="cursor:pointer;" data-buddy="🦖">
+          <h3 style="font-size:26px;">🦖</h3>
+          <p>Dino Buddy</p>
         </div>
       </div>
 
-      <p class="small" style="margin-top:10px;">
-        This is a login mockup (no passwords). It stores your name locally.
-      </p>
+      <div class="game-box" style="margin-top:14px;">
+        <p class="kid-big">Your Name</p>
+        <input id="nameInput" type="text" placeholder="Type name (or nickname)"
+               style="width:100%; padding:14px; border-radius:18px; border:2px solid rgba(0,0,0,0.08); font-size:18px; font-family:'Baloo 2', cursive;">
+        <p class="small" style="margin-top:8px;">Grown-up note: this is not secure — it just helps kids feel “logged in.”</p>
+
+        <div class="quick-strip">
+          <button class="btn" id="loginBtn">Login</button>
+          <a class="btn secondary" href="index.html">Back Home</a>
+        </div>
+
+        <p class="kid-big" id="status" style="margin-top:12px;"></p>
+      </div>
     </div>
   </div>
 </section>
@@ -94,27 +99,45 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const KEY = "bloom_student_name";
-  const input = document.getElementById("studentName");
-  const helloBox = document.getElementById("helloBox");
-  const helloText = document.getElementById("helloText");
+  const STUDENT_KEY = "bloom_student";
 
-  function showHello(name){
-    helloText.textContent = `Hi ${name}! ⭐`;
-    helloBox.style.display = "block";
+  let buddy = "🦄"; // default
+
+  document.querySelectorAll("[data-buddy]").forEach(card=>{
+    card.addEventListener("click", ()=>{
+      buddy = card.dataset.buddy;
+      document.querySelectorAll("[data-buddy]").forEach(c=>c.style.outline="none");
+      card.style.outline = "4px solid rgba(255,225,184,.9)";
+      document.getElementById("status").textContent = `Selected buddy: ${buddy}`;
+    });
+  });
+
+  function saveStudent(obj){
+    localStorage.setItem(STUDENT_KEY, JSON.stringify(obj));
   }
 
-  const saved = localStorage.getItem(KEY);
-  if (saved){
-    input.value = saved;
-    showHello(saved);
+  function loadStudent(){
+    try { return JSON.parse(localStorage.getItem(STUDENT_KEY) || "null"); }
+    catch { return null; }
   }
 
-  document.getElementById("startBtn").addEventListener("click", () => {
-    const name = (input.value || "").trim();
-    if (!name) return alert("Please type your name 🙂");
-    localStorage.setItem(KEY, name);
-    showHello(name);
+  // If already logged in, show it
+  const existing = loadStudent();
+  if (existing && existing.name){
+    document.getElementById("status").textContent = `You are already logged in as ${existing.buddy} ${existing.name}!`;
+  }
+
+  document.getElementById("loginBtn").addEventListener("click", ()=>{
+    const name = (document.getElementById("nameInput").value || "").trim();
+    if (!name){
+      document.getElementById("status").textContent = "Please type your name 🙂";
+      return;
+    }
+    saveStudent({ name, buddy, loginAt: Date.now() });
+    document.getElementById("status").textContent = `Welcome, ${buddy} ${name}! 🎉`;
+
+    // Go to progress page after a moment
+    setTimeout(()=>{ window.location.href = "progress.html"; }, 600);
   });
 </script>
 
