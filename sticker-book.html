@@ -54,102 +54,158 @@
 <section class="hero">
   <div class="container">
     <h1>Sticker Book 📖</h1>
-    <p>Trace letters and numbers to earn stickers ⭐</p>
+    <p id="hello">Loading…</p>
     <div class="quick-strip">
-      <a class="btn" href="resources.html#tracing">Earn Stickers</a>
-      <a class="btn secondary" href="progress.html">My Progress</a>
-      <button class="btn secondary" id="readBtn">🔊 Read</button>
+      <a class="btn secondary" href="progress.html">📊 My Progress</a>
+      <button class="btn secondary" id="logoutBtn">🚪 Logout</button>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">My Stickers ⭐</h2>
+    <h2 class="section-title">Sticker Packs 🎁</h2>
 
-    <div class="game-box wide">
-      <div class="badge-row">
-        <span class="badge" id="countBadge">🎁 Stickers: 0</span>
-        <span class="badge" id="uniqueBadge">🌟 Unique: 0</span>
-      </div>
-
-      <div id="emptyBox" class="game-box" style="margin-top:14px; display:none;">
-        <p class="kid-big">No stickers yet 🧸</p>
-        <p class="small">Go trace a letter to earn your first sticker!</p>
-        <div class="quick-strip">
-          <a class="btn" href="resources.html#tracing">Start Tracing</a>
+    <div class="grid-3">
+      <div class="card" id="packPhonics">
+        <h3>🔤 Phonics Pack</h3>
+        <p class="small" id="phStatus">Locked</p>
+        <div class="quick-strip" style="justify-content:center;">
+          <button class="btn" id="phCollectBtn">Collect Sticker</button>
         </div>
+        <p class="kid-big" id="phSticker" style="margin-top:8px;"></p>
       </div>
 
-      <div id="grid" class="sticker-grid"></div>
-
-      <div class="quick-strip" style="margin-top:14px;">
-        <button class="btn secondary" id="clearBtn">Reset Sticker Book</button>
+      <div class="card" id="packReading">
+        <h3>📖 Reading Pack</h3>
+        <p class="small" id="rdStatus">Locked</p>
+        <div class="quick-strip" style="justify-content:center;">
+          <button class="btn" id="rdCollectBtn">Collect Sticker</button>
+        </div>
+        <p class="kid-big" id="rdSticker" style="margin-top:8px;"></p>
       </div>
 
-      <p class="small" style="margin-top:10px;">Saved on this device (browser storage).</p>
+      <div class="card" id="packMath">
+        <h3>➕ Math Pack</h3>
+        <p class="small" id="maStatus">Locked</p>
+        <div class="quick-strip" style="justify-content:center;">
+          <button class="btn" id="maCollectBtn">Collect Sticker</button>
+        </div>
+        <p class="kid-big" id="maSticker" style="margin-top:8px;"></p>
+      </div>
     </div>
+
+    <div class="game-box wide" style="margin-top:16px;">
+      <h2 class="section-title">My Stickers ⭐</h2>
+      <p class="small">These save on this device.</p>
+
+      <div class="game-box" style="margin-top:12px;">
+        <p class="kid-big">Collected:</p>
+        <p id="collected" style="font-size:22px; margin-top:8px;">(none yet)</p>
+      </div>
+
+      <div class="quick-strip">
+        <button class="btn secondary" id="clearBtn">Clear Stickers</button>
+        <a class="btn secondary" href="index.html">Back Home</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const STICKER_KEY = "bloom_sticker_book";
+  const STUDENT_KEY = "bloom_student";
+  const PROG_KEY = "bloom_progress";
+  const STICKER_KEY = "bloom_stickers";
 
-  function load(){
-    try { return JSON.parse(localStorage.getItem(STICKER_KEY) || "[]"); }
-    catch { return []; }
+  function load(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
   }
-  function save(list){
-    localStorage.setItem(STICKER_KEY, JSON.stringify(list));
+  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+
+  // Gate
+  const student = load(STUDENT_KEY, null);
+  if (!student || !student.name){
+    window.location.href = "student-login.html";
+  } else {
+    document.getElementById("hello").textContent = `Hello, ${student.buddy || "🦄"} ${student.name}! Collect stickers you unlock.`;
   }
-  function speak(text){
-    if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1;
-    speechSynthesis.speak(u);
+
+  function getProgress(){
+    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
   }
+
+  function getStickers(){
+    return load(STICKER_KEY, []);
+  }
+  function setStickers(arr){
+    save(STICKER_KEY, arr);
+  }
+
+  const phonicsUnlock = 10;
+  const readingUnlock = 5;
+  const mathUnlock = 10;
+
+  const phonicsStickers = ["🌟", "🐝", "🍀", "🧩", "🎈"];
+  const readingStickers = ["📚", "🦋", "🌈", "🧸", "✨"];
+  const mathStickers = ["➕", "🔢", "🧠", "🏆", "⭐"];
 
   function render(){
-    const stickers = load();
-    document.getElementById("countBadge").textContent = `🎁 Stickers: ${stickers.length}`;
-    document.getElementById("uniqueBadge").textContent = `🌟 Unique: ${new Set(stickers.map(s=>s.emoji)).size}`;
+    const p = getProgress();
+    const unlockedPh = (p.phonicsStars || 0) >= phonicsUnlock;
+    const unlockedRd = (p.readingStars || 0) >= readingUnlock;
+    const unlockedMa = (p.mathStars || 0) >= mathUnlock;
 
-    const empty = document.getElementById("emptyBox");
-    const grid = document.getElementById("grid");
+    document.getElementById("phStatus").textContent = unlockedPh ? "Unlocked ✅" : `Locked — need ${phonicsUnlock} Phonics ⭐ (you have ${p.phonicsStars||0})`;
+    document.getElementById("rdStatus").textContent = unlockedRd ? "Unlocked ✅" : `Locked — need ${readingUnlock} Reading ⭐ (you have ${p.readingStars||0})`;
+    document.getElementById("maStatus").textContent = unlockedMa ? "Unlocked ✅" : `Locked — need ${mathUnlock} Math ⭐ (you have ${p.mathStars||0})`;
 
-    if (stickers.length === 0){
-      empty.style.display = "block";
-      grid.innerHTML = "";
-      return;
-    }
-    empty.style.display = "none";
+    document.getElementById("phCollectBtn").disabled = !unlockedPh;
+    document.getElementById("rdCollectBtn").disabled = !unlockedRd;
+    document.getElementById("maCollectBtn").disabled = !unlockedMa;
 
-    grid.innerHTML = stickers.slice().reverse().map(s => {
-      const d = new Date(s.time).toLocaleString();
-      return `
-        <div class="sticker-card">
-          <div class="sticker-big">${s.emoji}</div>
-          <div class="sticker-label">${s.item}</div>
-          <div class="small">${s.perfect ? "Perfect Trace ⭐" : "Great Trace 👍"}</div>
-          <div class="small">${d}</div>
-        </div>
-      `;
-    }).join("");
+    document.getElementById("phCollectBtn").style.opacity = unlockedPh ? "1" : ".6";
+    document.getElementById("rdCollectBtn").style.opacity = unlockedRd ? "1" : ".6";
+    document.getElementById("maCollectBtn").style.opacity = unlockedMa ? "1" : ".6";
+
+    const list = getStickers();
+    document.getElementById("collected").textContent = list.length ? list.join("  ") : "(none yet)";
   }
 
-  document.getElementById("clearBtn").onclick = () => {
-    if (!confirm("Reset Sticker Book?")) return;
-    save([]);
+  function collect(fromArr){
+    const list = getStickers();
+    const s = fromArr[Math.floor(Math.random() * fromArr.length)];
+    list.push(s);
+    setStickers(list);
     render();
+    return s;
+  }
+
+  document.getElementById("phCollectBtn").onclick = ()=> {
+    const s = collect(phonicsStickers);
+    document.getElementById("phSticker").textContent = `You got: ${s}`;
+  };
+  document.getElementById("rdCollectBtn").onclick = ()=> {
+    const s = collect(readingStickers);
+    document.getElementById("rdSticker").textContent = `You got: ${s}`;
+  };
+  document.getElementById("maCollectBtn").onclick = ()=> {
+    const s = collect(mathStickers);
+    document.getElementById("maSticker").textContent = `You got: ${s}`;
   };
 
-  document.getElementById("readBtn").onclick = () => {
-    const stickers = load();
-    if (stickers.length === 0) speak("Sticker book. No stickers yet. Trace a letter to earn one!");
-    else speak(`Sticker book. You have ${stickers.length} stickers. Great job!`);
+  document.getElementById("clearBtn").onclick = ()=>{
+    setStickers([]);
+    render();
+    alert("Stickers cleared!");
+  };
+
+  document.getElementById("logoutBtn").onclick = ()=>{
+    localStorage.removeItem(STUDENT_KEY);
+    window.location.href = "student-login.html";
   };
 
   render();
