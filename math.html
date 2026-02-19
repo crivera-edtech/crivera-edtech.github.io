@@ -15,7 +15,6 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-
         <li class="dropdown">
           <a href="#">Subjects</a>
           <div class="dropdown-menu">
@@ -25,7 +24,6 @@
             <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
-
         <li class="dropdown">
           <a href="#">Resources</a>
           <div class="dropdown-menu">
@@ -34,7 +32,6 @@
             <a href="standards.html">📘 Standards (K–2)</a>
           </div>
         </li>
-
         <li class="dropdown">
           <a href="#">Student</a>
           <div class="dropdown-menu">
@@ -43,7 +40,6 @@
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
-
         <li><a href="games.html">🎮 Games</a></li>
         <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
@@ -53,1401 +49,282 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Math ➕🌿</h1>
-    <p>Pick a grade, pick a game, and earn ⭐ for correct answers!</p>
-
+    <h1>Math ➕</h1>
+    <p>Play math games and earn ⭐. Correct answers count toward today’s mission!</p>
     <div class="quick-strip">
       <button class="btn secondary" id="soundBtn">🔊 Read Question</button>
-      <button class="btn secondary" id="stopBtn">⏹ Stop</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
-
-    <div class="hero-note">New! Skip counting, arrays, and a word-problem builder.</div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Math Mini Games 🌟</h2>
 
+    <h2 class="section-title">Game 1: Quick Choice 🌟</h2>
     <div class="game-box wide">
+      <div class="game-box">
+        <p class="kid-big" id="q1">Question loads here…</p>
+        <p class="small" id="hint1">Hint loads here…</p>
 
-      <!-- Grade picker + tabs -->
-      <div class="game-box" style="margin-bottom:14px;">
-        <p class="kid-big" style="margin-bottom:10px;">Pick a Grade</p>
-        <div class="badge-row">
-          <button class="pill active" data-grade="K">Kindergarten</button>
-          <button class="pill" data-grade="1">Grade 1</button>
-          <button class="pill" data-grade="2">Grade 2</button>
-        </div>
+        <div class="grid-3" id="choices1" style="margin-top:14px;"></div>
 
-        <div class="quick-strip" style="margin-top:14px; flex-wrap:wrap;">
-          <button class="btn" id="tabQuick">🧠 Quick Solve</button>
-          <button class="btn secondary" id="tabLine">🦘 Number Line Hop</button>
-          <button class="btn secondary" id="tabCount">🍓 Count Pictures</button>
-          <button class="btn secondary" id="tabMissing">🧩 Missing Number</button>
-          <button class="btn secondary" id="tabStory">📚 Story Problems</button>
-          <button class="btn secondary" id="tabShapes">🟦 Shapes & Patterns</button>
-          <button class="btn secondary" id="tabPlace">🧱 Tens & Ones</button>
-          <button class="btn secondary" id="tabTime">🕒 Time</button>
-          <button class="btn secondary" id="tabMoney">🪙 Money</button>
+        <p class="kid-big" id="result1" style="margin-top:14px;"></p>
 
-          <!-- NEW UPGRADE TABS -->
-          <button class="btn secondary" id="tabSkip">🔁 Skip Count</button>
-          <button class="btn secondary" id="tabArrays">🧮 Arrays</button>
-          <button class="btn secondary" id="tabBuilder">🧩 Problem Builder</button>
-
-          <button class="btn secondary" id="resetStarsBtn">Reset Stars</button>
+        <div class="quick-strip">
+          <button class="btn" id="next1">Next</button>
+          <button class="btn secondary" id="reset1">Reset Stars</button>
         </div>
       </div>
-
-      <!-- QUICK SOLVE -->
-      <div class="game-box" id="panelQuick">
-        <p class="kid-big">🧠 Quick Solve</p>
-        <p class="small">Solve and choose the right answer.</p>
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qQuick">Question loads here…</p>
-          <p class="small" id="hintQuick">Hint loads here…</p>
-          <div class="grid-3" id="choicesQuick" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultQuick" style="margin-top:14px;"></p>
-          <div class="quick-strip"><button class="btn" id="nextQuick">Next</button></div>
-        </div>
-      </div>
-
-      <!-- NUMBER LINE -->
-      <div class="game-box" id="panelLine" style="display:none;">
-        <p class="kid-big">🦘 Number Line Hop</p>
-        <p class="small">Tap the hops in order, then choose the answer.</p>
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qLine">Line question loads here…</p>
-          <p class="small" id="hintLine">Tap the hop buttons in order!</p>
-
-          <div class="game-box" style="margin-top:12px;">
-            <div class="small" style="margin-bottom:8px;">Number line</div>
-            <div id="lineTrack" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
-
-            <div class="small" style="margin-top:12px;">Hops</div>
-            <div class="game-row" id="hopButtons" style="gap:10px; flex-wrap:wrap;"></div>
-
-            <div class="small" style="margin-top:12px;">Your landing number:</div>
-            <div class="kid-big" id="landingNum" style="margin-top:6px;">—</div>
-          </div>
-
-          <div class="grid-3" id="choicesLine" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultLine" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextLine">Next</button>
-            <button class="btn secondary" id="resetHops">Reset Hops</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- COUNT PICTURES -->
-      <div class="game-box" id="panelCount" style="display:none;">
-        <p class="kid-big">🍓 Count Pictures</p>
-        <p class="small">Count the pictures and choose the right number.</p>
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qCount">Count question loads here…</p>
-          <p class="small" id="hintCount">Touch each picture as you count!</p>
-
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <div id="picPile" style="font-size:44px; line-height:1.2; letter-spacing:6px;"></div>
-            <div class="small" id="tapCount" style="margin-top:10px;">Tapped: 0</div>
-          </div>
-
-          <div class="grid-3" id="choicesCount" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultCount" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextCount">Next</button>
-            <button class="btn secondary" id="resetTap">Reset Taps</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- MISSING NUMBER -->
-      <div class="game-box" id="panelMissing" style="display:none;">
-        <p class="kid-big">🧩 Missing Number</p>
-        <p class="small">Fill in the missing number.</p>
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qMissing">Missing question loads here…</p>
-          <p class="small" id="hintMissing">Look for the pattern!</p>
-          <div class="grid-3" id="choicesMissing" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultMissing" style="margin-top:14px;"></p>
-          <div class="quick-strip"><button class="btn" id="nextMissing">Next</button></div>
-        </div>
-      </div>
-
-      <!-- STORY PROBLEMS -->
-      <div class="game-box" id="panelStory" style="display:none;">
-        <p class="kid-big">📚 Story Problems</p>
-        <p class="small">Read the story and solve.</p>
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qStory">Story loads here…</p>
-          <p class="small" id="hintStory">Hint loads here…</p>
-          <div class="grid-3" id="choicesStory" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultStory" style="margin-top:14px;"></p>
-          <div class="quick-strip"><button class="btn" id="nextStory">Next</button></div>
-        </div>
-      </div>
-
-      <!-- SHAPES -->
-      <div class="game-box" id="panelShapes" style="display:none;">
-        <p class="kid-big">🟦 Shapes & Patterns</p>
-        <p class="small">Pick the correct shape or the next pattern piece.</p>
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qShapes">Shapes question loads here…</p>
-          <p class="small" id="hintShapes">Hint loads here…</p>
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <div id="patternRow" style="font-size:44px; letter-spacing:8px; line-height:1.3;"></div>
-          </div>
-          <div class="grid-3" id="choicesShapes" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultShapes" style="margin-top:14px;"></p>
-          <div class="quick-strip"><button class="btn" id="nextShapes">Next</button></div>
-        </div>
-      </div>
-
-      <!-- PLACE VALUE -->
-      <div class="game-box" id="panelPlace" style="display:none;">
-        <p class="kid-big">🧱 Tens & Ones Builder</p>
-        <p class="small">Build the number using tens (🟩10) and ones (🟨1).</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qPlace">Build this number: —</p>
-          <p class="small" id="hintPlace">Tap + to add blocks. Tap − to remove blocks.</p>
-
-          <div class="game-box" style="margin-top:12px;">
-            <div class="grid-3">
-              <div class="card" style="text-align:center;">
-                <h3 style="margin-bottom:6px;">Tens 🟩</h3>
-                <div class="kid-big" id="tensCount">0</div>
-                <div class="quick-strip" style="justify-content:center;">
-                  <button class="btn secondary" id="tensMinus">−</button>
-                  <button class="btn" id="tensPlus">+</button>
-                </div>
-              </div>
-
-              <div class="card" style="text-align:center;">
-                <h3 style="margin-bottom:6px;">Ones 🟨</h3>
-                <div class="kid-big" id="onesCount">0</div>
-                <div class="quick-strip" style="justify-content:center;">
-                  <button class="btn secondary" id="onesMinus">−</button>
-                  <button class="btn" id="onesPlus">+</button>
-                </div>
-              </div>
-
-              <div class="card" style="text-align:center;">
-                <h3 style="margin-bottom:6px;">Your Number</h3>
-                <div class="kid-big" id="builtNumber">0</div>
-                <p class="small">tens×10 + ones</p>
-              </div>
-            </div>
-
-            <div class="game-box" style="margin-top:12px; text-align:center;">
-              <div class="small">Blocks</div>
-              <div id="blockView" style="font-size:30px; line-height:1.4; letter-spacing:4px; margin-top:8px;"></div>
-            </div>
-
-            <p class="kid-big" id="resultPlace" style="margin-top:14px;"></p>
-            <div class="quick-strip">
-              <button class="btn" id="checkPlace">Check</button>
-              <button class="btn secondary" id="nextPlace">Next</button>
-              <button class="btn secondary" id="resetPlace">Reset</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TIME -->
-      <div class="game-box" id="panelTime" style="display:none;">
-        <p class="kid-big">🕒 Telling Time</p>
-        <p class="small">Read the clock and pick the correct time (hour / half-hour).</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qTime">Time question loads here…</p>
-          <p class="small" id="hintTime">Short hand = hour. Long hand = minutes.</p>
-
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <canvas id="clockCanvas" width="220" height="220" style="max-width:100%;"></canvas>
-          </div>
-
-          <div class="grid-3" id="choicesTime" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultTime" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextTime">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- MONEY -->
-      <div class="game-box" id="panelMoney" style="display:none;">
-        <p class="kid-big">🪙 Money Game</p>
-        <p class="small">Count the coins and choose the total value.</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qMoney">Money question loads here…</p>
-          <p class="small" id="hintMoney">Add coin values together.</p>
-
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <div id="coinRow" style="font-size:44px; letter-spacing:8px; line-height:1.3;"></div>
-            <div class="small" style="margin-top:8px;">(🪙 Penny=1¢, Nickel=5¢, Dime=10¢, Quarter=25¢)</div>
-          </div>
-
-          <div class="grid-3" id="choicesMoney" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultMoney" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextMoney">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- NEW: SKIP COUNT -->
-      <div class="game-box" id="panelSkip" style="display:none;">
-        <p class="kid-big">🔁 Skip Counting</p>
-        <p class="small">Tap the next number in the skip-count pattern!</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qSkip">Skip question loads here…</p>
-          <p class="small" id="hintSkip">Pick the next number.</p>
-
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <div class="small">Pattern</div>
-            <div id="skipRow" style="font-size:40px; letter-spacing:6px; line-height:1.3; margin-top:8px;"></div>
-          </div>
-
-          <div class="grid-3" id="choicesSkip" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultSkip" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextSkip">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- NEW: ARRAYS / REPEATED ADDITION -->
-      <div class="game-box" id="panelArrays" style="display:none;">
-        <p class="kid-big">🧮 Arrays & Repeated Addition</p>
-        <p class="small">Count rows and columns. (Like mini multiplication!)</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qArrays">Array question loads here…</p>
-          <p class="small" id="hintArrays">Rows × Columns = Total.</p>
-
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <div id="arrayGrid" style="display:inline-block; padding:10px; border-radius:18px; background:rgba(255,255,255,0.7);"></div>
-            <div class="small" id="arrayLabel" style="margin-top:10px;"></div>
-          </div>
-
-          <div class="grid-3" id="choicesArrays" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultArrays" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextArrays">Next</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- NEW: WORD-PROBLEM BUILDER -->
-      <div class="game-box" id="panelBuilder" style="display:none;">
-        <p class="kid-big">🧩 Word-Problem Builder</p>
-        <p class="small">Drag items into the story to build it, then solve!</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="qBuilder">Builder question loads here…</p>
-          <p class="small" id="hintBuilder">Drag from the tray into the boxes.</p>
-
-          <div class="game-box" style="margin-top:12px;">
-            <div class="small">Story:</div>
-            <div id="storyLine" style="font-size:20px; line-height:1.6; margin-top:8px;">
-              I have
-              <span class="dropzone" data-zone="a" style="display:inline-block; min-width:64px; padding:10px 12px; border-radius:999px; background:rgba(255,255,255,.75); border:2px dashed rgba(0,0,0,.12); text-align:center;">__</span>
-              <span id="storyItemWord">items</span>. Then I get
-              <span class="dropzone" data-zone="b" style="display:inline-block; min-width:64px; padding:10px 12px; border-radius:999px; background:rgba(255,255,255,.75); border:2px dashed rgba(0,0,0,.12); text-align:center;">__</span>
-              more. How many now?
-            </div>
-
-            <div class="small" style="margin-top:12px;">Item tray (drag):</div>
-            <div id="tray" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;"></div>
-
-            <div class="small" style="margin-top:12px;">Number tiles (drag):</div>
-            <div id="numTiles" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;"></div>
-          </div>
-
-          <div class="grid-3" id="choicesBuilder" style="margin-top:14px;"></div>
-          <p class="kid-big" id="resultBuilder" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextBuilder">Next</button>
-            <button class="btn secondary" id="resetBuilder">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <p class="small" style="margin-top:12px;">Earn ⭐ for correct answers. Stars save on this device.</p>
-
     </div>
+
+    <h2 class="section-title" style="margin-top:18px;">Game 2: Number Line Jump 🐸</h2>
+    <div class="game-box wide">
+      <div class="game-box">
+        <p class="kid-big" id="nlQ">Jump to the answer!</p>
+        <p class="small" id="nlPrompt">Prompt loads…</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="small">Tap a number to land there:</p>
+          <div id="nlRow" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;"></div>
+        </div>
+
+        <p class="kid-big" id="nlResult" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="nlNext">Next Jump</button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px;">Game 3: Make 10 🍩</h2>
+    <div class="game-box wide">
+      <div class="game-box">
+        <p class="kid-big">Pick two numbers that make 10!</p>
+        <p class="small">Tap one number, then tap another.</p>
+
+        <div id="make10Row" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;"></div>
+        <p class="kid-big" id="make10Picked" style="margin-top:12px;"></p>
+        <p class="kid-big" id="make10Result" style="margin-top:8px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="make10New">New Round</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  // ======================
-  // Helpers + Progress
-  // ======================
   const PROG_KEY = "bloom_progress";
+  const MISSION_KEY = "bloom_daily_mission";
 
-  function load(key, fallback) {
+  function load(key, fallback){
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
   }
-  function save(key, obj) { localStorage.setItem(key, JSON.stringify(obj)); }
+  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
 
-  function addStar(){
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
-    p.mathStars = (p.mathStars || 0) + 1;
-    save(PROG_KEY, p);
+  function todayKey(){
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
   }
-
-  function shuffle(arr){
-    const a = arr.slice();
-    for (let i=a.length-1; i>0; i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i], a[j]] = [a[j], a[i]];
+  function ensureMission(){
+    const t = todayKey();
+    let ms = load(MISSION_KEY, null);
+    if (!ms || ms.date !== t){
+      ms = { date: t, phonics:0, reading:0, math:0 };
+      save(MISSION_KEY, ms);
     }
-    return a;
+    return ms;
+  }
+  function missionAddMath(){
+    const ms = ensureMission();
+    ms.math = (ms.math || 0) + 1;
+    save(MISSION_KEY, ms);
   }
 
-  function randInt(min, max){
-    return Math.floor(Math.random()*(max-min+1)) + min;
-  }
-
-  // ======================
-  // TTS
-  // ======================
   function speak(text){
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.95;
-    u.pitch = 1.08;
+    u.rate = 1;
     speechSynthesis.speak(u);
   }
-  function stopSpeak(){
-    if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
+
+  function getProgress(){
+    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
+  }
+  function addMathStar(){
+    const p = getProgress();
+    p.mathStars = (p.mathStars || 0) + 1;
+    save(PROG_KEY, p);
   }
 
-  // ======================
-  // Grade selection
-  // ======================
-  let grade = "K";
-  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
-    btn.onclick = ()=>{
-      grade = btn.dataset.grade;
-      document.querySelectorAll(".pill[data-grade]").forEach(b=>b.classList.toggle("active", b.dataset.grade===grade));
-      resetAllStates();
-      renderAll();
-    };
-  });
+  // ---------------- Game 1: Quick Choice ----------------
+  const qItems = [
+    { q:"5 + 3 = ?", correct:8, choices:[7,8,9], hint:"Count up 3 from 5." },
+    { q:"10 − 4 = ?", correct:6, choices:[6,5,7], hint:"Count back 4 from 10." },
+    { q:"7 + 7 = ?", correct:14, choices:[12,14,16], hint:"Double 7." },
+    { q:"9 − 5 = ?", correct:4, choices:[4,3,5], hint:"Count back 5." },
+    { q:"6 + 2 = ?", correct:8, choices:[8,7,9], hint:"Count up 2." }
+  ];
+  let qIdx = 0;
+  let qAnswered = false;
 
-  // ======================
-  // Panels/tabs
-  // ======================
-  const panels = {
-    quick:   document.getElementById("panelQuick"),
-    line:    document.getElementById("panelLine"),
-    count:   document.getElementById("panelCount"),
-    missing: document.getElementById("panelMissing"),
-    story:   document.getElementById("panelStory"),
-    shapes:  document.getElementById("panelShapes"),
-    place:   document.getElementById("panelPlace"),
-    time:    document.getElementById("panelTime"),
-    money:   document.getElementById("panelMoney"),
-    skip:    document.getElementById("panelSkip"),
-    arrays:  document.getElementById("panelArrays"),
-    builder: document.getElementById("panelBuilder"),
-  };
+  function renderQ(){
+    const it = qItems[qIdx % qItems.length];
+    document.getElementById("q1").textContent = it.q;
+    document.getElementById("hint1").textContent = it.hint;
+    document.getElementById("result1").textContent = "";
+    qAnswered = false;
 
-  let activePanel = "quick";
-  function showPanel(name){
-    activePanel = name;
-    Object.keys(panels).forEach(k=>{
-      panels[k].style.display = (k===name) ? "block" : "none";
+    const wrap = document.getElementById("choices1");
+    wrap.innerHTML = "";
+    it.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
+      card.onclick = ()=> checkQ(c, it.correct);
+      wrap.appendChild(card);
     });
   }
 
-  document.getElementById("tabQuick").onclick   = ()=> showPanel("quick");
-  document.getElementById("tabLine").onclick    = ()=> showPanel("line");
-  document.getElementById("tabCount").onclick   = ()=> showPanel("count");
-  document.getElementById("tabMissing").onclick = ()=> showPanel("missing");
-  document.getElementById("tabStory").onclick   = ()=> showPanel("story");
-  document.getElementById("tabShapes").onclick  = ()=> showPanel("shapes");
-  document.getElementById("tabPlace").onclick   = ()=> showPanel("place");
-  document.getElementById("tabTime").onclick    = ()=> showPanel("time");
-  document.getElementById("tabMoney").onclick   = ()=> showPanel("money");
+  function awardOnce(){
+    if (qAnswered) return;
+    qAnswered = true;
+    addMathStar();
+    missionAddMath();
+  }
 
-  // NEW tabs
-  document.getElementById("tabSkip").onclick    = ()=> showPanel("skip");
-  document.getElementById("tabArrays").onclick  = ()=> showPanel("arrays");
-  document.getElementById("tabBuilder").onclick = ()=> showPanel("builder");
+  function checkQ(choice, correct){
+    if (choice === correct){
+      document.getElementById("result1").textContent = "Correct! ⭐";
+      awardOnce();
+      speak("Correct!");
+    } else {
+      document.getElementById("result1").textContent = "Try again 🙂";
+      speak("Try again.");
+    }
+  }
 
-  // Read question button uses whichever panel is active
-  document.getElementById("soundBtn").onclick = ()=>{
-    const txt =
-      activePanel==="quick"   ? document.getElementById("qQuick").textContent :
-      activePanel==="line"    ? document.getElementById("qLine").textContent :
-      activePanel==="count"   ? document.getElementById("qCount").textContent :
-      activePanel==="missing" ? document.getElementById("qMissing").textContent :
-      activePanel==="story"   ? document.getElementById("qStory").textContent :
-      activePanel==="shapes"  ? document.getElementById("qShapes").textContent :
-      activePanel==="place"   ? document.getElementById("qPlace").textContent :
-      activePanel==="time"    ? document.getElementById("qTime").textContent :
-      activePanel==="money"   ? document.getElementById("qMoney").textContent :
-      activePanel==="skip"    ? document.getElementById("qSkip").textContent :
-      activePanel==="arrays"  ? document.getElementById("qArrays").textContent :
-                                document.getElementById("qBuilder").textContent;
-    speak(txt);
-  };
-  document.getElementById("stopBtn").onclick = stopSpeak;
-
-  document.getElementById("resetStarsBtn").onclick = ()=>{
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
+  document.getElementById("next1").onclick = ()=>{ qIdx++; renderQ(); };
+  document.getElementById("reset1").onclick = ()=>{
+    const p = getProgress();
     p.mathStars = 0;
     save(PROG_KEY, p);
     alert("Math stars reset!");
   };
 
-  // ======================
-  // Banks (K–2)
-  // ======================
-  // NEW: skip-count and arrays and builder use grade-aware configs
-  const banks = {
-    "K": {
-      quick: [
-        { q:"1 + 1 = ?", correct:2, choices:[1,2,3], hint:"Count two blocks." },
-        { q:"3 + 2 = ?", correct:5, choices:[4,5,6], hint:"Count up 2 from 3." },
-        { q:"6 − 2 = ?", correct:4, choices:[3,4,5], hint:"Count back 2." },
-        { q:"How many? 🍎🍎🍎", correct:3, choices:[2,3,4], hint:"Count the apples." }
-      ],
-      line: [
-        { start:3, hops:[+2], prompt:"Start at 3. Hop +2. Where do you land?" },
-        { start:5, hops:[-1], prompt:"Start at 5. Hop −1. Where do you land?" }
-      ],
-      count: [
-        { emoji:"🍓", count:5, prompt:"Count the strawberries." },
-        { emoji:"🐸", count:4, prompt:"Count the frogs." }
-      ],
-      missing: [
-        { seq:["1","2","__","4"], answer:3, choices:[3,5,2] },
-        { seq:["5","__","7","8"], answer:6, choices:[6,4,9] }
-      ],
-      story: [
-        { q:"Lia has 3 apples. She gets 2 more. How many apples now?", answer:5, choices:[4,5,6], hint:"Count up 2 from 3." },
-        { q:"Max has 6 blocks. He gives away 1. How many blocks left?", answer:5, choices:[5,6,4], hint:"Take away 1." }
-      ],
-      shapes: [
-        { q:"Which one is a circle?", row:"⬜ 🔺 ⚪", answer:"⚪", choices:["⚪","⬜","🔺"], hint:"A circle is round." },
-        { q:"What comes next? ⚪ ⬜ ⚪ ⬜ __", row:"⚪ ⬜ ⚪ ⬜ __", answer:"⚪", choices:["⚪","⬜","🔺"], hint:"It alternates." }
-      ],
-      place: { min: 10, max: 39 },
-      time:  { mode: "hour" },
-      money: { coins: ["p","n","d"], maxCount: 4 },
+  document.getElementById("soundBtn").onclick = ()=> speak(document.getElementById("q1").textContent);
 
-      // NEW
-      skip: { steps: [2,5,10], startMax: 10, length: 4 },     // simple
-      arrays: { rows:[1,2], cols:[2,3,4], dot:"🍎" },          // tiny arrays
-      builder: { maxA: 6, maxB: 6, items:["🍎","🍪","🧸"] }     // small numbers
-    },
+  // ---------------- Game 2: Number Line Jump ----------------
+  let nlA = 0, nlB = 0, nlAns = 0;
+  let nlAnswered = false;
 
-    "1": {
-      quick: [
-        { q:"5 + 3 = ?", correct:8, choices:[7,8,9], hint:"Count up 3 from 5." },
-        { q:"10 − 4 = ?", correct:6, choices:[6,5,7], hint:"Count back 4 from 10." },
-        { q:"12 − 5 = ?", correct:7, choices:[7,8,6], hint:"Take away 5." },
-        { q:"8 + 6 = ?", correct:14, choices:[13,14,15], hint:"Make 10: 8+2 then +4." }
-      ],
-      line: [
-        { start:7, hops:[+3], prompt:"Start at 7. Hop +3. Where do you land?" },
-        { start:10, hops:[-4], prompt:"Start at 10. Hop −4. Where do you land?" }
-      ],
-      count: [
-        { emoji:"🍪", count:7, prompt:"Count the cookies." },
-        { emoji:"🧁", count:9, prompt:"Count the cupcakes." }
-      ],
-      missing: [
-        { seq:["10","11","__","13"], answer:12, choices:[12,14,9] },
-        { seq:["2","4","6","__"], answer:8, choices:[7,8,10] }
-      ],
-      story: [
-        { q:"Nia has 9 stickers. She gets 4 more. How many stickers now?", answer:13, choices:[12,13,14], hint:"Add 4 to 9." },
-        { q:"Ben has 14 crayons. He loses 5. How many crayons left?", answer:9, choices:[9,8,10], hint:"Count back 5." }
-      ],
-      shapes: [
-        { q:"Which one is a rectangle?", row:"⬛ ▭ ⚪", answer:"▭", choices:["▭","⚪","⬛"], hint:"A rectangle has 4 sides." },
-        { q:"What comes next? 🔺 🔺 ⚪ 🔺 🔺 ⚪ __", row:"🔺 🔺 ⚪ 🔺 🔺 ⚪ __", answer:"🔺", choices:["🔺","⚪","▭"], hint:"It repeats." }
-      ],
-      place: { min: 10, max: 79 },
-      time:  { mode: "half" },
-      money: { coins: ["p","n","d","q"], maxCount: 4 },
+  function newNL(){
+    nlA = 1 + Math.floor(Math.random()*9);
+    nlB = 1 + Math.floor(Math.random()*9);
+    nlAns = nlA + nlB;
+    nlAnswered = false;
 
-      // NEW
-      skip: { steps: [2,5,10], startMax: 20, length: 5 },
-      arrays: { rows:[2,3], cols:[2,3,4], dot:"⭐" },
-      builder: { maxA: 10, maxB: 10, items:["🍓","🧁","🪁"] }
-    },
+    document.getElementById("nlPrompt").textContent = `🐸 Jump! What is ${nlA} + ${nlB}?`;
+    document.getElementById("nlResult").textContent = "";
 
-    "2": {
-      quick: [
-        { q:"23 + 10 = ?", correct:33, choices:[33,32,34], hint:"Add ten: 23 → 33." },
-        { q:"30 − 12 = ?", correct:18, choices:[18,20,16], hint:"30−10=20, then −2=18." },
-        { q:"27 + 8 = ?", correct:35, choices:[35,34,36], hint:"Add 3 to make 30, then +5." },
-        { q:"42 − 20 = ?", correct:22, choices:[22,24,20], hint:"Subtract two tens." }
-      ],
-      line: [
-        { start:12, hops:[+10], prompt:"Start at 12. Hop +10. Where do you land?" },
-        { start:25, hops:[-5], prompt:"Start at 25. Hop −5. Where do you land?" }
-      ],
-      count: [
-        { emoji:"🟩", count:12, prompt:"Count the blocks (12)." },
-        { emoji:"⭐", count:15, prompt:"Count the stars (15)." }
-      ],
-      missing: [
-        { seq:["21","22","__","24"], answer:23, choices:[23,25,20] },
-        { seq:["5","10","15","__"], answer:20, choices:[20,25,18] }
-      ],
-      story: [
-        { q:"Ava has 18 beads. She adds 7 more. How many beads now?", answer:25, choices:[24,25,26], hint:"18+2=20, then +5." },
-        { q:"There are 32 books. 10 are checked out. How many stay?", answer:22, choices:[22,21,20], hint:"Subtract 10." }
-      ],
-      shapes: [
-        { q:"What comes next? ⬜ ⬜ ▭ ⬜ ⬜ ▭ __", row:"⬜ ⬜ ▭ ⬜ ⬜ ▭ __", answer:"⬜", choices:["⬜","▭","⚪"], hint:"Repeats: square, square, rectangle." },
-        { q:"Which one is NOT a 4-sided shape?", row:"⬜ ▭ 🔺", answer:"🔺", choices:["⬜","▭","🔺"], hint:"Triangles have 3 sides." }
-      ],
-      place: { min: 20, max: 99 },
-      time:  { mode: "half" },
-      money: { coins: ["p","n","d","q"], maxCount: 6 },
-
-      // NEW
-      skip: { steps: [2,5,10], startMax: 40, length: 6 },
-      arrays: { rows:[2,3,4], cols:[2,3,4,5], dot:"🟦" },
-      builder: { maxA: 20, maxB: 20, items:["🍎","📚","🎈","🧸"] }
-    }
-  };
-
-  // ======================
-  // QUICK SOLVE
-  // ======================
-  let quickIdx = 0;
-  const qQuick = document.getElementById("qQuick");
-  const hintQuick = document.getElementById("hintQuick");
-  const choicesQuick = document.getElementById("choicesQuick");
-  const resultQuick = document.getElementById("resultQuick");
-
-  function renderQuick(){
-    const it = banks[grade].quick[quickIdx % banks[grade].quick.length];
-    qQuick.textContent = it.q;
-    hintQuick.textContent = "Hint: " + it.hint;
-    resultQuick.textContent = "";
-    choicesQuick.innerHTML = "";
-
-    shuffle(it.choices).forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultQuick.textContent.includes("Correct")) return;
-        if (String(c) === String(it.correct)){
-          resultQuick.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultQuick.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesQuick.appendChild(card);
-    });
-  }
-  document.getElementById("nextQuick").onclick = ()=>{ quickIdx++; renderQuick(); };
-
-  // ======================
-  // NUMBER LINE
-  // ======================
-  let lineIdx = 0, hopStep = 0, landing = null, currentLine = null;
-  const qLine = document.getElementById("qLine");
-  const lineTrack = document.getElementById("lineTrack");
-  const hopButtons = document.getElementById("hopButtons");
-  const landingNum = document.getElementById("landingNum");
-  const choicesLine = document.getElementById("choicesLine");
-  const resultLine = document.getElementById("resultLine");
-
-  function buildLineTrack(min, max, highlight){
-    lineTrack.innerHTML = "";
-    for (let n=min; n<=max; n++){
-      const chip = document.createElement("div");
-      chip.className = "pill";
-      chip.textContent = n;
-      chip.style.padding = "10px 14px";
-      chip.style.opacity = (n===highlight) ? "1" : ".7";
-      chip.style.border = (n===highlight) ? "3px solid rgba(0,0,0,.1)" : "2px solid rgba(0,0,0,.05)";
-      lineTrack.appendChild(chip);
-    }
-  }
-
-  function renderLine(){
-    const bank = banks[grade].line;
-    currentLine = bank[lineIdx % bank.length];
-    hopStep = 0;
-    landing = currentLine.start;
-
-    qLine.textContent = currentLine.prompt;
-    resultLine.textContent = "";
-    landingNum.textContent = "—";
-
-    const min = Math.max(0, currentLine.start - 6);
-    const max = currentLine.start + 14;
-    buildLineTrack(min, max, currentLine.start);
-
-    hopButtons.innerHTML = "";
-    currentLine.hops.forEach((h, i)=>{
+    const row = document.getElementById("nlRow");
+    row.innerHTML = "";
+    for (let n=0; n<=18; n++){
       const b = document.createElement("button");
-      b.className = "btn secondary";
-      b.textContent = (h>=0) ? `+${h}` : `${h}`;
-      b.onclick = ()=>{
-        if (i !== hopStep){
-          resultLine.textContent = "Tap the hops in order 🙂";
-          speak("Tap the hops in order.");
-          return;
-        }
-        landing += h;
-        hopStep++;
-        buildLineTrack(min, max, landing);
-        landingNum.textContent = landing;
-        if (hopStep >= currentLine.hops.length) speak("Now choose your answer.");
-      };
-      hopButtons.appendChild(b);
-    });
-
-    const correct = currentLine.start + currentLine.hops.reduce((a,b)=>a+b,0);
-    const options = shuffle([correct, correct+1, Math.max(0, correct-1)]);
-    choicesLine.innerHTML = "";
-    options.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultLine.textContent.includes("Correct")) return;
-        if (hopStep < currentLine.hops.length){
-          resultLine.textContent = "Do the hops first! 🦘";
-          speak("Do the hops first.");
-          return;
-        }
-        if (c === correct){
-          resultLine.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultLine.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesLine.appendChild(card);
-    });
-  }
-  document.getElementById("nextLine").onclick = ()=>{ lineIdx++; renderLine(); };
-  document.getElementById("resetHops").onclick = ()=> renderLine();
-
-  // ======================
-  // COUNT
-  // ======================
-  let countIdx = 0, tappedSet = new Set(), tapped = 0, currentCount = null;
-  const qCount = document.getElementById("qCount");
-  const picPile = document.getElementById("picPile");
-  const tapCount = document.getElementById("tapCount");
-  const choicesCount = document.getElementById("choicesCount");
-  const resultCount = document.getElementById("resultCount");
-
-  function renderCount(){
-    const bank = banks[grade].count;
-    currentCount = bank[countIdx % bank.length];
-
-    tapped = 0;
-    tappedSet = new Set();
-    tapCount.textContent = "Tapped: 0";
-    resultCount.textContent = "";
-
-    qCount.textContent = currentCount.prompt;
-
-    picPile.innerHTML = "";
-    const pieces = [];
-    for (let i=0; i<currentCount.count; i++){
-      pieces.push(`<span class="count-pic" data-i="${i}" style="cursor:pointer; user-select:none;">${currentCount.emoji}</span>`);
+      b.className = "pill";
+      b.textContent = n;
+      b.onclick = ()=> checkNL(n);
+      row.appendChild(b);
     }
-    picPile.innerHTML = pieces.join(" ");
-
-    picPile.querySelectorAll(".count-pic").forEach(el=>{
-      el.onclick = ()=>{
-        const id = el.getAttribute("data-i");
-        if (tappedSet.has(id)) return;
-        tappedSet.add(id);
-        tapped++;
-        el.style.opacity = "0.45";
-        tapCount.textContent = "Tapped: " + tapped;
-      };
-    });
-
-    const correct = currentCount.count;
-    const opts = shuffle([correct, correct+1, Math.max(0, correct-1)]);
-    choicesCount.innerHTML = "";
-    opts.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultCount.textContent.includes("Correct")) return;
-        if (c === correct){
-          resultCount.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultCount.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesCount.appendChild(card);
-    });
-  }
-  document.getElementById("nextCount").onclick = ()=>{ countIdx++; renderCount(); };
-  document.getElementById("resetTap").onclick = ()=> renderCount();
-
-  // ======================
-  // MISSING
-  // ======================
-  let missIdx = 0;
-  const qMissing = document.getElementById("qMissing");
-  const choicesMissing = document.getElementById("choicesMissing");
-  const resultMissing = document.getElementById("resultMissing");
-
-  function renderMissing(){
-    const it = banks[grade].missing[missIdx % banks[grade].missing.length];
-    qMissing.textContent = it.seq.join("  ");
-    resultMissing.textContent = "";
-    choicesMissing.innerHTML = "";
-
-    shuffle(it.choices).forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultMissing.textContent.includes("Correct")) return;
-        if (c === it.answer){
-          resultMissing.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultMissing.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesMissing.appendChild(card);
-    });
-  }
-  document.getElementById("nextMissing").onclick = ()=>{ missIdx++; renderMissing(); };
-
-  // ======================
-  // STORY
-  // ======================
-  let storyIdx = 0;
-  const qStory = document.getElementById("qStory");
-  const hintStory = document.getElementById("hintStory");
-  const choicesStory = document.getElementById("choicesStory");
-  const resultStory = document.getElementById("resultStory");
-
-  function renderStory(){
-    const it = banks[grade].story[storyIdx % banks[grade].story.length];
-    qStory.textContent = it.q;
-    hintStory.textContent = "Hint: " + it.hint;
-    resultStory.textContent = "";
-    choicesStory.innerHTML = "";
-
-    shuffle(it.choices).forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultStory.textContent.includes("Correct")) return;
-        if (c === it.answer){
-          resultStory.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultStory.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesStory.appendChild(card);
-    });
-  }
-  document.getElementById("nextStory").onclick = ()=>{ storyIdx++; renderStory(); };
-
-  // ======================
-  // SHAPES
-  // ======================
-  let shapesIdx = 0;
-  const qShapes = document.getElementById("qShapes");
-  const hintShapes = document.getElementById("hintShapes");
-  const patternRow = document.getElementById("patternRow");
-  const choicesShapes = document.getElementById("choicesShapes");
-  const resultShapes = document.getElementById("resultShapes");
-
-  function renderShapes(){
-    const it = banks[grade].shapes[shapesIdx % banks[grade].shapes.length];
-    qShapes.textContent = it.q;
-    hintShapes.textContent = "Hint: " + it.hint;
-    patternRow.textContent = it.row || "";
-    resultShapes.textContent = "";
-    choicesShapes.innerHTML = "";
-
-    shuffle(it.choices).forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultShapes.textContent.includes("Correct")) return;
-        if (c === it.answer){
-          resultShapes.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultShapes.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesShapes.appendChild(card);
-    });
-  }
-  document.getElementById("nextShapes").onclick = ()=>{ shapesIdx++; renderShapes(); };
-
-  // ======================
-  // PLACE VALUE
-  // ======================
-  let placeTarget = 0;
-  let tens = 0;
-  let ones = 0;
-
-  const qPlace = document.getElementById("qPlace");
-  const tensCount = document.getElementById("tensCount");
-  const onesCount = document.getElementById("onesCount");
-  const builtNumber = document.getElementById("builtNumber");
-  const blockView = document.getElementById("blockView");
-  const resultPlace = document.getElementById("resultPlace");
-
-  function updatePlaceUI(){
-    tensCount.textContent = tens;
-    onesCount.textContent = ones;
-    const value = tens*10 + ones;
-    builtNumber.textContent = value;
-    const tensBlocks = "🟩".repeat(Math.min(tens, 12));
-    const onesBlocks = "🟨".repeat(Math.min(ones, 20));
-    blockView.textContent = (tensBlocks + " " + onesBlocks).trim() || "—";
   }
 
-  function newPlace(){
-    const cfg = banks[grade].place;
-    placeTarget = randInt(cfg.min, cfg.max);
-    tens = 0; ones = 0;
-    resultPlace.textContent = "";
-    qPlace.textContent = `Build this number: ${placeTarget}`;
-    updatePlaceUI();
+  function awardNLOnce(){
+    if (nlAnswered) return;
+    nlAnswered = true;
+    addMathStar();
+    missionAddMath();
   }
 
-  document.getElementById("tensPlus").onclick = ()=>{ if (tens < 12) tens++; updatePlaceUI(); };
-  document.getElementById("tensMinus").onclick = ()=>{ if (tens > 0) tens--; updatePlaceUI(); };
-  document.getElementById("onesPlus").onclick = ()=>{ if (ones < 20) ones++; updatePlaceUI(); };
-  document.getElementById("onesMinus").onclick = ()=>{ if (ones > 0) ones--; updatePlaceUI(); };
-
-  document.getElementById("resetPlace").onclick = ()=>{ tens=0; ones=0; resultPlace.textContent=""; updatePlaceUI(); };
-
-  document.getElementById("checkPlace").onclick = ()=>{
-    const value = tens*10 + ones;
-    if (value === placeTarget){
-      resultPlace.textContent = "Correct! ⭐";
-      addStar(); speak("Correct!");
+  function checkNL(n){
+    if (n === nlAns){
+      document.getElementById("nlResult").textContent = "Correct jump! ⭐";
+      awardNLOnce();
+      speak("Correct!");
     } else {
-      resultPlace.textContent = "Try again 🙂";
+      document.getElementById("nlResult").textContent = "Oops! Try another number 🙂";
       speak("Try again.");
     }
-  };
-
-  document.getElementById("nextPlace").onclick = ()=> newPlace();
-
-  // ======================
-  // TIME (Canvas)
-  // ======================
-  let currentTime = null;
-
-  const qTime = document.getElementById("qTime");
-  const choicesTime = document.getElementById("choicesTime");
-  const resultTime = document.getElementById("resultTime");
-  const clockCanvas = document.getElementById("clockCanvas");
-  const ctx = clockCanvas.getContext("2d");
-
-  function formatTime(h, m){
-    const mm = (m===0) ? "00" : String(m);
-    return `${h}:${mm}`;
   }
 
-  function drawClock(hour, minute){
-    const w = clockCanvas.width, h = clockCanvas.height;
-    const cx = w/2, cy = h/2;
-    const r = Math.min(cx, cy) - 10;
+  document.getElementById("nlNext").onclick = newNL;
 
-    ctx.clearRect(0,0,w,h);
+  // ---------------- Game 3: Make 10 ----------------
+  const makeNums = [0,1,2,3,4,5,6,7,8,9,10];
+  let pick1 = null, pick2 = null;
 
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.fill();
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = "rgba(0,0,0,0.08)";
-    ctx.stroke();
+  function renderMake10(){
+    pick1 = null; pick2 = null;
+    document.getElementById("make10Picked").textContent = "Picked: (none)";
+    document.getElementById("make10Result").textContent = "";
 
-    ctx.fillStyle = "rgba(0,0,0,0.65)";
-    ctx.font = "16px 'Baloo 2', sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    for (let n=1; n<=12; n++){
-      const ang = (n * Math.PI/6) - Math.PI/2;
-      const x = cx + Math.cos(ang) * (r - 22);
-      const y = cy + Math.sin(ang) * (r - 22);
-      ctx.fillText(String(n), x, y);
-    }
+    const row = document.getElementById("make10Row");
+    row.innerHTML = "";
+    const shuffled = makeNums.slice().sort(()=>Math.random()-0.5);
 
-    const minAngle = (minute * Math.PI/30) - Math.PI/2;
-    const hourAngle = (((hour % 12) + minute/60) * Math.PI/6) - Math.PI/2;
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineWidth = 7;
-    ctx.strokeStyle = "rgba(0,0,0,0.65)";
-    ctx.lineTo(cx + Math.cos(hourAngle) * (r * 0.55), cy + Math.sin(hourAngle) * (r * 0.55));
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "rgba(0,0,0,0.55)";
-    ctx.lineTo(cx + Math.cos(minAngle) * (r * 0.78), cy + Math.sin(minAngle) * (r * 0.78));
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(0,0,0,0.35)";
-    ctx.fill();
-  }
-
-  function genTimeQuestion(){
-    const mode = banks[grade].time.mode;
-    const hour = randInt(1, 12);
-    const minute = (mode === "hour") ? 0 : (Math.random() < 0.5 ? 0 : 30);
-    const correct = formatTime(hour, minute);
-
-    const distract1 = formatTime(hour === 12 ? 1 : hour+1, minute);
-    const distract2 = formatTime(hour, minute === 0 ? 30 : 0);
-    const choices = shuffle([correct, distract1, distract2]);
-
-    return { hour, minute, correct, choices };
-  }
-
-  function renderTime(){
-    currentTime = genTimeQuestion();
-    qTime.textContent = "What time is it?";
-    resultTime.textContent = "";
-    drawClock(currentTime.hour, currentTime.minute);
-
-    choicesTime.innerHTML = "";
-    currentTime.choices.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultTime.textContent.includes("Correct")) return;
-        if (c === currentTime.correct){
-          resultTime.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultTime.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesTime.appendChild(card);
+    shuffled.forEach(n=>{
+      const b = document.createElement("button");
+      b.className = "pill";
+      b.textContent = n;
+      b.onclick = ()=> pickMake10(n);
+      row.appendChild(b);
     });
   }
-  document.getElementById("nextTime").onclick = renderTime;
 
-  // ======================
-  // MONEY
-  // ======================
-  let currentMoney = null;
+  function awardMake10(){
+    addMathStar();
+    missionAddMath();
+  }
 
-  const qMoney = document.getElementById("qMoney");
-  const coinRow = document.getElementById("coinRow");
-  const choicesMoney = document.getElementById("choicesMoney");
-  const resultMoney = document.getElementById("resultMoney");
-
-  const coinDefs = {
-    p: { emoji:"🟤", value:1 },
-    n: { emoji:"🟠", value:5 },
-    d: { emoji:"🟡", value:10 },
-    q: { emoji:"⚪", value:25 }
-  };
-
-  function genMoney(){
-    const cfg = banks[grade].money;
-    const count = randInt(2, cfg.maxCount);
-    const pool = cfg.coins;
-
-    const coins = [];
-    for (let i=0; i<count; i++){
-      coins.push(pool[Math.floor(Math.random()*pool.length)]);
+  function pickMake10(n){
+    if (pick1 === null){
+      pick1 = n;
+      document.getElementById("make10Picked").textContent = `Picked: ${pick1} + ?`;
+      return;
     }
+    if (pick2 === null){
+      pick2 = n;
+      document.getElementById("make10Picked").textContent = `Picked: ${pick1} + ${pick2}`;
 
-    const total = coins.reduce((sum,c)=>sum + coinDefs[c].value, 0);
-    const choices = shuffle([
-      total,
-      Math.max(0, total - (Math.random()<0.5?1:5)),
-      total + (Math.random()<0.5?1:5)
-    ]);
-
-    return { coins, total, choices };
-  }
-
-  function renderMoney(){
-    currentMoney = genMoney();
-    qMoney.textContent = "How many cents is this?";
-    resultMoney.textContent = "";
-    coinRow.innerHTML = currentMoney.coins.map(c=>coinDefs[c].emoji).join(" ");
-
-    choicesMoney.innerHTML = "";
-    currentMoney.choices.forEach(v=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${v}¢</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultMoney.textContent.includes("Correct")) return;
-        if (v === currentMoney.total){
-          resultMoney.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultMoney.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesMoney.appendChild(card);
-    });
-  }
-  document.getElementById("nextMoney").onclick = renderMoney;
-
-  // ======================
-  // NEW: SKIP COUNT
-  // ======================
-  let skipState = null;
-  const qSkip = document.getElementById("qSkip");
-  const skipRow = document.getElementById("skipRow");
-  const choicesSkip = document.getElementById("choicesSkip");
-  const resultSkip = document.getElementById("resultSkip");
-
-  function genSkip(){
-    const cfg = banks[grade].skip;
-    const step = cfg.steps[Math.floor(Math.random()*cfg.steps.length)];
-    const start = randInt(0, cfg.startMax);
-    const length = cfg.length;
-
-    const seq = [start];
-    for (let i=1; i<length; i++){
-      seq.push(seq[i-1] + step);
-    }
-    const next = seq[seq.length-1] + step;
-
-    const choices = shuffle([next, next+step, Math.max(0, next-step)]);
-    return { step, seq, next, choices };
-  }
-
-  function renderSkip(){
-    skipState = genSkip();
-    qSkip.textContent = `Skip count by ${skipState.step}. What comes next?`;
-    skipRow.textContent = skipState.seq.join("  •  ") + "  •  __";
-    resultSkip.textContent = "";
-    choicesSkip.innerHTML = "";
-
-    skipState.choices.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultSkip.textContent.includes("Correct")) return;
-        if (c === skipState.next){
-          resultSkip.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultSkip.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesSkip.appendChild(card);
-    });
-  }
-  document.getElementById("nextSkip").onclick = renderSkip;
-
-  // ======================
-  // NEW: ARRAYS
-  // ======================
-  let arrayState = null;
-  const qArrays = document.getElementById("qArrays");
-  const arrayGrid = document.getElementById("arrayGrid");
-  const arrayLabel = document.getElementById("arrayLabel");
-  const choicesArrays = document.getElementById("choicesArrays");
-  const resultArrays = document.getElementById("resultArrays");
-
-  function genArray(){
-    const cfg = banks[grade].arrays;
-    const rows = cfg.rows[Math.floor(Math.random()*cfg.rows.length)];
-    const cols = cfg.cols[Math.floor(Math.random()*cfg.cols.length)];
-    const total = rows * cols;
-
-    const choices = shuffle([
-      total,
-      Math.max(1, total - cols),
-      total + cols
-    ]);
-
-    return { rows, cols, total, dot: cfg.dot, choices };
-  }
-
-  function renderArrays(){
-    arrayState = genArray();
-    qArrays.textContent = "How many dots are in the array?";
-    resultArrays.textContent = "";
-
-    arrayGrid.innerHTML = "";
-    for (let r=0; r<arrayState.rows; r++){
-      const row = document.createElement("div");
-      row.style.display = "flex";
-      row.style.gap = "8px";
-      row.style.justifyContent = "center";
-      row.style.margin = "6px 0";
-      for (let c=0; c<arrayState.cols; c++){
-        const dot = document.createElement("div");
-        dot.textContent = arrayState.dot;
-        dot.style.fontSize = "28px";
-        dot.style.width = "34px";
-        dot.style.height = "34px";
-        dot.style.display = "flex";
-        dot.style.alignItems = "center";
-        dot.style.justifyContent = "center";
-        dot.style.borderRadius = "12px";
-        dot.style.background = "rgba(255,255,255,.75)";
-        dot.style.border = "2px solid rgba(0,0,0,.06)";
-        row.appendChild(dot);
+      if (pick1 + pick2 === 10){
+        document.getElementById("make10Result").textContent = "You made 10! ⭐";
+        awardMake10();
+        speak("Great job! You made ten!");
+      } else {
+        document.getElementById("make10Result").textContent = "Not 10 yet — try again 🙂";
+        speak("Try again.");
       }
-      arrayGrid.appendChild(row);
+
+      // reset quickly
+      setTimeout(renderMake10, 900);
     }
-
-    arrayLabel.textContent = `${arrayState.rows} rows × ${arrayState.cols} columns`;
-
-    choicesArrays.innerHTML = "";
-    arrayState.choices.forEach(v=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${v}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultArrays.textContent.includes("Correct")) return;
-        if (v === arrayState.total){
-          resultArrays.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultArrays.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesArrays.appendChild(card);
-    });
-  }
-  document.getElementById("nextArrays").onclick = renderArrays;
-
-  // ======================
-  // NEW: WORD-PROBLEM BUILDER
-  // ======================
-  let builderState = null;
-  const qBuilder = document.getElementById("qBuilder");
-  const storyItemWord = document.getElementById("storyItemWord");
-  const tray = document.getElementById("tray");
-  const numTiles = document.getElementById("numTiles");
-  const choicesBuilder = document.getElementById("choicesBuilder");
-  const resultBuilder = document.getElementById("resultBuilder");
-
-  function clearDropzones(){
-    document.querySelectorAll(".dropzone").forEach(z=>{
-      z.textContent = "__";
-      z.dataset.value = "";
-    });
   }
 
-  function makeDraggable(el, payload){
-    el.draggable = true;
-    el.addEventListener("dragstart", (e)=>{
-      e.dataTransfer.setData("text/plain", JSON.stringify(payload));
-    });
-  }
+  document.getElementById("make10New").onclick = renderMake10;
 
-  function setupDropzones(){
-    document.querySelectorAll(".dropzone").forEach(zone=>{
-      zone.addEventListener("dragover", (e)=> e.preventDefault());
-      zone.addEventListener("drop", (e)=>{
-        e.preventDefault();
-        try{
-          const data = JSON.parse(e.dataTransfer.getData("text/plain") || "{}");
-          if (data.type === "num"){
-            zone.textContent = data.value;
-            zone.dataset.value = String(data.value);
-          }
-        } catch {}
-      });
-    });
-  }
-
-  function genBuilder(){
-    const cfg = banks[grade].builder;
-    const a = randInt(1, cfg.maxA);
-    const b = randInt(1, cfg.maxB);
-    const item = cfg.items[Math.floor(Math.random()*cfg.items.length)];
-    const word = (item==="🍎") ? "apples" : (item==="🍪") ? "cookies" : (item==="🧸") ? "bears" : (item==="📚") ? "books" : (item==="🎈") ? "balloons" : "items";
-    const answer = a + b;
-
-    // answer choices
-    const choices = shuffle([answer, answer+1, Math.max(0, answer-1)]);
-    return { a, b, item, word, answer, choices };
-  }
-
-  function renderBuilder(){
-    builderState = genBuilder();
-    qBuilder.textContent = "Build the story with numbers, then solve!";
-    storyItemWord.textContent = builderState.word;
-    resultBuilder.textContent = "";
-    clearDropzones();
-
-    tray.innerHTML = "";
-    // show items just for fun/visual
-    for (let i=0; i<6; i++){
-      const chip = document.createElement("div");
-      chip.className = "pill";
-      chip.textContent = builderState.item;
-      chip.style.fontSize = "22px";
-      tray.appendChild(chip);
-    }
-
-    numTiles.innerHTML = "";
-    // include correct a & b plus extras
-    const nums = shuffle([builderState.a, builderState.b, builderState.a+1, Math.max(1,builderState.b-1), randInt(1, Math.max(3, banks[grade].builder.maxA))]);
-    nums.slice(0,5).forEach(n=>{
-      const t = document.createElement("div");
-      t.className = "pill";
-      t.textContent = n;
-      t.style.fontSize = "18px";
-      t.style.cursor = "grab";
-      makeDraggable(t, { type:"num", value:n });
-      numTiles.appendChild(t);
-    });
-
-    // pre-fill choices (kids can still solve without dragging perfectly)
-    choicesBuilder.innerHTML = "";
-    builderState.choices.forEach(v=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${v}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=>{
-        if (resultBuilder.textContent.includes("Correct")) return;
-
-        // optional: if they dragged, check if it matches target a/b
-        const aZone = document.querySelector('.dropzone[data-zone="a"]');
-        const bZone = document.querySelector('.dropzone[data-zone="b"]');
-        const aVal = parseInt(aZone.dataset.value || "NaN", 10);
-        const bVal = parseInt(bZone.dataset.value || "NaN", 10);
-
-        // If they dragged both numbers and they're different from the "secret", still allow solving, but give a gentle note
-        if (!Number.isNaN(aVal) && !Number.isNaN(bVal)){
-          if (aVal !== builderState.a || bVal !== builderState.b){
-            // just a friendly hint, not blocking
-            document.getElementById("hintBuilder").textContent = "Nice build! (Try matching the story numbers to the hidden challenge next time.)";
-          } else {
-            document.getElementById("hintBuilder").textContent = "Perfect build! Now solve it!";
-          }
-        }
-
-        if (v === builderState.answer){
-          resultBuilder.textContent = "Correct! ⭐";
-          addStar(); speak("Correct!");
-        } else {
-          resultBuilder.textContent = "Try again 🙂";
-          speak("Try again.");
-        }
-      };
-      choicesBuilder.appendChild(card);
-    });
-  }
-
-  document.getElementById("nextBuilder").onclick = renderBuilder;
-  document.getElementById("resetBuilder").onclick = ()=>{
-    clearDropzones();
-    document.getElementById("hintBuilder").textContent = "Drag from the tray into the boxes.";
-  };
-
-  // init dropzones
-  setupDropzones();
-
-  // ======================
-  // Init / Render All
-  // ======================
-  function resetAllStates(){
-    quickIdx = 0;
-    lineIdx = 0;
-    countIdx = 0;
-    missIdx = 0;
-    storyIdx = 0;
-    shapesIdx = 0;
-  }
-
-  function renderAll(){
-    renderQuick();
-    renderLine();
-    renderCount();
-    renderMissing();
-    renderStory();
-    renderShapes();
-    newPlace();
-    renderTime();
-    renderMoney();
-    renderSkip();
-    renderArrays();
-    renderBuilder();
-  }
-
-  // Start on Quick Solve
-  showPanel("quick");
-  renderAll();
+  renderQ();
+  newNL();
+  renderMake10();
 </script>
 
 </body>
