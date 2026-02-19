@@ -62,7 +62,7 @@
       <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
 
-    <div class="hero-note">Tip: Try “Number Line Hop” for a fun tap game!</div>
+    <div class="hero-note">Tip: Try “Tens & Ones” to build numbers like a pro!</div>
   </div>
 </section>
 
@@ -81,12 +81,19 @@
           <button class="pill" data-grade="2">Grade 2</button>
         </div>
 
-        <div class="quick-strip" style="margin-top:14px;">
+        <div class="quick-strip" style="margin-top:14px; flex-wrap:wrap;">
           <button class="btn" id="tabQuick">🧠 Quick Solve</button>
           <button class="btn secondary" id="tabLine">🦘 Number Line Hop</button>
           <button class="btn secondary" id="tabCount">🍓 Count Pictures</button>
           <button class="btn secondary" id="tabMissing">🧩 Missing Number</button>
-          <button class="btn secondary" id="resetBtn">Reset Stars</button>
+          <button class="btn secondary" id="tabStory">📚 Story Problems</button>
+          <button class="btn secondary" id="tabShapes">🟦 Shapes & Patterns</button>
+
+          <button class="btn secondary" id="tabPlace">🧱 Tens & Ones</button>
+          <button class="btn secondary" id="tabTime">🕒 Time</button>
+          <button class="btn secondary" id="tabMoney">🪙 Money</button>
+
+          <button class="btn secondary" id="resetStarsBtn">Reset Stars</button>
         </div>
       </div>
 
@@ -94,24 +101,19 @@
       <div class="game-box" id="panelQuick">
         <p class="kid-big">🧠 Quick Solve</p>
         <p class="small">Solve and choose the right answer.</p>
-
         <div class="game-box" style="margin-top:12px;">
           <p class="kid-big" id="qQuick">Question loads here…</p>
           <p class="small" id="hintQuick">Hint loads here…</p>
           <div class="grid-3" id="choicesQuick" style="margin-top:14px;"></div>
           <p class="kid-big" id="resultQuick" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextQuick">Next</button>
-          </div>
+          <div class="quick-strip"><button class="btn" id="nextQuick">Next</button></div>
         </div>
       </div>
 
       <!-- NUMBER LINE HOP PANEL -->
       <div class="game-box" id="panelLine" style="display:none;">
         <p class="kid-big">🦘 Number Line Hop</p>
-        <p class="small">Tap the hops to move on the number line. Then pick the answer.</p>
-
+        <p class="small">Tap the hops in order, then choose the answer.</p>
         <div class="game-box" style="margin-top:12px;">
           <p class="kid-big" id="qLine">Line question loads here…</p>
           <p class="small" id="hintLine">Tap the hop buttons in order!</p>
@@ -141,7 +143,6 @@
       <div class="game-box" id="panelCount" style="display:none;">
         <p class="kid-big">🍓 Count Pictures</p>
         <p class="small">Count the pictures and choose the right number.</p>
-
         <div class="game-box" style="margin-top:12px;">
           <p class="kid-big" id="qCount">Count question loads here…</p>
           <p class="small" id="hintCount">Touch each picture as you count!</p>
@@ -165,16 +166,136 @@
       <div class="game-box" id="panelMissing" style="display:none;">
         <p class="kid-big">🧩 Missing Number</p>
         <p class="small">Fill in the missing number.</p>
-
         <div class="game-box" style="margin-top:12px;">
           <p class="kid-big" id="qMissing">Missing question loads here…</p>
           <p class="small" id="hintMissing">Look for the pattern!</p>
-
           <div class="grid-3" id="choicesMissing" style="margin-top:14px;"></div>
           <p class="kid-big" id="resultMissing" style="margin-top:14px;"></p>
+          <div class="quick-strip"><button class="btn" id="nextMissing">Next</button></div>
+        </div>
+      </div>
+
+      <!-- STORY PROBLEMS PANEL -->
+      <div class="game-box" id="panelStory" style="display:none;">
+        <p class="kid-big">📚 Story Problems</p>
+        <p class="small">Read the story and solve.</p>
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qStory">Story loads here…</p>
+          <p class="small" id="hintStory">Hint loads here…</p>
+          <div class="grid-3" id="choicesStory" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultStory" style="margin-top:14px;"></p>
+          <div class="quick-strip"><button class="btn" id="nextStory">Next</button></div>
+        </div>
+      </div>
+
+      <!-- SHAPES & PATTERNS PANEL -->
+      <div class="game-box" id="panelShapes" style="display:none;">
+        <p class="kid-big">🟦 Shapes & Patterns</p>
+        <p class="small">Pick the correct shape or the next pattern piece.</p>
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qShapes">Shapes question loads here…</p>
+          <p class="small" id="hintShapes">Hint loads here…</p>
+          <div class="game-box" style="margin-top:12px; text-align:center;">
+            <div id="patternRow" style="font-size:44px; letter-spacing:8px; line-height:1.3;"></div>
+          </div>
+          <div class="grid-3" id="choicesShapes" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultShapes" style="margin-top:14px;"></p>
+          <div class="quick-strip"><button class="btn" id="nextShapes">Next</button></div>
+        </div>
+      </div>
+
+      <!-- TENS & ONES PANEL -->
+      <div class="game-box" id="panelPlace" style="display:none;">
+        <p class="kid-big">🧱 Tens & Ones Builder</p>
+        <p class="small">Build the number using tens (🟩10) and ones (🟨1).</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qPlace">Build this number: —</p>
+          <p class="small" id="hintPlace">Tap + to add blocks. Tap − to remove blocks.</p>
+
+          <div class="game-box" style="margin-top:12px;">
+            <div class="grid-3">
+              <div class="card" style="text-align:center;">
+                <h3 style="margin-bottom:6px;">Tens 🟩</h3>
+                <div class="kid-big" id="tensCount">0</div>
+                <div class="quick-strip" style="justify-content:center;">
+                  <button class="btn secondary" id="tensMinus">−</button>
+                  <button class="btn" id="tensPlus">+</button>
+                </div>
+              </div>
+
+              <div class="card" style="text-align:center;">
+                <h3 style="margin-bottom:6px;">Ones 🟨</h3>
+                <div class="kid-big" id="onesCount">0</div>
+                <div class="quick-strip" style="justify-content:center;">
+                  <button class="btn secondary" id="onesMinus">−</button>
+                  <button class="btn" id="onesPlus">+</button>
+                </div>
+              </div>
+
+              <div class="card" style="text-align:center;">
+                <h3 style="margin-bottom:6px;">Your Number</h3>
+                <div class="kid-big" id="builtNumber">0</div>
+                <p class="small">tens×10 + ones</p>
+              </div>
+            </div>
+
+            <div class="game-box" style="margin-top:12px; text-align:center;">
+              <div class="small">Blocks</div>
+              <div id="blockView" style="font-size:30px; line-height:1.4; letter-spacing:4px; margin-top:8px;"></div>
+            </div>
+
+            <p class="kid-big" id="resultPlace" style="margin-top:14px;"></p>
+            <div class="quick-strip">
+              <button class="btn" id="checkPlace">Check</button>
+              <button class="btn secondary" id="nextPlace">Next</button>
+              <button class="btn secondary" id="resetPlace">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIME PANEL -->
+      <div class="game-box" id="panelTime" style="display:none;">
+        <p class="kid-big">🕒 Telling Time</p>
+        <p class="small">Read the clock and pick the correct time (hour / half-hour).</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qTime">Time question loads here…</p>
+          <p class="small" id="hintTime">Short hand = hour. Long hand = minutes.</p>
+
+          <div class="game-box" style="margin-top:12px; text-align:center;">
+            <canvas id="clockCanvas" width="220" height="220" style="max-width:100%;"></canvas>
+          </div>
+
+          <div class="grid-3" id="choicesTime" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultTime" style="margin-top:14px;"></p>
 
           <div class="quick-strip">
-            <button class="btn" id="nextMissing">Next</button>
+            <button class="btn" id="nextTime">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONEY PANEL -->
+      <div class="game-box" id="panelMoney" style="display:none;">
+        <p class="kid-big">🪙 Money Game</p>
+        <p class="small">Count the coins and choose the total value.</p>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="qMoney">Money question loads here…</p>
+          <p class="small" id="hintMoney">Add coin values together.</p>
+
+          <div class="game-box" style="margin-top:12px; text-align:center;">
+            <div id="coinRow" style="font-size:44px; letter-spacing:8px; line-height:1.3;"></div>
+            <div class="small" style="margin-top:8px;">(🪙 Penny=1¢, Nickel=5¢, Dime=10¢, Quarter=25¢)</div>
+          </div>
+
+          <div class="grid-3" id="choicesMoney" style="margin-top:14px;"></div>
+          <p class="kid-big" id="resultMoney" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="nextMoney">Next</button>
           </div>
         </div>
       </div>
@@ -189,7 +310,7 @@
 
 <script>
   // ======================
-  // Progress + helpers
+  // Helpers + Progress
   // ======================
   const PROG_KEY = "bloom_progress";
 
@@ -246,38 +367,52 @@
   // ======================
   // Panels/tabs
   // ======================
-  const panelQuick = document.getElementById("panelQuick");
-  const panelLine = document.getElementById("panelLine");
-  const panelCount = document.getElementById("panelCount");
-  const panelMissing = document.getElementById("panelMissing");
+  const panels = {
+    quick:   document.getElementById("panelQuick"),
+    line:    document.getElementById("panelLine"),
+    count:   document.getElementById("panelCount"),
+    missing: document.getElementById("panelMissing"),
+    story:   document.getElementById("panelStory"),
+    shapes:  document.getElementById("panelShapes"),
+    place:   document.getElementById("panelPlace"),
+    time:    document.getElementById("panelTime"),
+    money:   document.getElementById("panelMoney"),
+  };
 
   let activePanel = "quick";
   function showPanel(name){
     activePanel = name;
-    panelQuick.style.display   = (name==="quick") ? "block" : "none";
-    panelLine.style.display    = (name==="line") ? "block" : "none";
-    panelCount.style.display   = (name==="count") ? "block" : "none";
-    panelMissing.style.display = (name==="missing") ? "block" : "none";
+    Object.keys(panels).forEach(k=>{
+      panels[k].style.display = (k===name) ? "block" : "none";
+    });
   }
 
-  document.getElementById("tabQuick").onclick = ()=> showPanel("quick");
-  document.getElementById("tabLine").onclick = ()=> showPanel("line");
-  document.getElementById("tabCount").onclick = ()=> showPanel("count");
+  document.getElementById("tabQuick").onclick   = ()=> showPanel("quick");
+  document.getElementById("tabLine").onclick    = ()=> showPanel("line");
+  document.getElementById("tabCount").onclick   = ()=> showPanel("count");
   document.getElementById("tabMissing").onclick = ()=> showPanel("missing");
+  document.getElementById("tabStory").onclick   = ()=> showPanel("story");
+  document.getElementById("tabShapes").onclick  = ()=> showPanel("shapes");
+  document.getElementById("tabPlace").onclick   = ()=> showPanel("place");
+  document.getElementById("tabTime").onclick    = ()=> showPanel("time");
+  document.getElementById("tabMoney").onclick   = ()=> showPanel("money");
 
-  // Sound button reads current question
   document.getElementById("soundBtn").onclick = ()=>{
     const txt =
       activePanel==="quick"   ? document.getElementById("qQuick").textContent :
       activePanel==="line"    ? document.getElementById("qLine").textContent :
       activePanel==="count"   ? document.getElementById("qCount").textContent :
-                                document.getElementById("qMissing").textContent;
+      activePanel==="missing" ? document.getElementById("qMissing").textContent :
+      activePanel==="story"   ? document.getElementById("qStory").textContent :
+      activePanel==="shapes"  ? document.getElementById("qShapes").textContent :
+      activePanel==="place"   ? document.getElementById("qPlace").textContent :
+      activePanel==="time"    ? document.getElementById("qTime").textContent :
+                                document.getElementById("qMoney").textContent;
     speak(txt);
   };
   document.getElementById("stopBtn").onclick = stopSpeak;
 
-  // Reset stars
-  document.getElementById("resetBtn").onclick = ()=>{
+  document.getElementById("resetStarsBtn").onclick = ()=>{
     const p = load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
     });
@@ -287,85 +422,103 @@
   };
 
   // ======================
-  // GAME BANKS (K–2)
+  // Banks (K–2)
   // ======================
   const banks = {
     "K": {
       quick: [
         { q:"1 + 1 = ?", correct:2, choices:[1,2,3], hint:"Count two blocks." },
         { q:"3 + 2 = ?", correct:5, choices:[4,5,6], hint:"Count up 2 from 3." },
-        { q:"5 − 1 = ?", correct:4, choices:[4,3,5], hint:"Take 1 away." },
-        { q:"2 + 4 = ?", correct:6, choices:[6,5,7], hint:"Count up 4 from 2." },
         { q:"6 − 2 = ?", correct:4, choices:[3,4,5], hint:"Count back 2." },
         { q:"How many? 🍎🍎🍎", correct:3, choices:[2,3,4], hint:"Count the apples." }
       ],
       line: [
         { start:3, hops:[+2], prompt:"Start at 3. Hop +2. Where do you land?" },
-        { start:5, hops:[-1], prompt:"Start at 5. Hop −1. Where do you land?" },
-        { start:2, hops:[+3], prompt:"Start at 2. Hop +3. Where do you land?" }
+        { start:5, hops:[-1], prompt:"Start at 5. Hop −1. Where do you land?" }
       ],
       count: [
         { emoji:"🍓", count:5, prompt:"Count the strawberries." },
-        { emoji:"🐸", count:4, prompt:"Count the frogs." },
-        { emoji:"⭐", count:6, prompt:"Count the stars." }
+        { emoji:"🐸", count:4, prompt:"Count the frogs." }
       ],
       missing: [
         { seq:["1","2","__","4"], answer:3, choices:[3,5,2] },
-        { seq:["2","4","__","8"], answer:6, choices:[6,7,5] },
         { seq:["5","__","7","8"], answer:6, choices:[6,4,9] }
-      ]
+      ],
+      story: [
+        { q:"Lia has 3 apples. She gets 2 more. How many apples now?", answer:5, choices:[4,5,6], hint:"Count up 2 from 3." },
+        { q:"Max has 6 blocks. He gives away 1. How many blocks left?", answer:5, choices:[5,6,4], hint:"Take away 1." }
+      ],
+      shapes: [
+        { q:"Which one is a circle?", row:"⬜ 🔺 ⚪", answer:"⚪", choices:["⚪","⬜","🔺"], hint:"A circle is round." },
+        { q:"What comes next? ⚪ ⬜ ⚪ ⬜ __", row:"⚪ ⬜ ⚪ ⬜ __", answer:"⚪", choices:["⚪","⬜","🔺"], hint:"It alternates." }
+      ],
+      place: { min: 10, max: 39 },   // kindergarten: small tens/ones
+      time:  { mode: "hour" },       // hour only
+      money: { coins: ["p","n","d"], maxCount: 4 } // penny/nickel/dime
     },
 
     "1": {
       quick: [
         { q:"5 + 3 = ?", correct:8, choices:[7,8,9], hint:"Count up 3 from 5." },
         { q:"10 − 4 = ?", correct:6, choices:[6,5,7], hint:"Count back 4 from 10." },
-        { q:"7 + 7 = ?", correct:14, choices:[12,14,16], hint:"Double 7." },
-        { q:"9 + 2 = ?", correct:11, choices:[11,10,12], hint:"Count on 2." },
         { q:"12 − 5 = ?", correct:7, choices:[7,8,6], hint:"Take away 5." },
         { q:"8 + 6 = ?", correct:14, choices:[13,14,15], hint:"Make 10: 8+2 then +4." }
       ],
       line: [
         { start:7, hops:[+3], prompt:"Start at 7. Hop +3. Where do you land?" },
-        { start:10, hops:[-4], prompt:"Start at 10. Hop −4. Where do you land?" },
-        { start:6, hops:[+2,+2], prompt:"Start at 6. Hop +2 then +2. Where do you land?" }
+        { start:10, hops:[-4], prompt:"Start at 10. Hop −4. Where do you land?" }
       ],
       count: [
         { emoji:"🍪", count:7, prompt:"Count the cookies." },
-        { emoji:"🦋", count:8, prompt:"Count the butterflies." },
         { emoji:"🧁", count:9, prompt:"Count the cupcakes." }
       ],
       missing: [
         { seq:["10","11","__","13"], answer:12, choices:[12,14,9] },
-        { seq:["2","4","6","__"], answer:8, choices:[7,8,10] },
-        { seq:["5","10","__","20"], answer:15, choices:[15,25,10] }
-      ]
+        { seq:["2","4","6","__"], answer:8, choices:[7,8,10] }
+      ],
+      story: [
+        { q:"Nia has 9 stickers. She gets 4 more. How many stickers now?", answer:13, choices:[12,13,14], hint:"Add 4 to 9." },
+        { q:"Ben has 14 crayons. He loses 5. How many crayons left?", answer:9, choices:[9,8,10], hint:"Count back 5." }
+      ],
+      shapes: [
+        { q:"Which one is a rectangle?", row:"⬛ ▭ ⚪", answer:"▭", choices:["▭","⚪","⬛"], hint:"A rectangle has 4 sides." },
+        { q:"What comes next? 🔺 🔺 ⚪ 🔺 🔺 ⚪ __", row:"🔺 🔺 ⚪ 🔺 🔺 ⚪ __", answer:"🔺", choices:["🔺","⚪","▭"], hint:"It repeats." }
+      ],
+      place: { min: 10, max: 79 },
+      time:  { mode: "half" }, // hour + half-hour
+      money: { coins: ["p","n","d","q"], maxCount: 4 }
     },
 
     "2": {
       quick: [
         { q:"23 + 10 = ?", correct:33, choices:[33,32,34], hint:"Add ten: 23 → 33." },
         { q:"30 − 12 = ?", correct:18, choices:[18,20,16], hint:"30−10=20, then −2=18." },
-        { q:"14 + 9 = ?", correct:23, choices:[23,24,22], hint:"Make 10: 9+1, then +13." },
-        { q:"42 − 20 = ?", correct:22, choices:[22,24,20], hint:"Subtract two tens." },
-        { q:"15 + 15 = ?", correct:30, choices:[28,30,32], hint:"Double 15." },
-        { q:"27 + 8 = ?", correct:35, choices:[35,34,36], hint:"Add 3 to make 30, then +5." }
+        { q:"27 + 8 = ?", correct:35, choices:[35,34,36], hint:"Add 3 to make 30, then +5." },
+        { q:"42 − 20 = ?", correct:22, choices:[22,24,20], hint:"Subtract two tens." }
       ],
       line: [
         { start:12, hops:[+10], prompt:"Start at 12. Hop +10. Where do you land?" },
-        { start:25, hops:[-5], prompt:"Start at 25. Hop −5. Where do you land?" },
-        { start:18, hops:[+2,+3], prompt:"Start at 18. Hop +2 then +3. Where do you land?" }
+        { start:25, hops:[-5], prompt:"Start at 25. Hop −5. Where do you land?" }
       ],
       count: [
-        { emoji:"🍇", count:10, prompt:"Count the grapes (10)." },
         { emoji:"🟩", count:12, prompt:"Count the blocks (12)." },
-        { emoji:"🐟", count:11, prompt:"Count the fish (11)." }
+        { emoji:"⭐", count:15, prompt:"Count the stars (15)." }
       ],
       missing: [
         { seq:["21","22","__","24"], answer:23, choices:[23,25,20] },
-        { seq:["5","10","15","__"], answer:20, choices:[20,25,18] },
-        { seq:["30","__","32","33"], answer:31, choices:[31,29,34] }
-      ]
+        { seq:["5","10","15","__"], answer:20, choices:[20,25,18] }
+      ],
+      story: [
+        { q:"Ava has 18 beads. She adds 7 more. How many beads now?", answer:25, choices:[24,25,26], hint:"18+2=20, then +5." },
+        { q:"There are 32 books. 10 are checked out. How many stay?", answer:22, choices:[22,21,20], hint:"Subtract 10." }
+      ],
+      shapes: [
+        { q:"What comes next? ⬜ ⬜ ▭ ⬜ ⬜ ▭ __", row:"⬜ ⬜ ▭ ⬜ ⬜ ▭ __", answer:"⬜", choices:["⬜","▭","⚪"], hint:"Repeats: square, square, rectangle." },
+        { q:"Which one is NOT a 4-sided shape?", row:"⬜ ▭ 🔺", answer:"🔺", choices:["⬜","▭","🔺"], hint:"Triangles have 3 sides." }
+      ],
+      place: { min: 20, max: 99 },
+      time:  { mode: "half" },
+      money: { coins: ["p","n","d","q"], maxCount: 6 } // more coins
     }
   };
 
@@ -373,33 +526,28 @@
   // QUICK SOLVE
   // ======================
   let quickIdx = 0;
-  let currentQuick = null;
-
   const qQuick = document.getElementById("qQuick");
   const hintQuick = document.getElementById("hintQuick");
   const choicesQuick = document.getElementById("choicesQuick");
   const resultQuick = document.getElementById("resultQuick");
 
   function renderQuick(){
-    const bank = banks[grade].quick;
-    currentQuick = bank[quickIdx % bank.length];
-
-    qQuick.textContent = currentQuick.q;
-    hintQuick.textContent = "Hint: " + currentQuick.hint;
+    const it = banks[grade].quick[quickIdx % banks[grade].quick.length];
+    qQuick.textContent = it.q;
+    hintQuick.textContent = "Hint: " + it.hint;
     resultQuick.textContent = "";
     choicesQuick.innerHTML = "";
 
-    shuffle(currentQuick.choices).forEach(c=>{
+    shuffle(it.choices).forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
       card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=> {
-        if (resultQuick.textContent) return;
-        if (c === currentQuick.correct){
+      card.onclick = ()=>{
+        if (resultQuick.textContent.includes("Correct")) return;
+        if (String(c) === String(it.correct)){
           resultQuick.textContent = "Correct! ⭐";
-          addStar();
-          speak("Correct!");
+          addStar(); speak("Correct!");
         } else {
           resultQuick.textContent = "Try again 🙂";
           speak("Try again.");
@@ -408,17 +556,12 @@
       choicesQuick.appendChild(card);
     });
   }
-
   document.getElementById("nextQuick").onclick = ()=>{ quickIdx++; renderQuick(); };
 
   // ======================
-  // NUMBER LINE HOP
+  // NUMBER LINE
   // ======================
-  let lineIdx = 0;
-  let currentLine = null;
-  let hopStep = 0;
-  let landing = null;
-
+  let lineIdx = 0, hopStep = 0, landing = null, currentLine = null;
   const qLine = document.getElementById("qLine");
   const lineTrack = document.getElementById("lineTrack");
   const hopButtons = document.getElementById("hopButtons");
@@ -453,31 +596,26 @@
     const max = currentLine.start + 14;
     buildLineTrack(min, max, currentLine.start);
 
-    // Hop buttons
     hopButtons.innerHTML = "";
     currentLine.hops.forEach((h, i)=>{
       const b = document.createElement("button");
       b.className = "btn secondary";
       b.textContent = (h>=0) ? `+${h}` : `${h}`;
       b.onclick = ()=>{
-        if (i !== hopStep) {
-          speak("Tap the hops in order.");
+        if (i !== hopStep){
           resultLine.textContent = "Tap the hops in order 🙂";
+          speak("Tap the hops in order.");
           return;
         }
         landing += h;
         hopStep++;
         buildLineTrack(min, max, landing);
         landingNum.textContent = landing;
-
-        if (hopStep >= currentLine.hops.length){
-          speak("Now choose your answer.");
-        }
+        if (hopStep >= currentLine.hops.length) speak("Now choose your answer.");
       };
       hopButtons.appendChild(b);
     });
 
-    // Choices
     const correct = currentLine.start + currentLine.hops.reduce((a,b)=>a+b,0);
     const options = shuffle([correct, correct+1, Math.max(0, correct-1)]);
     choicesLine.innerHTML = "";
@@ -495,8 +633,7 @@
         }
         if (c === correct){
           resultLine.textContent = "Correct! ⭐";
-          addStar();
-          speak("Correct!");
+          addStar(); speak("Correct!");
         } else {
           resultLine.textContent = "Try again 🙂";
           speak("Try again.");
@@ -505,18 +642,13 @@
       choicesLine.appendChild(card);
     });
   }
-
   document.getElementById("nextLine").onclick = ()=>{ lineIdx++; renderLine(); };
-  document.getElementById("resetHops").onclick = ()=>{ renderLine(); };
+  document.getElementById("resetHops").onclick = ()=> renderLine();
 
   // ======================
-  // COUNT PICTURES
+  // COUNT
   // ======================
-  let countIdx = 0;
-  let currentCount = null;
-  let tapped = 0;
-  let tappedSet = new Set();
-
+  let countIdx = 0, tappedSet = new Set(), tapped = 0, currentCount = null;
   const qCount = document.getElementById("qCount");
   const picPile = document.getElementById("picPile");
   const tapCount = document.getElementById("tapCount");
@@ -534,7 +666,6 @@
 
     qCount.textContent = currentCount.prompt;
 
-    // Build clickable emojis
     picPile.innerHTML = "";
     const pieces = [];
     for (let i=0; i<currentCount.count; i++){
@@ -553,7 +684,6 @@
       };
     });
 
-    // Choices
     const correct = currentCount.count;
     const opts = shuffle([correct, correct+1, Math.max(0, correct-1)]);
     choicesCount.innerHTML = "";
@@ -566,8 +696,7 @@
         if (resultCount.textContent.includes("Correct")) return;
         if (c === correct){
           resultCount.textContent = "Correct! ⭐";
-          addStar();
-          speak("Correct!");
+          addStar(); speak("Correct!");
         } else {
           resultCount.textContent = "Try again 🙂";
           speak("Try again.");
@@ -576,42 +705,33 @@
       choicesCount.appendChild(card);
     });
   }
-
   document.getElementById("nextCount").onclick = ()=>{ countIdx++; renderCount(); };
-  document.getElementById("resetTap").onclick = ()=>{
-    // just re-render this question
-    renderCount();
-  };
+  document.getElementById("resetTap").onclick = ()=> renderCount();
 
   // ======================
-  // MISSING NUMBER
+  // MISSING
   // ======================
   let missIdx = 0;
-  let currentMiss = null;
-
   const qMissing = document.getElementById("qMissing");
   const choicesMissing = document.getElementById("choicesMissing");
   const resultMissing = document.getElementById("resultMissing");
 
   function renderMissing(){
-    const bank = banks[grade].missing;
-    currentMiss = bank[missIdx % bank.length];
-
+    const it = banks[grade].missing[missIdx % banks[grade].missing.length];
+    qMissing.textContent = it.seq.join("  ");
     resultMissing.textContent = "";
-    qMissing.textContent = currentMiss.seq.join("  ");
-
     choicesMissing.innerHTML = "";
-    shuffle(currentMiss.choices).forEach(c=>{
+
+    shuffle(it.choices).forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
       card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
       card.onclick = ()=>{
         if (resultMissing.textContent.includes("Correct")) return;
-        if (c === currentMiss.answer){
+        if (c === it.answer){
           resultMissing.textContent = "Correct! ⭐";
-          addStar();
-          speak("Correct!");
+          addStar(); speak("Correct!");
         } else {
           resultMissing.textContent = "Try again 🙂";
           speak("Try again.");
@@ -620,8 +740,319 @@
       choicesMissing.appendChild(card);
     });
   }
-
   document.getElementById("nextMissing").onclick = ()=>{ missIdx++; renderMissing(); };
+
+  // ======================
+  // STORY
+  // ======================
+  let storyIdx = 0;
+  const qStory = document.getElementById("qStory");
+  const hintStory = document.getElementById("hintStory");
+  const choicesStory = document.getElementById("choicesStory");
+  const resultStory = document.getElementById("resultStory");
+
+  function renderStory(){
+    const it = banks[grade].story[storyIdx % banks[grade].story.length];
+    qStory.textContent = it.q;
+    hintStory.textContent = "Hint: " + it.hint;
+    resultStory.textContent = "";
+    choicesStory.innerHTML = "";
+
+    shuffle(it.choices).forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultStory.textContent.includes("Correct")) return;
+        if (c === it.answer){
+          resultStory.textContent = "Correct! ⭐";
+          addStar(); speak("Correct!");
+        } else {
+          resultStory.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesStory.appendChild(card);
+    });
+  }
+  document.getElementById("nextStory").onclick = ()=>{ storyIdx++; renderStory(); };
+
+  // ======================
+  // SHAPES
+  // ======================
+  let shapesIdx = 0;
+  const qShapes = document.getElementById("qShapes");
+  const hintShapes = document.getElementById("hintShapes");
+  const patternRow = document.getElementById("patternRow");
+  const choicesShapes = document.getElementById("choicesShapes");
+  const resultShapes = document.getElementById("resultShapes");
+
+  function renderShapes(){
+    const it = banks[grade].shapes[shapesIdx % banks[grade].shapes.length];
+    qShapes.textContent = it.q;
+    hintShapes.textContent = "Hint: " + it.hint;
+    patternRow.textContent = it.row || "";
+    resultShapes.textContent = "";
+    choicesShapes.innerHTML = "";
+
+    shuffle(it.choices).forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultShapes.textContent.includes("Correct")) return;
+        if (c === it.answer){
+          resultShapes.textContent = "Correct! ⭐";
+          addStar(); speak("Correct!");
+        } else {
+          resultShapes.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesShapes.appendChild(card);
+    });
+  }
+  document.getElementById("nextShapes").onclick = ()=>{ shapesIdx++; renderShapes(); };
+
+  // ======================
+  // PLACE VALUE (TENS & ONES)
+  // ======================
+  let placeTarget = 0;
+  let tens = 0;
+  let ones = 0;
+
+  const qPlace = document.getElementById("qPlace");
+  const tensCount = document.getElementById("tensCount");
+  const onesCount = document.getElementById("onesCount");
+  const builtNumber = document.getElementById("builtNumber");
+  const blockView = document.getElementById("blockView");
+  const resultPlace = document.getElementById("resultPlace");
+
+  function randInt(min, max){
+    return Math.floor(Math.random()*(max-min+1)) + min;
+  }
+
+  function updatePlaceUI(){
+    tensCount.textContent = tens;
+    onesCount.textContent = ones;
+    const value = tens*10 + ones;
+    builtNumber.textContent = value;
+
+    // visualize
+    const tensBlocks = "🟩".repeat(Math.min(tens, 12)); // cap visual
+    const onesBlocks = "🟨".repeat(Math.min(ones, 20));
+    blockView.textContent = (tensBlocks + " " + onesBlocks).trim() || "—";
+  }
+
+  function newPlace(){
+    const cfg = banks[grade].place;
+    placeTarget = randInt(cfg.min, cfg.max);
+    tens = 0; ones = 0;
+    resultPlace.textContent = "";
+    qPlace.textContent = `Build this number: ${placeTarget}`;
+    updatePlaceUI();
+  }
+
+  document.getElementById("tensPlus").onclick = ()=>{ if (tens < 12) tens++; updatePlaceUI(); };
+  document.getElementById("tensMinus").onclick = ()=>{ if (tens > 0) tens--; updatePlaceUI(); };
+  document.getElementById("onesPlus").onclick = ()=>{ if (ones < 20) ones++; updatePlaceUI(); };
+  document.getElementById("onesMinus").onclick = ()=>{ if (ones > 0) ones--; updatePlaceUI(); };
+
+  document.getElementById("resetPlace").onclick = ()=>{ tens=0; ones=0; resultPlace.textContent=""; updatePlaceUI(); };
+
+  document.getElementById("checkPlace").onclick = ()=>{
+    const value = tens*10 + ones;
+    if (value === placeTarget){
+      resultPlace.textContent = "Correct! ⭐";
+      addStar(); speak("Correct!");
+    } else {
+      resultPlace.textContent = "Try again 🙂";
+      speak("Try again.");
+    }
+  };
+
+  document.getElementById("nextPlace").onclick = ()=> newPlace();
+
+  // ======================
+  // TIME (Canvas clock)
+  // ======================
+  let timeIdx = 0;
+  let currentTime = null;
+
+  const qTime = document.getElementById("qTime");
+  const choicesTime = document.getElementById("choicesTime");
+  const resultTime = document.getElementById("resultTime");
+  const clockCanvas = document.getElementById("clockCanvas");
+  const ctx = clockCanvas.getContext("2d");
+
+  function formatTime(h, m){
+    const mm = (m===0) ? "00" : String(m);
+    return `${h}:${mm}`;
+  }
+
+  function drawClock(hour, minute){
+    const w = clockCanvas.width, h = clockCanvas.height;
+    const cx = w/2, cy = h/2;
+    const r = Math.min(cx, cy) - 10;
+
+    ctx.clearRect(0,0,w,h);
+
+    // face
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fill();
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = "rgba(0,0,0,0.08)";
+    ctx.stroke();
+
+    // numbers
+    ctx.fillStyle = "rgba(0,0,0,0.65)";
+    ctx.font = "16px 'Baloo 2', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (let n=1; n<=12; n++){
+      const ang = (n * Math.PI/6) - Math.PI/2;
+      const x = cx + Math.cos(ang) * (r - 22);
+      const y = cy + Math.sin(ang) * (r - 22);
+      ctx.fillText(String(n), x, y);
+    }
+
+    // hands
+    const minAngle = (minute * Math.PI/30) - Math.PI/2;
+    const hourAngle = (((hour % 12) + minute/60) * Math.PI/6) - Math.PI/2;
+
+    // hour hand
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineWidth = 7;
+    ctx.strokeStyle = "rgba(0,0,0,0.65)";
+    ctx.lineTo(cx + Math.cos(hourAngle) * (r * 0.55), cy + Math.sin(hourAngle) * (r * 0.55));
+    ctx.stroke();
+
+    // minute hand
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgba(0,0,0,0.55)";
+    ctx.lineTo(cx + Math.cos(minAngle) * (r * 0.78), cy + Math.sin(minAngle) * (r * 0.78));
+    ctx.stroke();
+
+    // center dot
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    ctx.fill();
+  }
+
+  function genTimeQuestion(){
+    const mode = banks[grade].time.mode; // "hour" or "half"
+    const hour = randInt(1, 12);
+    const minute = (mode === "hour") ? 0 : (Math.random() < 0.5 ? 0 : 30);
+    const correct = formatTime(hour, minute);
+
+    // create choices
+    const distract1 = formatTime(hour === 12 ? 1 : hour+1, minute);
+    const distract2 = formatTime(hour, minute === 0 ? 30 : 0);
+    const choices = shuffle([correct, distract1, distract2]);
+
+    return { hour, minute, correct, choices };
+  }
+
+  function renderTime(){
+    currentTime = genTimeQuestion();
+    qTime.textContent = "What time is it?";
+    resultTime.textContent = "";
+    drawClock(currentTime.hour, currentTime.minute);
+
+    choicesTime.innerHTML = "";
+    currentTime.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultTime.textContent.includes("Correct")) return;
+        if (c === currentTime.correct){
+          resultTime.textContent = "Correct! ⭐";
+          addStar(); speak("Correct!");
+        } else {
+          resultTime.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesTime.appendChild(card);
+    });
+  }
+  document.getElementById("nextTime").onclick = ()=>{ timeIdx++; renderTime(); };
+
+  // ======================
+  // MONEY (Coins)
+  // ======================
+  let moneyIdx = 0;
+  let currentMoney = null;
+
+  const qMoney = document.getElementById("qMoney");
+  const coinRow = document.getElementById("coinRow");
+  const choicesMoney = document.getElementById("choicesMoney");
+  const resultMoney = document.getElementById("resultMoney");
+
+  const coinDefs = {
+    p: { emoji:"🟤", name:"penny", value:1 },
+    n: { emoji:"🟠", name:"nickel", value:5 },
+    d: { emoji:"🟡", name:"dime", value:10 },
+    q: { emoji:"⚪", name:"quarter", value:25 }
+  };
+
+  function genMoney(){
+    const cfg = banks[grade].money;
+    const count = randInt(2, cfg.maxCount);
+    const pool = cfg.coins;
+
+    const coins = [];
+    for (let i=0; i<count; i++){
+      coins.push(pool[Math.floor(Math.random()*pool.length)]);
+    }
+
+    const total = coins.reduce((sum,c)=>sum + coinDefs[c].value, 0);
+    const choices = shuffle([
+      total,
+      Math.max(0, total - (Math.random()<0.5?1:5)),
+      total + (Math.random()<0.5?1:5)
+    ]);
+
+    return { coins, total, choices };
+  }
+
+  function renderMoney(){
+    currentMoney = genMoney();
+    qMoney.textContent = "How many cents is this?";
+    resultMoney.textContent = "";
+
+    coinRow.innerHTML = currentMoney.coins.map(c=>coinDefs[c].emoji).join(" ");
+
+    choicesMoney.innerHTML = "";
+    currentMoney.choices.forEach(v=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${v}¢</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (resultMoney.textContent.includes("Correct")) return;
+        if (v === currentMoney.total){
+          resultMoney.textContent = "Correct! ⭐";
+          addStar(); speak("Correct!");
+        } else {
+          resultMoney.textContent = "Try again 🙂";
+          speak("Try again.");
+        }
+      };
+      choicesMoney.appendChild(card);
+    });
+  }
+  document.getElementById("nextMoney").onclick = ()=>{ moneyIdx++; renderMoney(); };
 
   // ======================
   // Init
@@ -631,12 +1062,22 @@
     lineIdx = 0;
     countIdx = 0;
     missIdx = 0;
+    storyIdx = 0;
+    shapesIdx = 0;
+    timeIdx = 0;
+    moneyIdx = 0;
   }
+
   function renderAll(){
     renderQuick();
     renderLine();
     renderCount();
     renderMissing();
+    renderStory();
+    renderShapes();
+    newPlace();
+    renderTime();
+    renderMoney();
   }
 
   showPanel("quick");
