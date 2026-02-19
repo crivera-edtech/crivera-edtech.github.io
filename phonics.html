@@ -53,38 +53,56 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Phonics 🔤</h1>
-    <p>Choose an activity: take a diagnostic, or play a matching game!</p>
+    <h1>Phonics Playground 🔤🌿</h1>
+    <p>Pick a game: match sounds, label pictures, build silly words, or read decodable stories!</p>
     <div class="quick-strip">
       <a class="btn secondary" href="progress.html">My Progress</a>
       <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
     </div>
-    <div class="hero-note">K–2: letter names + letter sounds</div>
+    <div class="hero-note">K–2 practice: letter names, letter sounds, blending, and decodable reading</div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Choose a Phonics Activity 🌟</h2>
+    <h2 class="section-title">Choose a Phonics Game 🌟</h2>
 
     <div class="game-box wide">
       <div class="grid-3">
         <div class="card">
           <h3>🧠 Diagnostic</h3>
-          <p>Quick check: letter names + sounds. Then it recommends the best practice.</p>
+          <p>Letter names + sounds. Then it recommends practice.</p>
           <button class="btn" id="showDiagBtn">Start</button>
         </div>
 
         <div class="card">
-          <h3>🎧 Sound → Letter Match</h3>
-          <p>Press 🔊, then choose the letter that makes the sound.</p>
+          <h3>🎧 Sound → Letter</h3>
+          <p>Hear the sound. Tap the letter card.</p>
           <button class="btn" id="showSoundToLetterBtn">Play</button>
         </div>
 
         <div class="card">
-          <h3>🔤 Letter → Sound Match</h3>
-          <p>See a letter, then pick the sound it makes (with audio help).</p>
+          <h3>🔤 Letter → Sound</h3>
+          <p>See the letter. Choose the sound card.</p>
           <button class="btn" id="showLetterToSoundBtn">Play</button>
+        </div>
+
+        <div class="card">
+          <h3>🖼️ Label the Picture</h3>
+          <p>Pick the word that matches the picture AND starts with the sound.</p>
+          <button class="btn" id="showLabelPicBtn">Play</button>
+        </div>
+
+        <div class="card">
+          <h3>🧪 Nonsense Word Lab</h3>
+          <p>Swap vowels to make safe silly words (no bad words).</p>
+          <button class="btn" id="showNonsenseBtn">Play</button>
+        </div>
+
+        <div class="card">
+          <h3>📚 Decodable Reading</h3>
+          <p>Short phonics-friendly stories + a quick question.</p>
+          <button class="btn" id="showDecodableBtn">Read</button>
         </div>
       </div>
     </div>
@@ -97,10 +115,10 @@
         <button class="pill" data-grade="1">Grade 1</button>
         <button class="pill" data-grade="2">Grade 2</button>
       </div>
-      <p class="small" style="margin-top:10px;">Tip: Use the same grade for all games to keep it just right.</p>
+      <p class="small" style="margin-top:10px;">Tip: Keep the same grade so games stay “just right.”</p>
     </div>
 
-    <!-- DIAGNOSTIC PANEL -->
+    <!-- DIAGNOSTIC -->
     <div class="game-box wide" id="diagPanel" style="margin-top:18px; display:none;">
       <p class="kid-big">Diagnostic ✅</p>
       <p class="small">Answer letter <strong>name</strong> and <strong>sound</strong> questions. Tap 🔊 to hear it.</p>
@@ -126,12 +144,12 @@
         </div>
 
         <p class="small" style="margin-top:8px;">
-          After the diagnostic, you can play a game based on what was missed.
+          After the diagnostic, try the recommended mini game.
         </p>
       </div>
     </div>
 
-    <!-- TARGETED MINI GAME (from diagnostic) -->
+    <!-- RECOMMENDED GAME -->
     <div class="game-box wide" id="targetGamePanel" style="margin-top:18px; display:none;">
       <p class="kid-big">Recommended Mini Game 🎮</p>
       <p class="small" id="gamePlan">Your game is based on your diagnostic.</p>
@@ -149,7 +167,7 @@
         <p class="kid-big" id="gameResult" style="margin-top:14px;"></p>
 
         <div class="quick-strip">
-          <button class="btn" id="goGameBtn">Go to Recommended Game</button>
+          <button class="btn" id="goGameBtn">Go</button>
           <button class="btn secondary" id="gameNextBtn">Next</button>
           <button class="btn secondary" id="resetStarsBtn">Reset Stars</button>
           <button class="btn secondary" id="closeTargetGameBtn">Close</button>
@@ -157,10 +175,10 @@
       </div>
     </div>
 
-    <!-- GAME 1: Sound -> Letter -->
+    <!-- GAME: Sound -> Letter -->
     <div class="game-box wide" id="soundToLetterPanel" style="margin-top:18px; display:none;">
       <p class="kid-big">🎧 Sound → Letter Match</p>
-      <p class="small">Press 🔊 to hear the sound. Then tap the correct letter(s) card!</p>
+      <p class="small">Press 🔊. Then tap the correct letter(s).</p>
 
       <div class="game-box" style="margin-top:12px;">
         <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
@@ -182,10 +200,10 @@
       </div>
     </div>
 
-    <!-- GAME 2: Letter -> Sound -->
+    <!-- GAME: Letter -> Sound -->
     <div class="game-box wide" id="letterToSoundPanel" style="margin-top:18px; display:none;">
       <p class="kid-big">🔤 Letter → Sound Match</p>
-      <p class="small">Tap a sound card. Use 🔊 to hear the letter name again.</p>
+      <p class="small">Tap a sound card to hear it. Use 🔊 to hear the letter name again.</p>
 
       <div class="game-box" style="margin-top:12px;">
         <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
@@ -203,6 +221,96 @@
           <button class="btn" id="ltsStartBtn">Play</button>
           <button class="btn secondary" id="ltsNextBtn">Next</button>
           <button class="btn secondary" id="closeLtsBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW GAME: Label the Picture -->
+    <div class="game-box wide" id="labelPicPanel" style="margin-top:18px; display:none;">
+      <p class="kid-big">🖼️ Label the Picture</p>
+      <p class="small">Pick the word that matches the picture AND starts with the sound. Press 🔊 to hear the sound.</p>
+
+      <div class="game-box" style="margin-top:12px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+          <p class="kid-big" id="lpQ" style="margin:0; flex:1;">Press Play to start!</p>
+          <button class="btn secondary" id="lpSpeakBtn" aria-label="Play sound">🔊</button>
+        </div>
+
+        <p class="small" id="lpHint"></p>
+        <p class="small" id="lpAudioStatus" style="display:none;"></p>
+
+        <div class="grid-3" id="lpChoices" style="margin-top:14px;"></div>
+        <p class="kid-big" id="lpResult" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="lpStartBtn">Play</button>
+          <button class="btn secondary" id="lpNextBtn">Next</button>
+          <button class="btn secondary" id="closeLpBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW GAME: Nonsense Word Lab -->
+    <div class="game-box wide" id="nonsensePanel" style="margin-top:18px; display:none;">
+      <p class="kid-big">🧪 Nonsense Word Lab</p>
+      <p class="small">
+        Build a silly word by swapping the vowel. Tap 🔊 to hear each sound you’re using.
+      </p>
+
+      <div class="game-box" style="margin-top:12px;">
+        <p class="kid-big" id="nwWord" style="margin:0;">Press “Make a Word”!</p>
+        <p class="small" id="nwHint">Pick a vowel button to change the middle sound.</p>
+        <p class="small" id="nwStatus" style="display:none;"></p>
+
+        <div class="quick-strip" style="margin-top:12px;">
+          <button class="btn" id="nwMakeBtn">Make a Word</button>
+          <button class="btn secondary" id="nwPlayC1Btn">🔊 Start</button>
+          <button class="btn secondary" id="nwPlayVBtn">🔊 Vowel</button>
+          <button class="btn secondary" id="nwPlayC2Btn">🔊 End</button>
+        </div>
+
+        <div class="badge-row" style="margin-top:12px;">
+          <button class="pill" data-v="a">a</button>
+          <button class="pill" data-v="e">e</button>
+          <button class="pill" data-v="i">i</button>
+          <button class="pill" data-v="o">o</button>
+          <button class="pill" data-v="u">u</button>
+        </div>
+
+        <div class="quick-strip" style="margin-top:12px;">
+          <button class="btn" id="nwCheckBtn">Is it a real word?</button>
+          <button class="btn secondary" id="closeNwBtn">Close</button>
+        </div>
+
+        <p class="small" id="nwRealCheck" style="margin-top:10px;"></p>
+      </div>
+    </div>
+
+    <!-- NEW: Decodable reading -->
+    <div class="game-box wide" id="decodablePanel" style="margin-top:18px; display:none;">
+      <p class="kid-big">📚 Decodable Reading</p>
+      <p class="small">Choose a short story. Tap 🔊 to have it read aloud (optional).</p>
+
+      <div class="game-box" style="margin-top:12px;">
+        <div class="quick-strip">
+          <button class="btn" id="decPickBtn">Pick a Story</button>
+          <button class="btn secondary" id="decReadBtn">🔊 Read Aloud</button>
+          <button class="btn secondary" id="decStopBtn">⏹ Stop</button>
+          <button class="btn secondary" id="closeDecBtn">Close</button>
+        </div>
+
+        <div style="margin-top:12px;">
+          <p class="kid-big" id="decTitle" style="margin:0;">Press “Pick a Story”</p>
+          <p class="small" id="decFocus"></p>
+          <div class="game-box" style="margin-top:10px;">
+            <p id="decText" style="margin:0; font-size:18px; line-height:1.6;"></p>
+          </div>
+        </div>
+
+        <div class="game-box" style="margin-top:12px;">
+          <p class="kid-big" id="decQ" style="margin:0;">Question:</p>
+          <div class="grid-3" id="decChoices" style="margin-top:12px;"></div>
+          <p class="kid-big" id="decResult" style="margin-top:12px;"></p>
         </div>
       </div>
     </div>
@@ -238,6 +346,9 @@
     targetGamePanel.style.display = "none";
     soundToLetterPanel.style.display = "none";
     letterToSoundPanel.style.display = "none";
+    labelPicPanel.style.display = "none";
+    nonsensePanel.style.display = "none";
+    decodablePanel.style.display = "none";
   }
   function showPanel(el){
     hideAllPanels();
@@ -245,7 +356,16 @@
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // ---------- Real Audio Player ----------
+  // ---------- Stars ----------
+  function addPhonicsStar(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    p.phonicsStars = (p.phonicsStars || 0) + 1;
+    save(PROG_KEY, p);
+  }
+
+  // ---------- Audio ----------
   const audio = new Audio();
   audio.preload = "auto";
 
@@ -256,19 +376,18 @@
     clearTimeout(el._t);
     el._t = setTimeout(()=>{ el.style.display = "none"; }, 2000);
   }
-
   async function playAudio(src, statusEl){
     try {
       audio.pause();
       audio.currentTime = 0;
       audio.src = src;
       await audio.play();
-    } catch (err) {
-      showAudioStatus(statusEl, "Audio not found yet. Check filename + folder path.");
+    } catch {
+      showAudioStatus(statusEl, "Audio not found. Check filename + folder path.");
     }
   }
 
-  // ---------- Audio Maps ----------
+  // Your real mp3 files (assets/)
   const soundAudio = {
     "m": "./assets/audio/sounds/m.mp3",
     "s": "./assets/audio/sounds/s.mp3",
@@ -280,7 +399,6 @@
     "long-e": "./assets/audio/sounds/long-e.mp3",
     "long-o": "./assets/audio/sounds/long-o.mp3"
   };
-
   const letterAudio = {
     "A": "./assets/audio/letters/A.mp3",
     "M": "./assets/audio/letters/M.mp3",
@@ -293,22 +411,36 @@
     "V": "./assets/audio/letters/V.mp3"
   };
 
-  // ---------- Grade Selection ----------
+  // Speech (for decodable read-aloud)
+  function speakText(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.9;
+    u.pitch = 1.1;
+    window.speechSynthesis.speak(u);
+  }
+  function stopSpeak(){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+  }
+
+  // ---------- Grade selection ----------
   let grade = "K";
   function renderGradeButtons(){
-    document.querySelectorAll(".pill").forEach(btn=>{
+    document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.grade === grade);
     });
   }
-  document.querySelectorAll(".pill").forEach(btn=>{
+  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
     btn.onclick = ()=>{
       grade = btn.dataset.grade;
       renderGradeButtons();
-      resetAllGames();
+      resetUI();
     };
   });
 
-  // ---------- Content Banks (K–2) ----------
+  // ---------- Banks ----------
   const gradeBanks = {
     "K": {
       nameItems: [
@@ -317,9 +449,14 @@
         { letter:"S", correct:"S", choices:["S","C","G"] }
       ],
       soundItems: [
-        { soundText:"/m/", soundKey:"m", correct:"M", choices:["M","S","T"], hint:"/m/ like moon" },
-        { soundText:"/s/", soundKey:"s", correct:"S", choices:["B","S","D"], hint:"/s/ like sun" },
-        { soundText:"/t/", soundKey:"t", correct:"T", choices:["T","A","P"], hint:"/t/ like top" }
+        { soundKey:"m", correct:"M", choices:["M","S","T"], hint:"/m/ like moon" },
+        { soundKey:"s", correct:"S", choices:["B","S","D"], hint:"/s/ like sun" },
+        { soundKey:"t", correct:"T", choices:["T","A","P"], hint:"/t/ like top" }
+      ],
+      labelPics: [
+        { soundKey:"m", picture:"🌙", answer:"moon", choices:["moon","sun","top"], hint:"Starts with /m/" },
+        { soundKey:"s", picture:"☀️", answer:"sun", choices:["sun","moon","top"], hint:"Starts with /s/" },
+        { soundKey:"t", picture:"🎩", answer:"top", choices:["top","sun","moon"], hint:"Starts with /t/" }
       ]
     },
     "1": {
@@ -329,9 +466,14 @@
         { letter:"T", correct:"T", choices:["T","F","E"] }
       ],
       soundItems: [
-        { soundText:"/sh/", soundKey:"sh", correct:"SH", choices:["CH","SH","TH"], hint:"SH like ship" },
-        { soundText:"/ch/", soundKey:"ch", correct:"CH", choices:["CH","PH","WH"], hint:"CH like chop" },
-        { soundText:"/th/", soundKey:"th", correct:"TH", choices:["TH","SH","CH"], hint:"TH like this" }
+        { soundKey:"sh", correct:"SH", choices:["CH","SH","TH"], hint:"SH like ship" },
+        { soundKey:"ch", correct:"CH", choices:["CH","PH","WH"], hint:"CH like chop" },
+        { soundKey:"th", correct:"TH", choices:["TH","SH","CH"], hint:"TH like this" }
+      ],
+      labelPics: [
+        { soundKey:"sh", picture:"🚢", answer:"ship", choices:["ship","chop","this"], hint:"Starts with /sh/" },
+        { soundKey:"ch", picture:"🪓", answer:"chop", choices:["this","ship","chop"], hint:"Starts with /ch/" },
+        { soundKey:"th", picture:"👍", answer:"this", choices:["chop","this","ship"], hint:"Starts with /th/" }
       ]
     },
     "2": {
@@ -341,64 +483,85 @@
         { letter:"V", correct:"V", choices:["V","W","Y"] }
       ],
       soundItems: [
-        { soundText:"long A (ai/ay)", soundKey:"long-a", correct:"AI", choices:["AI","OA","EE"], hint:"AI like rain" },
-        { soundText:"long E (ee/ea)", soundKey:"long-e", correct:"EE", choices:["EE","OO","AI"], hint:"EE like feet" },
-        { soundText:"long O (oa/ow)", soundKey:"long-o", correct:"OA", choices:["OA","EE","AI"], hint:"OA like boat" }
+        { soundKey:"long-a", correct:"AI", choices:["AI","OA","EE"], hint:"Long A like rain" },
+        { soundKey:"long-e", correct:"EE", choices:["EE","OO","AI"], hint:"Long E like feet" },
+        { soundKey:"long-o", correct:"OA", choices:["OA","EE","AI"], hint:"Long O like boat" }
+      ],
+      labelPics: [
+        { soundKey:"long-a", picture:"🌧️", answer:"rain", choices:["rain","feet","boat"], hint:"Has long A (ai/ay)" },
+        { soundKey:"long-e", picture:"🦶", answer:"feet", choices:["boat","rain","feet"], hint:"Has long E (ee/ea)" },
+        { soundKey:"long-o", picture:"⛵", answer:"boat", choices:["feet","boat","rain"], hint:"Has long O (oa/ow)" }
       ]
     }
   };
 
-  // ---------- Stars ----------
-  function addPhonicsStar(){
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
-    p.phonicsStars = (p.phonicsStars || 0) + 1;
-    save(PROG_KEY, p);
-  }
-
-  // ---------- Panel Refs ----------
+  // ---------- Panel refs ----------
   const diagPanel = document.getElementById("diagPanel");
   const targetGamePanel = document.getElementById("targetGamePanel");
   const soundToLetterPanel = document.getElementById("soundToLetterPanel");
   const letterToSoundPanel = document.getElementById("letterToSoundPanel");
+  const labelPicPanel = document.getElementById("labelPicPanel");
+  const nonsensePanel = document.getElementById("nonsensePanel");
+  const decodablePanel = document.getElementById("decodablePanel");
 
-  // ---------- Buttons (Activity Chooser) ----------
+  // Activity buttons
   document.getElementById("showDiagBtn").onclick = ()=> showPanel(diagPanel);
   document.getElementById("showSoundToLetterBtn").onclick = ()=> showPanel(soundToLetterPanel);
   document.getElementById("showLetterToSoundBtn").onclick = ()=> showPanel(letterToSoundPanel);
+  document.getElementById("showLabelPicBtn").onclick = ()=> showPanel(labelPicPanel);
+  document.getElementById("showNonsenseBtn").onclick = ()=> showPanel(nonsensePanel);
+  document.getElementById("showDecodableBtn").onclick = ()=> showPanel(decodablePanel);
 
   document.getElementById("closeDiagBtn").onclick = hideAllPanels;
   document.getElementById("closeTargetGameBtn").onclick = hideAllPanels;
   document.getElementById("closeStlBtn").onclick = hideAllPanels;
   document.getElementById("closeLtsBtn").onclick = hideAllPanels;
+  document.getElementById("closeLpBtn").onclick = hideAllPanels;
+  document.getElementById("closeNwBtn").onclick = hideAllPanels;
+  document.getElementById("closeDecBtn").onclick = ()=>{ stopSpeak(); hideAllPanels(); };
 
-  function resetAllGames(){
-    // reset UI text only (not stars)
+  // ---------- Reset UI ----------
+  function resetUI(){
+    // diag
     diagQEl.textContent = "Press “Take Diagnostic” to begin.";
     diagHintEl.textContent = "";
     diagChoicesEl.innerHTML = "";
     diagResultEl.textContent = "";
-
+    // recommended
+    gamePlanEl.textContent = "Your game is based on your diagnostic.";
     gameQEl.textContent = "Game question loads here…";
     gameHintEl.textContent = "";
     gameChoicesEl.innerHTML = "";
     gameResultEl.textContent = "";
-    gamePlanEl.textContent = "Your game is based on your diagnostic.";
-
+    // STL
     stlQ.textContent = "Press Play to start!";
     stlHint.textContent = "";
     stlChoices.innerHTML = "";
     stlResult.textContent = "";
-
+    // LTS
     ltsQ.textContent = "Press Play to start!";
     ltsHint.textContent = "";
     ltsChoices.innerHTML = "";
     ltsResult.textContent = "";
+    // Label pic
+    lpQ.textContent = "Press Play to start!";
+    lpHint.textContent = "";
+    lpChoices.innerHTML = "";
+    lpResult.textContent = "";
+    // Nonsense
+    nwWord.textContent = "Press “Make a Word”!";
+    nwRealCheck.textContent = "";
+    // Decodable
+    decTitle.textContent = "Press “Pick a Story”";
+    decFocus.textContent = "";
+    decText.textContent = "";
+    decQ.textContent = "Question:";
+    decChoices.innerHTML = "";
+    decResult.textContent = "";
   }
 
   // =========================================================
-  // 1) DIAGNOSTIC + RECOMMENDED GAME (same as before)
+  // 1) DIAGNOSTIC + RECOMMENDED GAME
   // =========================================================
   let diagQs = [];
   let diagIndex = 0;
@@ -423,8 +586,8 @@
   const gameResultEl = document.getElementById("gameResult");
   const gameAudioStatus = document.getElementById("gameAudioStatus");
 
-  function buildDiagnostic(grade){
-    const b = gradeBanks[grade];
+  function buildDiagnostic(gr){
+    const b = gradeBanks[gr];
 
     const nameQs = b.nameItems.map(x => ({
       type:"name",
@@ -449,8 +612,8 @@
     return shuffle([...nameQs, ...soundQs]);
   }
 
-  function buildRecommendedGame(grade, missedFocusKeys){
-    const b = gradeBanks[grade];
+  function buildRecommendedGame(gr, missedFocusKeys){
+    const b = gradeBanks[gr];
 
     const nameQs = b.nameItems.map(x => ({
       type:"name",
@@ -541,9 +704,9 @@
     const missedSounds = diagMissed.filter(x=>x.startsWith("sound:")).length;
 
     let planText = `Diagnostic score: ${score}% — `;
-    if (missedNames === 0 && missedSounds === 0) planText += "Awesome! We'll do a fun mix of practice.";
+    if (missedNames === 0 && missedSounds === 0) planText += "Awesome! Try any game you like.";
     else {
-      planText += "We will practice: ";
+      planText += "Recommended practice: ";
       const parts = [];
       if (missedNames) parts.push(`letter names (${missedNames})`);
       if (missedSounds) parts.push(`letter sounds (${missedSounds})`);
@@ -551,7 +714,6 @@
     }
     gamePlanEl.textContent = planText;
 
-    // Build recommended game and show it
     gameQs = buildRecommendedGame(grade, diagMissed);
     gameIndex = 0;
     showPanel(targetGamePanel);
@@ -603,7 +765,7 @@
     }
   }
 
-  // Diagnostic buttons
+  // diag buttons
   document.getElementById("goDiagBtn").onclick = ()=>{
     diagQs = buildDiagnostic(grade);
     diagIndex = 0;
@@ -613,11 +775,9 @@
   };
   document.getElementById("diagNextBtn").onclick = ()=>{
     if (!diagQs.length) return;
-
     if (!diagResultEl.textContent){
       diagMissed.push(diagQs[diagIndex].focusKey);
     }
-
     diagIndex++;
     if (diagIndex >= diagQs.length) finishDiagnostic();
     else renderDiagQuestion();
@@ -631,12 +791,12 @@
   };
   document.getElementById("retakeBtn").onclick = ()=>{
     localStorage.removeItem(PHONICS_DIAG_KEY);
-    resetAllGames();
+    resetUI();
     alert("Diagnostic cleared. Press “Take Diagnostic” to start again!");
   };
   document.getElementById("diagSpeakBtn").onclick = playDiagAudio;
 
-  // Recommended game buttons
+  // recommended game buttons
   document.getElementById("goGameBtn").onclick = ()=>{
     const savedDiag = load(PHONICS_DIAG_KEY, null);
     if (!savedDiag || savedDiag.grade !== grade) {
@@ -663,7 +823,7 @@
   };
 
   // =========================================================
-  // 2) GAME: Sound -> Letter Match (NEW)
+  // 2) GAME: Sound -> Letter
   // =========================================================
   const stlQ = document.getElementById("stlQ");
   const stlHint = document.getElementById("stlHint");
@@ -675,11 +835,9 @@
   let stlIndex = 0;
   let stlCurrent = null;
 
-  function buildSoundToLetterGame(grade){
-    const b = gradeBanks[grade];
-    // Use sound items; answer is the correct letter(s)
+  function buildSoundToLetterGame(gr){
+    const b = gradeBanks[gr];
     return shuffle(b.soundItems.map(x => ({
-      type:"sound",
       soundKey: x.soundKey,
       hint: x.hint || "Listen for the sound.",
       correct: x.correct,
@@ -735,7 +893,7 @@
   document.getElementById("stlSpeakBtn").onclick = playSTLSound;
 
   // =========================================================
-  // 3) GAME: Letter -> Sound Match (NEW)
+  // 3) GAME: Letter -> Sound
   // =========================================================
   const ltsQ = document.getElementById("ltsQ");
   const ltsHint = document.getElementById("ltsHint");
@@ -747,64 +905,54 @@
   let ltsIndex = 0;
   let ltsCurrent = null;
 
-  function buildLetterToSoundGame(grade){
-    const b = gradeBanks[grade];
-
-    // We will create choices as soundKeys.
-    // For grade 1/2 sounds, we still play audio and show label.
+  function buildLetterToSoundGame(gr){
+    const b = gradeBanks[gr];
     const soundKeys = b.soundItems.map(x => x.soundKey);
 
-    return shuffle(b.nameItems.map(n => {
-      // pick 3 sound options, including a "best" one by grade alignment
-      // For K: map A->m? not correct; so we keep it simple: choose among grade sounds and teach "listen + choose"
-      // We'll set correctSoundKey based on a small map for K letters we have audio for.
-      const correctSoundKeyMap = {
-        "K": { "A":"m", "M":"m", "S":"s" }, // simple starter
-        "1": { "B":"ch", "R":"sh", "T":"th" }, // playful mapping (you can refine later)
+    // Only use letters we have letter audio for (so 🔊 works)
+    const safeLetters = b.nameItems.filter(n => !!letterAudio[n.letter]);
+
+    return shuffle(safeLetters.map(n => {
+      // Choose a "best match" based on grade theme (simple but consistent)
+      const defaultMap = {
+        "K": { "A":"m", "M":"m", "S":"s" },
+        "1": { "B":"ch", "R":"sh", "T":"th" },
         "2": { "G":"long-o", "P":"long-a", "V":"long-e" }
       };
+      const correctSoundKey = (defaultMap[gr] && defaultMap[gr][n.letter]) ? defaultMap[gr][n.letter] : soundKeys[0];
+      const distractors = shuffle(soundKeys.filter(k=>k!==correctSoundKey)).slice(0,2);
+      const options = shuffle([correctSoundKey, ...distractors]);
 
-      const mapForGrade = correctSoundKeyMap[grade] || {};
-      const correctSoundKey = mapForGrade[n.letter] || soundKeys[0];
-
-      const options = shuffle([correctSoundKey, ...shuffle(soundKeys.filter(k=>k!==correctSoundKey)).slice(0,2)]);
-
-      return {
-        type:"letter",
-        letter: n.letter,
-        correctSoundKey,
-        options
-      };
+      return { letter:n.letter, correctSoundKey, options };
     }));
   }
 
   function renderLTS(){
     ltsCurrent = ltsItems[ltsIndex % ltsItems.length];
     ltsQ.textContent = `Which sound matches this letter: ${ltsCurrent.letter}?`;
-    ltsHint.textContent = "Tap a sound card. Use 🔊 to hear the letter name.";
+    ltsHint.textContent = "Tap a sound card to hear it.";
     ltsResult.textContent = "";
     ltsChoices.innerHTML = "";
 
-    ltsCurrent.options.forEach(soundKey=>{
-      const labelMap = {
-        "m":" /m/ ",
-        "s":" /s/ ",
-        "t":" /t/ ",
-        "sh":" /sh/ ",
-        "ch":" /ch/ ",
-        "th":" /th/ ",
-        "long-a":" long A ",
-        "long-e":" long E ",
-        "long-o":" long O "
-      };
+    const labelMap = {
+      "m":" /m/ ",
+      "s":" /s/ ",
+      "t":" /t/ ",
+      "sh":" /sh/ ",
+      "ch":" /ch/ ",
+      "th":" /th/ ",
+      "long-a":" long A ",
+      "long-e":" long E ",
+      "long-o":" long O "
+    };
 
+    ltsCurrent.options.forEach(soundKey=>{
       const card = document.createElement("div");
       card.className = "card";
       card.style.textAlign = "center";
       card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${labelMap[soundKey] || soundKey}</h3><p class="small">Tap to hear!</p>`;
 
       card.onclick = async ()=>{
-        // play the sound when they tap it
         const src = soundAudio[soundKey];
         if (!src) return showAudioStatus(ltsAudioStatus, "Missing sound audio file.");
         await playAudio(src, ltsAudioStatus);
@@ -843,9 +991,306 @@
   };
   document.getElementById("ltsSpeakBtn").onclick = playLTSLetterName;
 
-  // ---------- Init ----------
+  // =========================================================
+  // 4) NEW GAME: Label the Picture
+  // =========================================================
+  const lpQ = document.getElementById("lpQ");
+  const lpHint = document.getElementById("lpHint");
+  const lpChoices = document.getElementById("lpChoices");
+  const lpResult = document.getElementById("lpResult");
+  const lpAudioStatus = document.getElementById("lpAudioStatus");
+
+  let lpItems = [];
+  let lpIndex = 0;
+  let lpCurrent = null;
+
+  function buildLabelPicGame(gr){
+    const b = gradeBanks[gr];
+    return shuffle(b.labelPics.map(x => ({
+      soundKey: x.soundKey,
+      picture: x.picture,
+      answer: x.answer,
+      choices: shuffle(x.choices),
+      hint: x.hint || "Starts with the sound!"
+    })));
+  }
+
+  function renderLP(){
+    lpCurrent = lpItems[lpIndex % lpItems.length];
+    lpQ.textContent = `Label this picture: ${lpCurrent.picture}`;
+    lpHint.textContent = lpCurrent.hint;
+    lpResult.textContent = "";
+    lpChoices.innerHTML = "";
+
+    lpCurrent.choices.forEach(w=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${w}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (lpResult.textContent) return;
+        if (w === lpCurrent.answer) {
+          lpResult.textContent = "Correct! ⭐";
+          addPhonicsStar();
+        } else {
+          lpResult.textContent = "Try again 🙂";
+          playLPSound();
+        }
+      };
+      lpChoices.appendChild(card);
+    });
+  }
+
+  function playLPSound(){
+    if (!lpCurrent) return showAudioStatus(lpAudioStatus, "Press Play to start!");
+    const src = soundAudio[lpCurrent.soundKey];
+    if (!src) return showAudioStatus(lpAudioStatus, "Missing sound audio file.");
+    playAudio(src, lpAudioStatus);
+  }
+
+  document.getElementById("lpStartBtn").onclick = ()=>{
+    lpItems = buildLabelPicGame(grade);
+    lpIndex = 0;
+    renderLP();
+    playLPSound();
+  };
+  document.getElementById("lpNextBtn").onclick = ()=>{
+    if (!lpItems.length) return;
+    lpIndex++;
+    renderLP();
+    playLPSound();
+  };
+  document.getElementById("lpSpeakBtn").onclick = playLPSound;
+
+  // =========================================================
+  // 5) NEW GAME: Nonsense Word Lab (safe)
+  // =========================================================
+  const nwWord = document.getElementById("nwWord");
+  const nwHint = document.getElementById("nwHint");
+  const nwStatus = document.getElementById("nwStatus");
+  const nwRealCheck = document.getElementById("nwRealCheck");
+
+  // A small “bad word” blocklist (we keep it minimal + safe)
+  // Add more if you ever notice a problem combo
+  const blockedSubstrings = [
+    "ass","sex","cum","dick","shit","fuck","bitch","cunt","piss"
+  ];
+
+  // Some real words we might accidentally generate—treat as "real"
+  const simpleRealWords = new Set([
+    "map","sap","tap","tip","top","mop","sip","ship","chip","thin","this"
+  ]);
+
+  // Choose consonants that won’t form accidental bad words easily
+  const safeC1 = ["m","s","t","sh","ch","th"];
+  const safeC2 = ["p","t","m","s","n"];  // simple endings
+  const vowels = ["a","e","i","o","u"];
+
+  let nw = { c1:"m", v:"a", c2:"p" };
+
+  function isBlocked(word){
+    const lower = word.toLowerCase();
+    return blockedSubstrings.some(b => lower.includes(b));
+  }
+
+  function buildNonsenseWord(){
+    // Try a few times to avoid blocked combos
+    for (let tries=0; tries<30; tries++){
+      const c1 = safeC1[Math.floor(Math.random()*safeC1.length)];
+      const v  = vowels[Math.floor(Math.random()*vowels.length)];
+      const c2 = safeC2[Math.floor(Math.random()*safeC2.length)];
+      const w = `${c1}${v}${c2}`;
+      if (!isBlocked(w)) {
+        nw = { c1, v, c2 };
+        return w;
+      }
+    }
+    // fallback if somehow blocked every time
+    nw = { c1:"m", v:"a", c2:"p" };
+    return "map";
+  }
+
+  function showNW(){
+    const w = `${nw.c1}${nw.v}${nw.c2}`;
+    nwWord.textContent = `Your silly word: ${w}`;
+    nwRealCheck.textContent = "";
+  }
+
+  function setVowel(v){
+    nw.v = v;
+    const w = `${nw.c1}${nw.v}${nw.c2}`;
+    if (isBlocked(w)) {
+      showAudioStatus(nwStatus, "Oops! That one is not allowed. Try a different vowel.");
+      // revert to 'a'
+      nw.v = "a";
+    }
+    showNW();
+  }
+
+  // Small vowel sound playback using speech (since you don't have vowel mp3s)
+  // If you later record vowel sounds, we can switch to mp3 here.
+  function speakSoundLabel(label){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(label);
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  }
+
+  document.getElementById("nwMakeBtn").onclick = ()=>{
+    const w = buildNonsenseWord();
+    nwWord.textContent = `Your silly word: ${w}`;
+    nwHint.textContent = "Now tap a vowel to change the middle sound!";
+    nwRealCheck.textContent = "";
+  };
+
+  // Play buttons
+  document.getElementById("nwPlayC1Btn").onclick = ()=>{
+    const key = (nw.c1 === "sh" || nw.c1 === "ch" || nw.c1 === "th") ? nw.c1 : nw.c1;
+    const src = soundAudio[key];
+    if (src) playAudio(src, nwStatus);
+    else speakSoundLabel(nw.c1);
+  };
+  document.getElementById("nwPlayVBtn").onclick = ()=>{
+    speakSoundLabel(nw.v);
+  };
+  document.getElementById("nwPlayC2Btn").onclick = ()=>{
+    // ending is a letter sound, approximate with speech
+    speakSoundLabel(nw.c2);
+  };
+
+  // Vowel buttons (the pills inside nonsense panel)
+  document.querySelectorAll("#nonsensePanel .pill[data-v]").forEach(btn=>{
+    btn.onclick = ()=> setVowel(btn.dataset.v);
+  });
+
+  document.getElementById("nwCheckBtn").onclick = ()=>{
+    const w = `${nw.c1}${nw.v}${nw.c2}`.toLowerCase();
+    if (isBlocked(w)) {
+      nwRealCheck.textContent = "🚫 Not allowed. Try another vowel!";
+      return;
+    }
+    if (simpleRealWords.has(w)) {
+      nwRealCheck.textContent = "✅ That one is a REAL word!";
+      addPhonicsStar();
+    } else {
+      nwRealCheck.textContent = "🌟 That’s a FUN nonsense word!";
+      addPhonicsStar();
+    }
+  };
+
+  // =========================================================
+  // 6) NEW: Decodable Reading (by grade)
+  // =========================================================
+  const decTitle = document.getElementById("decTitle");
+  const decFocus = document.getElementById("decFocus");
+  const decText = document.getElementById("decText");
+  const decQ = document.getElementById("decQ");
+  const decChoices = document.getElementById("decChoices");
+  const decResult = document.getElementById("decResult");
+
+  let currentStory = null;
+
+  const decodables = {
+    "K": [
+      {
+        title:"Sam sat.",
+        focus:"Focus: s, a, m (simple words)",
+        text:"Sam sat. Sam sat on a mat. Sam is so glad.",
+        q:"Where did Sam sit?",
+        correct:"on a mat",
+        choices:["on a mat","in a boat","in the rain"]
+      },
+      {
+        title:"Tam and Tim",
+        focus:"Focus: t, m, short vowels",
+        text:"Tam sat. Tim sat. Tam and Tim tap.",
+        q:"What do Tam and Tim do?",
+        correct:"tap",
+        choices:["tap","chop","ship"]
+      }
+    ],
+    "1": [
+      {
+        title:"Ship or Chop",
+        focus:"Focus: sh, ch, th",
+        text:"The ship is big. I chop a stick. This is fun.",
+        q:"What is big?",
+        correct:"the ship",
+        choices:["the ship","the chop","the stick"]
+      },
+      {
+        title:"This and That",
+        focus:"Focus: th",
+        text:"This is my math. That is my map. This is that.",
+        q:"What is my map?",
+        correct:"that",
+        choices:["that","ship","chop"]
+      }
+    ],
+    "2": [
+      {
+        title:"Rain Day",
+        focus:"Focus: long a (ai/ay)",
+        text:"It may rain today. I wait and play a game. I stay and read.",
+        q:"What might happen today?",
+        correct:"rain",
+        choices:["rain","snow","ship"]
+      },
+      {
+        title:"Boat Ride",
+        focus:"Focus: long o (oa/ow)",
+        text:"I float in a boat. I row slow. The boat will go home.",
+        q:"What do you float in?",
+        correct:"a boat",
+        choices:["a boat","a ship","a mat"]
+      }
+    ]
+  };
+
+  function pickStory(){
+    const list = decodables[grade] || decodables["K"];
+    currentStory = list[Math.floor(Math.random()*list.length)];
+    decTitle.textContent = currentStory.title;
+    decFocus.textContent = currentStory.focus;
+    decText.textContent = currentStory.text;
+    decQ.textContent = `Question: ${currentStory.q}`;
+    decResult.textContent = "";
+    renderDecChoices();
+  }
+
+  function renderDecChoices(){
+    decChoices.innerHTML = "";
+    const options = shuffle(currentStory.choices);
+    options.forEach(opt=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${opt}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (decResult.textContent) return;
+        if (opt === currentStory.correct) {
+          decResult.textContent = "Correct! ⭐";
+          addPhonicsStar();
+        } else {
+          decResult.textContent = "Try again 🙂";
+        }
+      };
+      decChoices.appendChild(card);
+    });
+  }
+
+  document.getElementById("decPickBtn").onclick = pickStory;
+  document.getElementById("decReadBtn").onclick = ()=>{
+    if (!currentStory) return;
+    speakText(currentStory.text);
+  };
+  document.getElementById("decStopBtn").onclick = stopSpeak;
+
+  // ---------- init ----------
   renderGradeButtons();
-  resetAllGames();
+  resetUI();
+
 </script>
 
 </body>
