@@ -15,7 +15,6 @@
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-
         <li class="dropdown">
           <a href="#">Subjects</a>
           <div class="dropdown-menu">
@@ -25,7 +24,6 @@
             <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
-
         <li class="dropdown">
           <a href="#">Resources</a>
           <div class="dropdown-menu">
@@ -34,7 +32,6 @@
             <a href="standards.html">📘 Standards (K–2)</a>
           </div>
         </li>
-
         <li class="dropdown">
           <a href="#">Student</a>
           <div class="dropdown-menu">
@@ -43,7 +40,6 @@
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
-
         <li><a href="games.html">🎮 Games</a></li>
         <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
@@ -53,449 +49,238 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Reading 📖🌿</h1>
-    <p>Pick a grade, read a short passage, answer a question, and earn ⭐. Try picture labeling too!</p>
-
+    <h1>Reading 📖</h1>
+    <p>Read or listen, then answer. Earn ⭐ and complete your mission!</p>
     <div class="quick-strip">
-      <button class="btn secondary" id="readAloudBtn">🔊 Read Aloud</button>
-      <button class="btn secondary" id="stopBtn">⏹ Stop</button>
+      <button class="btn secondary" id="readBtn">🔊 Read Passage</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
-
-    <div class="hero-note">Tip: Tap “🔊 Read Aloud” anytime to hear the passage + question.</div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Reading Games ✅</h2>
 
+    <h2 class="section-title">Game 1: Mini Reading Check ✅</h2>
     <div class="game-box wide">
-      <!-- grade picker -->
-      <div class="game-box" style="margin-bottom:14px;">
-        <p class="kid-big" style="margin-bottom:10px;">Pick a Grade</p>
-        <div class="badge-row">
-          <button class="pill active" data-grade="K">Kindergarten</button>
-          <button class="pill" data-grade="1">Grade 1</button>
-          <button class="pill" data-grade="2">Grade 2</button>
+      <div class="game-box">
+        <p class="kid-big" id="passage">Passage loads here…</p>
+        <p class="small" id="question">Question loads here…</p>
+
+        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+
+        <p class="kid-big" id="result" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="nextBtn">Next</button>
+          <button class="btn secondary" id="resetBtn">Reset Stars</button>
         </div>
 
-        <div class="quick-strip" style="margin-top:14px;">
-          <button class="btn" id="showPassageGameBtn">📖 Passage Game</button>
-          <button class="btn secondary" id="showPictureGameBtn">🖼️ Picture Labeling</button>
-          <button class="btn secondary" id="resetStarsBtn">Reset Reading Stars</button>
-        </div>
+        <p class="small" style="margin-top:10px;">Earn ⭐ for correct answers.</p>
       </div>
-
-      <!-- PASSAGE GAME -->
-      <div class="game-box" id="passagePanel">
-        <p class="kid-big">📖 Passage Game</p>
-        <p class="small">Read the passage and answer the question. Earn ⭐ for correct answers.</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="kid-big" id="passageText" style="margin:0;">Passage loads here…</p>
-          <p class="small" id="questionText" style="margin-top:10px;">Question loads here…</p>
-
-          <div class="grid-3" id="passageChoices" style="margin-top:14px;"></div>
-
-          <p class="kid-big" id="passageResult" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextPassageBtn">Next</button>
-            <button class="btn secondary" id="repeatQuestionBtn">🔊 Question</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- PICTURE LABELING GAME -->
-      <div class="game-box" id="picturePanel" style="display:none;">
-        <p class="kid-big">🖼️ Picture Labeling</p>
-        <p class="small">Look at the picture and pick the correct word for the scenario.</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
-            <p class="kid-big" id="picPrompt" style="margin:0; flex:1;">Prompt loads here…</p>
-            <button class="btn secondary" id="picSpeakBtn" aria-label="Read prompt">🔊</button>
-          </div>
-
-          <div class="game-box" style="margin-top:12px; text-align:center;">
-            <div id="picEmoji" style="font-size:64px; line-height:1;">📦</div>
-            <p class="small" id="picScene" style="margin-top:8px;"></p>
-          </div>
-
-          <div class="grid-3" id="picChoices" style="margin-top:14px;"></div>
-
-          <p class="kid-big" id="picResult" style="margin-top:14px;"></p>
-
-          <div class="quick-strip">
-            <button class="btn" id="nextPicBtn">Next</button>
-            <button class="btn secondary" id="hintPicBtn">Hint</button>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <h2 class="section-title" style="margin-top:18px;">Game 2: Label the Picture 🏷️</h2>
+    <div class="game-box wide">
+      <div class="game-box">
+        <p class="small">Pick the word that matches the picture. (Pictures are emoji for now.)</p>
+
+        <div class="card" style="text-align:center;">
+          <div style="font-size:54px;" id="pic">🍎</div>
+          <p class="kid-big" id="picPrompt">What is this?</p>
+        </div>
+
+        <div class="grid-3" id="picChoices" style="margin-top:14px;"></div>
+
+        <p class="kid-big" id="picResult" style="margin-top:14px;"></p>
+
+        <div class="quick-strip">
+          <button class="btn" id="picNextBtn">Next Picture</button>
+          <button class="btn secondary" id="picSoundBtn">🔊 Read Question</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  // =========================
-  // Storage + helpers
-  // =========================
   const PROG_KEY = "bloom_progress";
+  const MISSION_KEY = "bloom_daily_mission";
 
-  function load(key, fallback) {
+  function load(key, fallback){
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
   }
-  function save(key, obj) {
-    localStorage.setItem(key, JSON.stringify(obj));
+  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+
+  function todayKey(){
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
   }
-  function shuffle(arr){
-    const a = arr.slice();
-    for (let i=a.length-1; i>0; i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i], a[j]] = [a[j], a[i]];
+  function ensureMission(){
+    const t = todayKey();
+    let ms = load(MISSION_KEY, null);
+    if (!ms || ms.date !== t){
+      ms = { date: t, phonics:0, reading:0, math:0 };
+      save(MISSION_KEY, ms);
     }
-    return a;
+    return ms;
+  }
+  function missionAddReading(){
+    const ms = ensureMission();
+    ms.reading = (ms.reading || 0) + 1;
+    save(MISSION_KEY, ms);
   }
 
-  function addReadingStar(){
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
-    p.readingStars = (p.readingStars || 0) + 1;
-    save(PROG_KEY, p);
-  }
-
-  // TTS
   function speak(text){
     if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
+    speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.95;
-    u.pitch = 1.08;
-    window.speechSynthesis.speak(u);
-  }
-  function stopSpeak(){
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
+    u.rate = 1;
+    speechSynthesis.speak(u);
   }
 
-  // =========================
-  // Grade selection
-  // =========================
-  let grade = "K";
-  function renderGradeButtons(){
-    document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
-      btn.classList.toggle("active", btn.dataset.grade === grade);
-    });
-    // Reset both games when grade changes
-    passageIndex = 0;
-    picIndex = 0;
-    renderPassage();
-    renderPicture();
+  function loadProgress(){
+    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
   }
-  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
-    btn.onclick = ()=>{
-      grade = btn.dataset.grade;
-      renderGradeButtons();
-    };
-  });
+  function saveProgress(p){ save(PROG_KEY, p); }
 
-  // =========================
-  // Panels
-  // =========================
-  const passagePanel = document.getElementById("passagePanel");
-  const picturePanel = document.getElementById("picturePanel");
+  // -------- Game 1: Passages --------
+  const items = [
+    { passage:"Mia has a red kite. She runs fast. The kite goes up, up, up!", question:"What color is Mia’s kite?", correct:"Red", choices:["Blue","Red","Green"] },
+    { passage:"Ben has a pet fish. He feeds it every day. The fish swims in circles.", question:"What does Ben have?", correct:"A fish", choices:["A dog","A fish","A cat"] },
+    { passage:"The sun is bright. Kai puts on his hat. He goes outside to play.", question:"Why does Kai put on his hat?", correct:"The sun is bright", choices:["It is raining","The sun is bright","It is snowing"] },
+    { passage:"Lena likes to read. She sits on a soft rug and turns the pages.", question:"What does Lena like to do?", correct:"Read", choices:["Swim","Read","Cook"] },
+    { passage:"A dog barks at the door. The mail carrier walks away.", question:"Who was at the door?", correct:"Mail carrier", choices:["A clown","Mail carrier","A dragon"] },
+    { passage:"Tom puts ice in his cup. The drink gets cold.", question:"What does the ice do?", correct:"Makes it cold", choices:["Makes it hot","Makes it cold","Makes it loud"] }
+  ];
 
-  document.getElementById("showPassageGameBtn").onclick = ()=>{
-    passagePanel.style.display = "block";
-    picturePanel.style.display = "none";
-    passagePanel.scrollIntoView({behavior:"smooth", block:"start"});
-  };
-  document.getElementById("showPictureGameBtn").onclick = ()=>{
-    passagePanel.style.display = "none";
-    picturePanel.style.display = "block";
-    picturePanel.scrollIntoView({behavior:"smooth", block:"start"});
-  };
+  let idx = 0;
+  let answered = false;
 
-  // =========================
-  // PASSAGE GAME BANK (K–2)
-  // =========================
-  const passages = {
-    "K": [
-      {
-        passage: "I see a cat. The cat can nap on a mat.",
-        question: "What can the cat do?",
-        correct: "nap",
-        choices: ["nap", "swim", "drive"]
-      },
-      {
-        passage: "Sam has a red ball. Sam can toss the ball.",
-        question: "What color is the ball?",
-        correct: "red",
-        choices: ["blue", "red", "green"]
-      },
-      {
-        passage: "Mia has a big hat. The hat sits on her head.",
-        question: "Where is the hat?",
-        correct: "on her head",
-        choices: ["on her head", "in a box", "under a bed"]
-      },
-      {
-        passage: "A dog can run. A dog can hop. The dog is fast!",
-        question: "What animal is in the passage?",
-        correct: "a dog",
-        choices: ["a cat", "a dog", "a fish"]
-      },
-      {
-        passage: "The sun is up. I play outside. I feel glad.",
-        question: "Where do you play?",
-        correct: "outside",
-        choices: ["outside", "inside", "underwater"]
-      },
-      {
-        passage: "I have a cup. The cup has milk.",
-        question: "What is in the cup?",
-        correct: "milk",
-        choices: ["milk", "sand", "soap"]
-      }
-    ],
+  function render(){
+    const it = items[idx % items.length];
+    document.getElementById("passage").textContent = it.passage;
+    document.getElementById("question").textContent = it.question;
+    document.getElementById("result").textContent = "";
+    answered = false;
 
-    "1": [
-      {
-        passage: "Nia went to the park. She slid down the slide and laughed.",
-        question: "Where did Nia go?",
-        correct: "the park",
-        choices: ["the zoo", "the park", "the beach"]
-      },
-      {
-        passage: "Ben had a pet fish. He fed it every day. The fish swam in circles.",
-        question: "What does Ben have?",
-        correct: "a fish",
-        choices: ["a fish", "a cat", "a turtle"]
-      },
-      {
-        passage: "The class made a chart. The chart showed how many kids liked apples.",
-        question: "What did the class make?",
-        correct: "a chart",
-        choices: ["a sandwich", "a chart", "a kite"]
-      },
-      {
-        passage: "Lena’s mom packed lunch. Lena ate a sandwich and an apple.",
-        question: "What did Lena eat?",
-        correct: "a sandwich and an apple",
-        choices: ["pizza", "a sandwich and an apple", "ice cream"]
-      },
-      {
-        passage: "Kai saw a small bird on the fence. The bird chirped and flew away.",
-        question: "What did the bird do?",
-        correct: "flew away",
-        choices: ["swam away", "fell asleep", "flew away"]
-      },
-      {
-        passage: "It began to rain. Jo put on her raincoat and held an umbrella.",
-        question: "Why did Jo use an umbrella?",
-        correct: "It began to rain",
-        choices: ["It was sunny", "It began to rain", "It was snowing"]
-      }
-    ],
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
 
-    "2": [
-      {
-        passage: "Ava was planting seeds. She watered the soil and waited for sprouts to grow.",
-        question: "What is Ava doing?",
-        correct: "planting seeds",
-        choices: ["building a boat", "planting seeds", "painting a wall"]
-      },
-      {
-        passage: "Theo read a map to find the trail. He stayed on the path and reached the lake.",
-        question: "Where did Theo reach?",
-        correct: "the lake",
-        choices: ["the mall", "the lake", "the moon"]
-      },
-      {
-        passage: "Mila practiced her lines for the play. She spoke clearly and remembered every word.",
-        question: "Why did Mila practice?",
-        correct: "for the play",
-        choices: ["to cook dinner", "for the play", "to fix a bike"]
-      },
-      {
-        passage: "The storm ended, but the ground was still wet. Jay wore boots to keep his feet dry.",
-        question: "Why did Jay wear boots?",
-        correct: "to keep his feet dry",
-        choices: ["to fly a kite", "to keep his feet dry", "to bake a cake"]
-      },
-      {
-        passage: "The team worked together. They shared ideas and finished the project on time.",
-        question: "How did the team finish the project?",
-        correct: "by working together",
-        choices: ["by working together", "by sleeping", "by hiding it"]
-      },
-      {
-        passage: "Nora saw a sign that said ‘Do Not Run.’ She walked carefully in the hall.",
-        question: "What did the sign say?",
-        correct: "Do Not Run",
-        choices: ["Eat Candy", "Do Not Run", "Jump High"]
-      }
-    ]
-  };
-
-  // Passage game state + rendering
-  let passageIndex = 0;
-  let currentPassage = null;
-
-  const passageTextEl = document.getElementById("passageText");
-  const questionTextEl = document.getElementById("questionText");
-  const passageChoicesEl = document.getElementById("passageChoices");
-  const passageResultEl = document.getElementById("passageResult");
-
-  function renderPassage(){
-    const bank = passages[grade] || passages["K"];
-    currentPassage = bank[passageIndex % bank.length];
-
-    passageTextEl.textContent = currentPassage.passage;
-    questionTextEl.textContent = "Question: " + currentPassage.question;
-    passageResultEl.textContent = "";
-    passageChoicesEl.innerHTML = "";
-
-    const choices = shuffle(currentPassage.choices);
-
-    choices.forEach(c=>{
+    it.choices.forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=> checkPassage(c);
-      passageChoicesEl.appendChild(card);
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
+      card.onclick = ()=> check(c, it.correct);
+      choices.appendChild(card);
     });
   }
 
-  function checkPassage(choice){
-    if (passageResultEl.textContent) return;
+  function addStarAndMissionOnce(){
+    // only count the first correct attempt per passage
+    if (answered) return;
+    answered = true;
 
-    if (choice === currentPassage.correct){
-      passageResultEl.textContent = "Correct! ⭐";
-      addReadingStar();
+    const p = loadProgress();
+    p.readingStars = (p.readingStars || 0) + 1;
+    saveProgress(p);
+
+    missionAddReading();
+  }
+
+  function check(choice, correct){
+    if (choice === correct){
+      document.getElementById("result").textContent = "Correct! ⭐";
+      addStarAndMissionOnce();
       speak("Correct!");
     } else {
-      passageResultEl.textContent = "Try again 🙂";
+      document.getElementById("result").textContent = "Try again 🙂";
       speak("Try again.");
     }
   }
 
-  document.getElementById("nextPassageBtn").onclick = ()=>{ passageIndex++; renderPassage(); };
-  document.getElementById("repeatQuestionBtn").onclick = ()=>{ speak(currentPassage.question); };
-
-  // =========================
-  // PICTURE LABELING GAME (everyday scenarios)
-  // =========================
-  const pictureItems = {
-    "K": [
-      { emoji:"🪥", scene:"In the bathroom (morning time)", prompt:"What do you use to brush your teeth?", correct:"toothbrush", choices:["toothbrush","spoon","shoe"], hint:"It has bristles." },
-      { emoji:"🥛", scene:"At breakfast", prompt:"What do you drink milk from?", correct:"cup", choices:["cup","hat","sock"], hint:"You hold it and sip." },
-      { emoji:"🧦", scene:"Getting dressed", prompt:"What do you put on your feet?", correct:"socks", choices:["socks","gloves","plate"], hint:"It goes in your shoes." },
-      { emoji:"📚", scene:"In class", prompt:"What do you read?", correct:"book", choices:["book","banana","ball"], hint:"It has pages." },
-      { emoji:"🧸", scene:"At bedtime", prompt:"What can you cuddle?", correct:"teddy bear", choices:["teddy bear","fork","pencil"], hint:"A soft toy." }
-    ],
-    "1": [
-      { emoji:"🎒", scene:"Before school", prompt:"What do you carry your things in?", correct:"backpack", choices:["backpack","pillow","pan"], hint:"It goes on your back." },
-      { emoji:"✏️", scene:"Writing time", prompt:"What do you use to write?", correct:"pencil", choices:["pencil","remote","shoe"], hint:"It can erase." },
-      { emoji:"🍎", scene:"Snack time", prompt:"Which food is a fruit?", correct:"apple", choices:["apple","chair","soap"], hint:"It can be red or green." },
-      { emoji:"🦺", scene:"Crossing the street", prompt:"What helps keep you safe?", correct:"crosswalk", choices:["crosswalk","cupcake","pajamas"], hint:"White lines on the road." },
-      { emoji:"🧤", scene:"Cold day", prompt:"What keeps your hands warm?", correct:"gloves", choices:["gloves","spoon","book"], hint:"You wear them." }
-    ],
-    "2": [
-      { emoji:"🧯", scene:"Kitchen safety", prompt:"What helps stop a small fire?", correct:"fire extinguisher", choices:["fire extinguisher","towel","balloon"], hint:"It sprays to put out flames." },
-      { emoji:"🗺️", scene:"Going on a hike", prompt:"What can help you find the trail?", correct:"map", choices:["map","cookie","sock"], hint:"It shows where to go." },
-      { emoji:"⏰", scene:"Morning routine", prompt:"What wakes you up on time?", correct:"alarm clock", choices:["alarm clock","sandwich","paint"], hint:"It rings or beeps." },
-      { emoji:"🩹", scene:"Small scrape", prompt:"What covers a cut?", correct:"bandage", choices:["bandage","pillow","plate"], hint:"It sticks on your skin." },
-      { emoji:"🔦", scene:"Dark room", prompt:"What helps you see?", correct:"flashlight", choices:["flashlight","shoe","spaghetti"], hint:"It shines bright." }
-    ]
-  };
-
-  let picIndex = 0;
-  let currentPic = null;
-
-  const picPromptEl = document.getElementById("picPrompt");
-  const picEmojiEl = document.getElementById("picEmoji");
-  const picSceneEl = document.getElementById("picScene");
-  const picChoicesEl = document.getElementById("picChoices");
-  const picResultEl = document.getElementById("picResult");
-
-  function renderPicture(){
-    const bank = pictureItems[grade] || pictureItems["K"];
-    currentPic = bank[picIndex % bank.length];
-
-    picPromptEl.textContent = currentPic.prompt;
-    picEmojiEl.textContent = currentPic.emoji;
-    picSceneEl.textContent = "Scene: " + currentPic.scene;
-
-    picResultEl.textContent = "";
-    picChoicesEl.innerHTML = "";
-
-    const choices = shuffle(currentPic.choices);
-    choices.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=> checkPicture(c);
-      picChoicesEl.appendChild(card);
-    });
-  }
-
-  function checkPicture(choice){
-    if (picResultEl.textContent) return;
-
-    if (choice === currentPic.correct){
-      picResultEl.textContent = "Correct! ⭐";
-      addReadingStar();
-      speak("Correct!");
-    } else {
-      picResultEl.textContent = "Try again 🙂";
-      speak("Try again.");
-    }
-  }
-
-  document.getElementById("nextPicBtn").onclick = ()=>{ picIndex++; renderPicture(); };
-  document.getElementById("hintPicBtn").onclick = ()=>{
-    if (!currentPic) return;
-    speak(currentPic.hint);
-    picResultEl.textContent = "Hint: " + currentPic.hint;
-  };
-  document.getElementById("picSpeakBtn").onclick = ()=>{
-    if (!currentPic) return;
-    speak(currentPic.prompt);
-  };
-
-  // Global hero buttons
-  document.getElementById("readAloudBtn").onclick = ()=>{
-    if (passagePanel.style.display !== "none") {
-      speak(`${passageTextEl.textContent} ${questionTextEl.textContent}`);
-    } else {
-      speak(`${picPromptEl.textContent}`);
-    }
-  };
-  document.getElementById("stopBtn").onclick = stopSpeak;
-
-  // Reset stars
-  document.getElementById("resetStarsBtn").onclick = ()=>{
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
+  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
+  document.getElementById("resetBtn").onclick = ()=>{
+    const p = loadProgress();
     p.readingStars = 0;
-    save(PROG_KEY, p);
+    saveProgress(p);
     alert("Reading stars reset!");
   };
 
-  // Init
-  renderGradeButtons();
-  renderPassage();
-  renderPicture();
+  document.getElementById("readBtn").onclick = ()=>{
+    const it = items[idx % items.length];
+    speak(`${it.passage} Question: ${it.question}`);
+  };
+
+  // -------- Game 2: Picture labeling --------
+  const pics = [
+    { emoji:"🍎", prompt:"What is this?", correct:"apple", choices:["apple","orange","hat"] },
+    { emoji:"🧦", prompt:"What is this?", correct:"sock", choices:["sock","shoe","book"] },
+    { emoji:"🚌", prompt:"What is this?", correct:"bus", choices:["bus","car","boat"] },
+    { emoji:"🪥", prompt:"What is this?", correct:"toothbrush", choices:["toothbrush","spoon","pencil"] },
+    { emoji:"🌧️", prompt:"What is happening?", correct:"raining", choices:["raining","snowing","sunny"] },
+    { emoji:"🍕", prompt:"What food is this?", correct:"pizza", choices:["pizza","salad","ice cream"] }
+  ];
+  let pidx = 0;
+  let picAnswered = false;
+
+  function renderPic(){
+    const it = pics[pidx % pics.length];
+    document.getElementById("pic").textContent = it.emoji;
+    document.getElementById("picPrompt").textContent = it.prompt;
+    document.getElementById("picResult").textContent = "";
+    picAnswered = false;
+
+    const wrap = document.getElementById("picChoices");
+    wrap.innerHTML = "";
+    it.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:22px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> checkPic(c, it.correct);
+      wrap.appendChild(card);
+    });
+  }
+
+  function addPicStarAndMissionOnce(){
+    if (picAnswered) return;
+    picAnswered = true;
+
+    const p = loadProgress();
+    p.readingStars = (p.readingStars || 0) + 1;
+    saveProgress(p);
+
+    missionAddReading();
+  }
+
+  function checkPic(choice, correct){
+    if (choice === correct){
+      document.getElementById("picResult").textContent = "Correct! ⭐";
+      addPicStarAndMissionOnce();
+      speak("Correct!");
+    } else {
+      document.getElementById("picResult").textContent = "Try again 🙂";
+      speak("Try again.");
+    }
+  }
+
+  document.getElementById("picNextBtn").onclick = ()=>{ pidx++; renderPic(); };
+  document.getElementById("picSoundBtn").onclick = ()=>{
+    const it = pics[pidx % pics.length];
+    speak(it.prompt);
+  };
+
+  render();
+  renderPic();
 </script>
 
 </body>
