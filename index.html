@@ -1,55 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>BloomELearning ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-</head>
-<body>
-
-<header>
-  <div class="container">
-    <div class="logo">BloomELearning ✨</div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
-          <div class="dropdown-menu">
-            <a href="phonics.html">🔤 Phonics</a>
-            <a href="reading.html">📖 Reading</a>
-            <a href="math.html">➕ Math</a>
-            <a href="letter-formation.html">✍️ Letter Tracing</a>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
-          <div class="dropdown-menu">
-            <a href="resources.html">🎥 Kids Resources</a>
-            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
-            <a href="standards.html">📘 Standards (K–2)</a>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
-          <div class="dropdown-menu">
-            <a href="student-login.html">🧒 Student Login</a>
-            <a href="progress.html">📊 My Progress</a>
-            <a href="sticker-book.html">📖 Sticker Book</a>
-          </div>
-        </li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+---
+layout: default
+title: Home
+---
 
 <section class="hero">
   <div class="container">
@@ -95,8 +47,6 @@
     <h2 class="section-title">Today’s Mission 🌟</h2>
 
     <div class="mission game-box wide">
-
-      <!-- Left: Compact mission -->
       <div>
         <div class="kid-big">Mini Goals</div>
         <div class="small">Complete these to finish today’s mission.</div>
@@ -126,7 +76,6 @@
         <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
       </div>
 
-      <!-- Right: helper + rewards -->
       <div>
         <div class="helper">
           <div class="face" id="helperFace">🦄</div>
@@ -172,63 +121,12 @@
           </div>
         </div>
       </div>
-
     </div>
 
   </div>
 </section>
 
-<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
-
 <script>
-  // =========================================================
-  // Dropdowns: click-to-open (works on phones + desktop)
-  // =========================================================
-  (function(){
-    const dropdowns = Array.from(document.querySelectorAll(".dropdown"));
-    const toggles = Array.from(document.querySelectorAll(".dropdown-toggle"));
-
-    function closeAll(except){
-      dropdowns.forEach(dd=>{
-        if (dd !== except) {
-          dd.classList.remove("open");
-          const t = dd.querySelector(".dropdown-toggle");
-          if (t) t.setAttribute("aria-expanded", "false");
-        }
-      });
-    }
-
-    toggles.forEach(t=>{
-      t.addEventListener("click", (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-
-        const dd = t.closest(".dropdown");
-        const isOpen = dd.classList.contains("open");
-        closeAll(dd);
-
-        if (!isOpen){
-          dd.classList.add("open");
-          t.setAttribute("aria-expanded", "true");
-        } else {
-          dd.classList.remove("open");
-          t.setAttribute("aria-expanded", "false");
-        }
-      });
-    });
-
-    // click outside closes
-    document.addEventListener("click", ()=> closeAll(null));
-
-    // Esc closes
-    document.addEventListener("keydown", (e)=>{
-      if (e.key === "Escape") closeAll(null);
-    });
-  })();
-
-  // =========================================================
-  // Grade preference
-  // =========================================================
   const PREF_GRADE_KEY = "bloom_pref_grade";
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
 
@@ -240,7 +138,6 @@
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
-    // Pass grade in URL (optional use on other pages)
     document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
@@ -250,20 +147,13 @@
     btn.onclick = ()=> setGrade(btn.dataset.grade);
   });
 
-  // =========================================================
-  // Missions (Daily)
-  // =========================================================
   const MISSION_KEY = "bloom_daily_mission";
   const PROG_KEY = "bloom_progress";
 
   function todayKey(){
     const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
   }
-
   function load(key, fallback){
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
@@ -282,7 +172,6 @@
 
   function renderMission(){
     const ms = ensureMission();
-
     const g1 = 2, g2 = 1, g3 = 2;
 
     document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
@@ -301,7 +190,6 @@
     document.getElementById("missionBar").style.width = pct + "%";
     document.getElementById("missionPct").textContent = `${pct}% complete`;
 
-    // Helper reacts
     const face = document.getElementById("helperFace");
     const title = document.getElementById("helperTitle");
     const msg = document.getElementById("helperMsg");
@@ -321,9 +209,6 @@
     }
   }
 
-  // =========================================================
-  // Badge preview (unlocks)
-  // =========================================================
   function getProgress(){
     return load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
@@ -355,11 +240,7 @@
       phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
   }
 
-  // Init
   setGrade(grade);
   renderMission();
   renderBadges();
 </script>
-
-</body>
-</html>
