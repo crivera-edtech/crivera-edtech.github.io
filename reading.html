@@ -1,56 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Reading | BloomELearning ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-</head>
-<body>
-
-<header>
-  <div class="container">
-    <div class="logo">BloomELearning ✨</div>
-
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
-          <div class="dropdown-menu">
-            <a href="phonics.html">🔤 Phonics</a>
-            <a href="reading.html">📖 Reading</a>
-            <a href="math.html">➕ Math</a>
-            <a href="letter-formation.html">✍️ Letter Tracing</a>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
-          <div class="dropdown-menu">
-            <a href="resources.html">🎥 Kids Resources</a>
-            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
-            <a href="standards.html">📘 Standards (K–2)</a>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
-          <div class="dropdown-menu">
-            <a href="student-login.html">🧒 Student Login</a>
-            <a href="progress.html">📊 My Progress</a>
-            <a href="sticker-book.html">📖 Sticker Book</a>
-          </div>
-        </li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+---
+layout: default
+title: Reading
+---
 
 <section class="hero">
   <div class="container">
@@ -62,9 +13,10 @@
 <section class="section">
   <div class="container">
 
+    <h2 class="section-title">Mini Reading Check 🌟</h2>
+
     <div class="game-box wide">
       <div class="card">
-
         <p class="kid-big">
           The cat sat on the mat. The mat was red.
         </p>
@@ -78,20 +30,18 @@
         </div>
 
         <p id="readingResult" class="kid-big" style="margin-top:16px;"></p>
-
       </div>
     </div>
 
   </div>
 </section>
 
-<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
-
 <script>
   const answers = document.querySelectorAll(".answer");
   const result = document.getElementById("readingResult");
 
   answers.forEach(a=>{
+    a.style.cursor = "pointer";
     a.onclick = ()=>{
       if(a.textContent === "Red"){
         result.textContent = "Correct! ⭐";
@@ -101,9 +51,3 @@
     };
   });
 </script>
-
-<!-- Shared dropdown script -->
-<script src="./nav.js"></script>
-
-</body>
-</html>
