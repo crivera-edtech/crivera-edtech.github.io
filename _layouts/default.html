@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ page.title }} | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+
+    <nav>
+      <ul>
+        <li><a href="{{ '/index.html' | relative_url }}">Home</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="{{ '/phonics.html' | relative_url }}">🔤 Phonics</a>
+            <a href="{{ '/reading.html' | relative_url }}">📖 Reading</a>
+            <a href="{{ '/math.html' | relative_url }}">➕ Math</a>
+            <a href="{{ '/letter-formation.html' | relative_url }}">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
+          <div class="dropdown-menu">
+            <a href="{{ '/resources.html' | relative_url }}">🎥 Kids Resources</a>
+            <a href="{{ '/parent-resources.html' | relative_url }}">🧑‍🏫 Parent Resources</a>
+            <a href="{{ '/standards.html' | relative_url }}">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
+          <div class="dropdown-menu">
+            <a href="{{ '/student-login.html' | relative_url }}">🧒 Student Login</a>
+            <a href="{{ '/progress.html' | relative_url }}">📊 My Progress</a>
+            <a href="{{ '/sticker-book.html' | relative_url }}">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="{{ '/games.html' | relative_url }}">🎮 Games</a></li>
+        <li><a href="{{ '/diagnostic.html' | relative_url }}">🧠 Diagnostic</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Page content goes here -->
+{{ content }}
+
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<!-- Shared dropdown script -->
+<script src="{{ '/nav.js' | relative_url }}"></script>
+
+</body>
+</html>
