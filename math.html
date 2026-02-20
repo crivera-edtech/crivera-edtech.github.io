@@ -12,11 +12,13 @@
 <header>
   <div class="container">
     <div class="logo">BloomELearning ✨</div>
+
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
+
         <li class="dropdown">
-          <a href="#">Subjects</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
           <div class="dropdown-menu">
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
@@ -24,22 +26,25 @@
             <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
+
         <li class="dropdown">
-          <a href="#">Resources</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
           <div class="dropdown-menu">
             <a href="resources.html">🎥 Kids Resources</a>
             <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
             <a href="standards.html">📘 Standards (K–2)</a>
           </div>
         </li>
+
         <li class="dropdown">
-          <a href="#">Student</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
             <a href="student-login.html">🧒 Student Login</a>
             <a href="progress.html">📊 My Progress</a>
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
+
         <li><a href="games.html">🎮 Games</a></li>
         <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
@@ -50,9 +55,10 @@
 <section class="hero">
   <div class="container">
     <h1>Math ➕</h1>
-    <p>Play math games and earn ⭐. Correct answers count toward today’s mission!</p>
+    <p>Solve the problem and choose the correct answer. Earn ⭐ for correct answers!</p>
+
     <div class="quick-strip">
-      <button class="btn secondary" id="soundBtn">🔊 Read Question</button>
+      <button class="btn secondary" id="soundBtn" type="button">🔊 Read Question</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
   </div>
@@ -60,272 +66,113 @@
 
 <section class="section">
   <div class="container">
+    <h2 class="section-title">Quick Math Game 🌟</h2>
 
-    <h2 class="section-title">Game 1: Quick Choice 🌟</h2>
     <div class="game-box wide">
       <div class="game-box">
-        <p class="kid-big" id="q1">Question loads here…</p>
-        <p class="small" id="hint1">Hint loads here…</p>
+        <p class="kid-big" id="question">Question loads here…</p>
+        <p class="small" id="hint">Hint loads here…</p>
 
-        <div class="grid-3" id="choices1" style="margin-top:14px;"></div>
+        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
 
-        <p class="kid-big" id="result1" style="margin-top:14px;"></p>
-
-        <div class="quick-strip">
-          <button class="btn" id="next1">Next</button>
-          <button class="btn secondary" id="reset1">Reset Stars</button>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="section-title" style="margin-top:18px;">Game 2: Number Line Jump 🐸</h2>
-    <div class="game-box wide">
-      <div class="game-box">
-        <p class="kid-big" id="nlQ">Jump to the answer!</p>
-        <p class="small" id="nlPrompt">Prompt loads…</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <p class="small">Tap a number to land there:</p>
-          <div id="nlRow" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;"></div>
-        </div>
-
-        <p class="kid-big" id="nlResult" style="margin-top:14px;"></p>
+        <p class="kid-big" id="result" style="margin-top:14px;"></p>
 
         <div class="quick-strip">
-          <button class="btn" id="nlNext">Next Jump</button>
+          <button class="btn" id="nextBtn" type="button">Next</button>
+          <button class="btn secondary" id="resetBtn" type="button">Reset Stars</button>
         </div>
+
+        <p class="small" style="margin-top:10px;">Stars save on this device.</p>
       </div>
     </div>
-
-    <h2 class="section-title" style="margin-top:18px;">Game 3: Make 10 🍩</h2>
-    <div class="game-box wide">
-      <div class="game-box">
-        <p class="kid-big">Pick two numbers that make 10!</p>
-        <p class="small">Tap one number, then tap another.</p>
-
-        <div id="make10Row" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;"></div>
-        <p class="kid-big" id="make10Picked" style="margin-top:12px;"></p>
-        <p class="kid-big" id="make10Result" style="margin-top:8px;"></p>
-
-        <div class="quick-strip">
-          <button class="btn" id="make10New">New Round</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
+  // --- Progress storage ---
   const PROG_KEY = "bloom_progress";
-  const MISSION_KEY = "bloom_daily_mission";
+  function loadProgress(){ try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); } catch { return {}; } }
+  function saveProgress(p){ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }
 
-  function load(key, fallback){
-    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
-    catch { return fallback; }
-  }
-  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
-
-  function todayKey(){
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
-  }
-  function ensureMission(){
-    const t = todayKey();
-    let ms = load(MISSION_KEY, null);
-    if (!ms || ms.date !== t){
-      ms = { date: t, phonics:0, reading:0, math:0 };
-      save(MISSION_KEY, ms);
-    }
-    return ms;
-  }
-  function missionAddMath(){
-    const ms = ensureMission();
-    ms.math = (ms.math || 0) + 1;
-    save(MISSION_KEY, ms);
-  }
-
+  // --- Optional read aloud (built-in TTS) ---
   function speak(text){
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.rate = 1;
+    u.pitch = 1.05;
     speechSynthesis.speak(u);
   }
 
-  function getProgress(){
-    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
-  }
-  function addMathStar(){
-    const p = getProgress();
-    p.mathStars = (p.mathStars || 0) + 1;
-    save(PROG_KEY, p);
-  }
-
-  // ---------------- Game 1: Quick Choice ----------------
-  const qItems = [
-    { q:"5 + 3 = ?", correct:8, choices:[7,8,9], hint:"Count up 3 from 5." },
-    { q:"10 − 4 = ?", correct:6, choices:[6,5,7], hint:"Count back 4 from 10." },
-    { q:"7 + 7 = ?", correct:14, choices:[12,14,16], hint:"Double 7." },
-    { q:"9 − 5 = ?", correct:4, choices:[4,3,5], hint:"Count back 5." },
-    { q:"6 + 2 = ?", correct:8, choices:[8,7,9], hint:"Count up 2." }
+  // --- Questions ---
+  const items = [
+    { q: "5 + 3 = ?", correct: 8, choices: [7,8,9], hint:"Count up 3 from 5." },
+    { q: "10 − 4 = ?", correct: 6, choices: [6,5,7], hint:"Count back 4 from 10." },
+    { q: "7 + 7 = ?", correct: 14, choices: [12,14,16], hint:"Double 7." },
+    { q: "9 − 3 = ?", correct: 6, choices: [6,7,5], hint:"Count back 3 from 9." },
+    { q: "6 + 2 = ?", correct: 8, choices: [8,9,7], hint:"Add 2 more." }
   ];
-  let qIdx = 0;
-  let qAnswered = false;
 
-  function renderQ(){
-    const it = qItems[qIdx % qItems.length];
-    document.getElementById("q1").textContent = it.q;
-    document.getElementById("hint1").textContent = it.hint;
-    document.getElementById("result1").textContent = "";
-    qAnswered = false;
+  let idx = 0;
 
-    const wrap = document.getElementById("choices1");
-    wrap.innerHTML = "";
+  function render(){
+    const it = items[idx % items.length];
+    document.getElementById("question").textContent = it.q;
+    document.getElementById("hint").textContent = it.hint;
+    document.getElementById("result").textContent = "";
+
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
+
     it.choices.forEach(c=>{
       const card = document.createElement("div");
       card.className = "card";
+      card.style.textAlign = "center";
       card.style.cursor = "pointer";
       card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
-      card.onclick = ()=> checkQ(c, it.correct);
-      wrap.appendChild(card);
+      card.onclick = ()=> check(c, it.correct);
+      choices.appendChild(card);
     });
   }
 
-  function awardOnce(){
-    if (qAnswered) return;
-    qAnswered = true;
-    addMathStar();
-    missionAddMath();
+  function addStar(){
+    const p = loadProgress();
+    p.mathStars = (p.mathStars || 0) + 1;
+    saveProgress(p);
   }
 
-  function checkQ(choice, correct){
+  function check(choice, correct){
+    const resultEl = document.getElementById("result");
+    if (resultEl.textContent) return; // prevent double scoring
+
     if (choice === correct){
-      document.getElementById("result1").textContent = "Correct! ⭐";
-      awardOnce();
+      resultEl.textContent = "Correct! ⭐";
+      addStar();
       speak("Correct!");
     } else {
-      document.getElementById("result1").textContent = "Try again 🙂";
+      resultEl.textContent = "Try again 🙂";
       speak("Try again.");
     }
   }
 
-  document.getElementById("next1").onclick = ()=>{ qIdx++; renderQ(); };
-  document.getElementById("reset1").onclick = ()=>{
-    const p = getProgress();
+  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
+  document.getElementById("resetBtn").onclick = ()=>{
+    const p = loadProgress();
     p.mathStars = 0;
-    save(PROG_KEY, p);
+    saveProgress(p);
     alert("Math stars reset!");
+    render();
   };
 
-  document.getElementById("soundBtn").onclick = ()=> speak(document.getElementById("q1").textContent);
+  document.getElementById("soundBtn").onclick = ()=> speak(document.getElementById("question").textContent);
 
-  // ---------------- Game 2: Number Line Jump ----------------
-  let nlA = 0, nlB = 0, nlAns = 0;
-  let nlAnswered = false;
-
-  function newNL(){
-    nlA = 1 + Math.floor(Math.random()*9);
-    nlB = 1 + Math.floor(Math.random()*9);
-    nlAns = nlA + nlB;
-    nlAnswered = false;
-
-    document.getElementById("nlPrompt").textContent = `🐸 Jump! What is ${nlA} + ${nlB}?`;
-    document.getElementById("nlResult").textContent = "";
-
-    const row = document.getElementById("nlRow");
-    row.innerHTML = "";
-    for (let n=0; n<=18; n++){
-      const b = document.createElement("button");
-      b.className = "pill";
-      b.textContent = n;
-      b.onclick = ()=> checkNL(n);
-      row.appendChild(b);
-    }
-  }
-
-  function awardNLOnce(){
-    if (nlAnswered) return;
-    nlAnswered = true;
-    addMathStar();
-    missionAddMath();
-  }
-
-  function checkNL(n){
-    if (n === nlAns){
-      document.getElementById("nlResult").textContent = "Correct jump! ⭐";
-      awardNLOnce();
-      speak("Correct!");
-    } else {
-      document.getElementById("nlResult").textContent = "Oops! Try another number 🙂";
-      speak("Try again.");
-    }
-  }
-
-  document.getElementById("nlNext").onclick = newNL;
-
-  // ---------------- Game 3: Make 10 ----------------
-  const makeNums = [0,1,2,3,4,5,6,7,8,9,10];
-  let pick1 = null, pick2 = null;
-
-  function renderMake10(){
-    pick1 = null; pick2 = null;
-    document.getElementById("make10Picked").textContent = "Picked: (none)";
-    document.getElementById("make10Result").textContent = "";
-
-    const row = document.getElementById("make10Row");
-    row.innerHTML = "";
-    const shuffled = makeNums.slice().sort(()=>Math.random()-0.5);
-
-    shuffled.forEach(n=>{
-      const b = document.createElement("button");
-      b.className = "pill";
-      b.textContent = n;
-      b.onclick = ()=> pickMake10(n);
-      row.appendChild(b);
-    });
-  }
-
-  function awardMake10(){
-    addMathStar();
-    missionAddMath();
-  }
-
-  function pickMake10(n){
-    if (pick1 === null){
-      pick1 = n;
-      document.getElementById("make10Picked").textContent = `Picked: ${pick1} + ?`;
-      return;
-    }
-    if (pick2 === null){
-      pick2 = n;
-      document.getElementById("make10Picked").textContent = `Picked: ${pick1} + ${pick2}`;
-
-      if (pick1 + pick2 === 10){
-        document.getElementById("make10Result").textContent = "You made 10! ⭐";
-        awardMake10();
-        speak("Great job! You made ten!");
-      } else {
-        document.getElementById("make10Result").textContent = "Not 10 yet — try again 🙂";
-        speak("Try again.");
-      }
-
-      // reset quickly
-      setTimeout(renderMake10, 900);
-    }
-  }
-
-  document.getElementById("make10New").onclick = renderMake10;
-
-  renderQ();
-  newNL();
-  renderMake10();
+  render();
 </script>
+
+<!-- Shared dropdown script -->
+<script src="./nav.js"></script>
 
 </body>
 </html>
