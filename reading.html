@@ -12,11 +12,13 @@
 <header>
   <div class="container">
     <div class="logo">BloomELearning ✨</div>
+
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
+
         <li class="dropdown">
-          <a href="#">Subjects</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
           <div class="dropdown-menu">
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
@@ -24,22 +26,25 @@
             <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
+
         <li class="dropdown">
-          <a href="#">Resources</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
           <div class="dropdown-menu">
             <a href="resources.html">🎥 Kids Resources</a>
             <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
             <a href="standards.html">📘 Standards (K–2)</a>
           </div>
         </li>
+
         <li class="dropdown">
-          <a href="#">Student</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
             <a href="student-login.html">🧒 Student Login</a>
             <a href="progress.html">📊 My Progress</a>
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
+
         <li><a href="games.html">🎮 Games</a></li>
         <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
@@ -50,54 +55,30 @@
 <section class="hero">
   <div class="container">
     <h1>Reading 📖</h1>
-    <p>Read or listen, then answer. Earn ⭐ and complete your mission!</p>
-    <div class="quick-strip">
-      <button class="btn secondary" id="readBtn">🔊 Read Passage</button>
-      <a class="btn secondary" href="progress.html">My Progress</a>
-    </div>
+    <p>Read the short passage and answer the question.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
 
-    <h2 class="section-title">Game 1: Mini Reading Check ✅</h2>
     <div class="game-box wide">
-      <div class="game-box">
-        <p class="kid-big" id="passage">Passage loads here…</p>
-        <p class="small" id="question">Question loads here…</p>
+      <div class="card">
 
-        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+        <p class="kid-big">
+          The cat sat on the mat. The mat was red.
+        </p>
 
-        <p class="kid-big" id="result" style="margin-top:14px;"></p>
+        <p style="margin-top:16px;"><strong>Question:</strong> What color was the mat?</p>
 
-        <div class="quick-strip">
-          <button class="btn" id="nextBtn">Next</button>
-          <button class="btn secondary" id="resetBtn">Reset Stars</button>
+        <div class="grid-3" style="margin-top:14px;">
+          <div class="card answer">Red</div>
+          <div class="card answer">Blue</div>
+          <div class="card answer">Green</div>
         </div>
 
-        <p class="small" style="margin-top:10px;">Earn ⭐ for correct answers.</p>
-      </div>
-    </div>
+        <p id="readingResult" class="kid-big" style="margin-top:16px;"></p>
 
-    <h2 class="section-title" style="margin-top:18px;">Game 2: Label the Picture 🏷️</h2>
-    <div class="game-box wide">
-      <div class="game-box">
-        <p class="small">Pick the word that matches the picture. (Pictures are emoji for now.)</p>
-
-        <div class="card" style="text-align:center;">
-          <div style="font-size:54px;" id="pic">🍎</div>
-          <p class="kid-big" id="picPrompt">What is this?</p>
-        </div>
-
-        <div class="grid-3" id="picChoices" style="margin-top:14px;"></div>
-
-        <p class="kid-big" id="picResult" style="margin-top:14px;"></p>
-
-        <div class="quick-strip">
-          <button class="btn" id="picNextBtn">Next Picture</button>
-          <button class="btn secondary" id="picSoundBtn">🔊 Read Question</button>
-        </div>
       </div>
     </div>
 
@@ -107,181 +88,22 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  const PROG_KEY = "bloom_progress";
-  const MISSION_KEY = "bloom_daily_mission";
+  const answers = document.querySelectorAll(".answer");
+  const result = document.getElementById("readingResult");
 
-  function load(key, fallback){
-    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
-    catch { return fallback; }
-  }
-  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
-
-  function todayKey(){
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
-  }
-  function ensureMission(){
-    const t = todayKey();
-    let ms = load(MISSION_KEY, null);
-    if (!ms || ms.date !== t){
-      ms = { date: t, phonics:0, reading:0, math:0 };
-      save(MISSION_KEY, ms);
-    }
-    return ms;
-  }
-  function missionAddReading(){
-    const ms = ensureMission();
-    ms.reading = (ms.reading || 0) + 1;
-    save(MISSION_KEY, ms);
-  }
-
-  function speak(text){
-    if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1;
-    speechSynthesis.speak(u);
-  }
-
-  function loadProgress(){
-    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
-  }
-  function saveProgress(p){ save(PROG_KEY, p); }
-
-  // -------- Game 1: Passages --------
-  const items = [
-    { passage:"Mia has a red kite. She runs fast. The kite goes up, up, up!", question:"What color is Mia’s kite?", correct:"Red", choices:["Blue","Red","Green"] },
-    { passage:"Ben has a pet fish. He feeds it every day. The fish swims in circles.", question:"What does Ben have?", correct:"A fish", choices:["A dog","A fish","A cat"] },
-    { passage:"The sun is bright. Kai puts on his hat. He goes outside to play.", question:"Why does Kai put on his hat?", correct:"The sun is bright", choices:["It is raining","The sun is bright","It is snowing"] },
-    { passage:"Lena likes to read. She sits on a soft rug and turns the pages.", question:"What does Lena like to do?", correct:"Read", choices:["Swim","Read","Cook"] },
-    { passage:"A dog barks at the door. The mail carrier walks away.", question:"Who was at the door?", correct:"Mail carrier", choices:["A clown","Mail carrier","A dragon"] },
-    { passage:"Tom puts ice in his cup. The drink gets cold.", question:"What does the ice do?", correct:"Makes it cold", choices:["Makes it hot","Makes it cold","Makes it loud"] }
-  ];
-
-  let idx = 0;
-  let answered = false;
-
-  function render(){
-    const it = items[idx % items.length];
-    document.getElementById("passage").textContent = it.passage;
-    document.getElementById("question").textContent = it.question;
-    document.getElementById("result").textContent = "";
-    answered = false;
-
-    const choices = document.getElementById("choices");
-    choices.innerHTML = "";
-
-    it.choices.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.cursor = "pointer";
-      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap me!</p>`;
-      card.onclick = ()=> check(c, it.correct);
-      choices.appendChild(card);
-    });
-  }
-
-  function addStarAndMissionOnce(){
-    // only count the first correct attempt per passage
-    if (answered) return;
-    answered = true;
-
-    const p = loadProgress();
-    p.readingStars = (p.readingStars || 0) + 1;
-    saveProgress(p);
-
-    missionAddReading();
-  }
-
-  function check(choice, correct){
-    if (choice === correct){
-      document.getElementById("result").textContent = "Correct! ⭐";
-      addStarAndMissionOnce();
-      speak("Correct!");
-    } else {
-      document.getElementById("result").textContent = "Try again 🙂";
-      speak("Try again.");
-    }
-  }
-
-  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
-  document.getElementById("resetBtn").onclick = ()=>{
-    const p = loadProgress();
-    p.readingStars = 0;
-    saveProgress(p);
-    alert("Reading stars reset!");
-  };
-
-  document.getElementById("readBtn").onclick = ()=>{
-    const it = items[idx % items.length];
-    speak(`${it.passage} Question: ${it.question}`);
-  };
-
-  // -------- Game 2: Picture labeling --------
-  const pics = [
-    { emoji:"🍎", prompt:"What is this?", correct:"apple", choices:["apple","orange","hat"] },
-    { emoji:"🧦", prompt:"What is this?", correct:"sock", choices:["sock","shoe","book"] },
-    { emoji:"🚌", prompt:"What is this?", correct:"bus", choices:["bus","car","boat"] },
-    { emoji:"🪥", prompt:"What is this?", correct:"toothbrush", choices:["toothbrush","spoon","pencil"] },
-    { emoji:"🌧️", prompt:"What is happening?", correct:"raining", choices:["raining","snowing","sunny"] },
-    { emoji:"🍕", prompt:"What food is this?", correct:"pizza", choices:["pizza","salad","ice cream"] }
-  ];
-  let pidx = 0;
-  let picAnswered = false;
-
-  function renderPic(){
-    const it = pics[pidx % pics.length];
-    document.getElementById("pic").textContent = it.emoji;
-    document.getElementById("picPrompt").textContent = it.prompt;
-    document.getElementById("picResult").textContent = "";
-    picAnswered = false;
-
-    const wrap = document.getElementById("picChoices");
-    wrap.innerHTML = "";
-    it.choices.forEach(c=>{
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.cursor = "pointer";
-      card.innerHTML = `<h3 style="font-size:22px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=> checkPic(c, it.correct);
-      wrap.appendChild(card);
-    });
-  }
-
-  function addPicStarAndMissionOnce(){
-    if (picAnswered) return;
-    picAnswered = true;
-
-    const p = loadProgress();
-    p.readingStars = (p.readingStars || 0) + 1;
-    saveProgress(p);
-
-    missionAddReading();
-  }
-
-  function checkPic(choice, correct){
-    if (choice === correct){
-      document.getElementById("picResult").textContent = "Correct! ⭐";
-      addPicStarAndMissionOnce();
-      speak("Correct!");
-    } else {
-      document.getElementById("picResult").textContent = "Try again 🙂";
-      speak("Try again.");
-    }
-  }
-
-  document.getElementById("picNextBtn").onclick = ()=>{ pidx++; renderPic(); };
-  document.getElementById("picSoundBtn").onclick = ()=>{
-    const it = pics[pidx % pics.length];
-    speak(it.prompt);
-  };
-
-  render();
-  renderPic();
+  answers.forEach(a=>{
+    a.onclick = ()=>{
+      if(a.textContent === "Red"){
+        result.textContent = "Correct! ⭐";
+      } else {
+        result.textContent = "Try again 🙂";
+      }
+    };
+  });
 </script>
+
+<!-- Shared dropdown script -->
+<script src="./nav.js"></script>
 
 </body>
 </html>
