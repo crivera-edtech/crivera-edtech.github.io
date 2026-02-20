@@ -1,56 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Math | BloomELearning ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-</head>
-<body>
-
-<header>
-  <div class="container">
-    <div class="logo">BloomELearning ✨</div>
-
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
-          <div class="dropdown-menu">
-            <a href="phonics.html">🔤 Phonics</a>
-            <a href="reading.html">📖 Reading</a>
-            <a href="math.html">➕ Math</a>
-            <a href="letter-formation.html">✍️ Letter Tracing</a>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
-          <div class="dropdown-menu">
-            <a href="resources.html">🎥 Kids Resources</a>
-            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
-            <a href="standards.html">📘 Standards (K–2)</a>
-          </div>
-        </li>
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
-          <div class="dropdown-menu">
-            <a href="student-login.html">🧒 Student Login</a>
-            <a href="progress.html">📊 My Progress</a>
-            <a href="sticker-book.html">📖 Sticker Book</a>
-          </div>
-        </li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+---
+layout: default
+title: Math
+---
 
 <section class="hero">
   <div class="container">
@@ -88,15 +39,11 @@
   </div>
 </section>
 
-<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
-
 <script>
-  // --- Progress storage ---
   const PROG_KEY = "bloom_progress";
   function loadProgress(){ try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); } catch { return {}; } }
   function saveProgress(p){ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }
 
-  // --- Optional read aloud (built-in TTS) ---
   function speak(text){
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
@@ -106,7 +53,6 @@
     speechSynthesis.speak(u);
   }
 
-  // --- Questions ---
   const items = [
     { q: "5 + 3 = ?", correct: 8, choices: [7,8,9], hint:"Count up 3 from 5." },
     { q: "10 − 4 = ?", correct: 6, choices: [6,5,7], hint:"Count back 4 from 10." },
@@ -145,7 +91,7 @@
 
   function check(choice, correct){
     const resultEl = document.getElementById("result");
-    if (resultEl.textContent) return; // prevent double scoring
+    if (resultEl.textContent) return;
 
     if (choice === correct){
       resultEl.textContent = "Correct! ⭐";
@@ -170,9 +116,3 @@
 
   render();
 </script>
-
-<!-- Shared dropdown script -->
-<script src="./nav.js"></script>
-
-</body>
-</html>
