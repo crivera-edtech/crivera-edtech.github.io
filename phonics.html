@@ -13,6 +13,7 @@
   <div class="container">
     <div class="logo">BloomELearning ✨</div>
 
+    <!-- NAV matches your other pages (dropdowns controlled by nav.js) -->
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -133,20 +134,32 @@
 
         <div class="card">
           <h3>🧱 CVC Words</h3>
-          <p>Build or choose a CVC word (cat, map, sun).</p>
+          <p>Choose the correct CVC word (cat, map, sun).</p>
           <button class="btn" data-game="cvcWords" type="button">Play</button>
         </div>
 
         <div class="card">
+          <h3>🧩 CVC Drag Builder</h3>
+          <p>Listen to the word, then drag letters into boxes to build it.</p>
+          <button class="btn" data-game="cvcDrag" type="button">Play</button>
+        </div>
+
+        <div class="card">
           <h3>🍀 Vowels Focus</h3>
-          <p>Practice short vowels (a, e, i, o, u).</p>
+          <p>Practice short vowels (a, e, i, o, u) + grade 2 vowel teams.</p>
           <button class="btn" data-game="vowels" type="button">Play</button>
         </div>
 
         <div class="card">
-          <h3>⭐ Stars</h3>
+          <h3>⭐ Rewards</h3>
           <p>Earn stars by answering correctly!</p>
           <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
+        </div>
+
+        <div class="card">
+          <h3>📊 Progress</h3>
+          <p>Check how many phonics stars you have.</p>
+          <a class="btn secondary" href="progress.html">My Progress</a>
         </div>
       </div>
     </div>
@@ -170,6 +183,29 @@
           <div class="small" id="pictureCaption"></div>
         </div>
 
+        <!-- CVC Drag Builder (only used by cvcDrag) -->
+        <div id="cvcDragBox" class="game-box" style="display:none; margin-top:12px;">
+          <div class="kid-big">Build the Word 🧩</div>
+          <p class="small">Drag letters into the boxes. Tap 🔊 to hear the word again.</p>
+
+          <div class="cvc-tiles" id="cvcTiles"
+               style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:10px;"></div>
+
+          <div class="cvc-slots" style="display:flex; gap:10px; justify-content:center; margin-top:12px;">
+            <div class="cvc-slot" data-slot="0" aria-label="letter slot 1"></div>
+            <div class="cvc-slot" data-slot="1" aria-label="letter slot 2"></div>
+            <div class="cvc-slot" data-slot="2" aria-label="letter slot 3"></div>
+          </div>
+
+          <div class="quick-strip" style="margin-top:12px;">
+            <button class="btn secondary" id="cvcClearBtn" type="button">Clear</button>
+            <button class="btn" id="cvcCheckBtn" type="button">Check</button>
+          </div>
+
+          <p class="small" style="margin-top:10px;">Word built: <strong id="cvcBuilt">___</strong></p>
+        </div>
+
+        <!-- Multiple-choice choices (used by all non-drag games) -->
         <div class="grid-3" id="playChoices" style="margin-top:14px;"></div>
 
         <p class="kid-big" id="playResult" style="margin-top:14px;"></p>
@@ -191,18 +227,17 @@
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
-<!-- ---------- Page Script ---------- -->
 <script>
-  // -----------------------------
-  // Keys
-  // -----------------------------
+  // =============================
+  // Storage Keys
+  // =============================
   const PROG_KEY = "bloom_progress";
   const DIAG_KEY = "bloom_phonics_diag_v2";
   const PREF_GRADE_KEY = "bloom_pref_grade";
 
-  // -----------------------------
+  // =============================
   // Helpers
-  // -----------------------------
+  // =============================
   function load(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
@@ -219,19 +254,20 @@
   }
 
   function showStatus(el, msg){
+    if (!el) return;
     el.style.display = "block";
     el.textContent = msg;
     clearTimeout(el._t);
     el._t = setTimeout(()=>{ el.style.display = "none"; }, 2000);
   }
 
-  // -----------------------------
-  // Audio (real mp3 preferred)
-  // If mp3 missing, falls back to TTS.
-  // -----------------------------
+  // =============================
+  // Audio (real mp3 preferred; fallback to TTS)
+  // =============================
   const audio = new Audio();
   audio.preload = "auto";
 
+  // Your existing sounds folder (add more if you want)
   const soundAudio = {
     "m": "./assets/audio/sounds/m.mp3",
     "s": "./assets/audio/sounds/s.mp3",
@@ -249,66 +285,71 @@
     "long-o": "./assets/audio/sounds/long-o.mp3"
   };
 
+  // Letters folder (you already started these)
   const letterAudio = {
     "A": "./assets/audio/letters/A.mp3",
     "B": "./assets/audio/letters/B.mp3",
-    "C": "./assets/audio/letters/C.mp3",
-    "D": "./assets/audio/letters/D.mp3",
-    "E": "./assets/audio/letters/E.mp3",
-    "F": "./assets/audio/letters/F.mp3",
-    "G": "./assets/audio/letters/G.mp3",
-    "H": "./assets/audio/letters/H.mp3",
-    "I": "./assets/audio/letters/I.mp3",
-    "J": "./assets/audio/letters/J.mp3",
-    "K": "./assets/audio/letters/K.mp3",
-    "L": "./assets/audio/letters/L.mp3",
-    "M": "./assets/audio/letters/M.mp3",
-    "N": "./assets/audio/letters/N.mp3",
-    "O": "./assets/audio/letters/O.mp3",
-    "P": "./assets/audio/letters/P.mp3",
-    "Q": "./assets/audio/letters/Q.mp3",
     "R": "./assets/audio/letters/R.mp3",
-    "S": "./assets/audio/letters/S.mp3",
     "T": "./assets/audio/letters/T.mp3",
-    "U": "./assets/audio/letters/U.mp3",
+    "G": "./assets/audio/letters/G.mp3",
+    "P": "./assets/audio/letters/P.mp3",
     "V": "./assets/audio/letters/V.mp3",
-    "W": "./assets/audio/letters/W.mp3",
-    "X": "./assets/audio/letters/X.mp3",
-    "Y": "./assets/audio/letters/Y.mp3",
-    "Z": "./assets/audio/letters/Z.mp3"
+    "M": "./assets/audio/letters/M.mp3",
+    "S": "./assets/audio/letters/S.mp3"
   };
+
+  // Optional: word audio for CVC Drag Builder
+  // Put files here if you want REAL word audio:
+  // assets/audio/words/cat.mp3, map.mp3, sun.mp3, cap.mp3, pin.mp3, bed.mp3
+  const wordAudio = {
+    "cat": "./assets/audio/words/cat.mp3",
+    "map": "./assets/audio/words/map.mp3",
+    "sun": "./assets/audio/words/sun.mp3",
+    "cap": "./assets/audio/words/cap.mp3",
+    "pin": "./assets/audio/words/pin.mp3",
+    "bed": "./assets/audio/words/bed.mp3"
+  };
+
+  function speakFallback(text){
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.95;
+    u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
+  }
 
   async function playAudio(src, statusEl, ttsFallbackText){
     try {
       audio.pause();
       audio.currentTime = 0;
-      audio.src = src;
+      audio.src = src || "";
+      if (!src) throw new Error("no-src");
       await audio.play();
     } catch (e) {
-      // fallback to TTS if available
-      if ("speechSynthesis" in window && ttsFallbackText) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(ttsFallbackText);
-        u.rate = 1; u.pitch = 1.05;
-        window.speechSynthesis.speak(u);
-      } else {
-        showStatus(statusEl, "Audio missing. Add mp3 files in assets/audio/…");
-      }
+      if (ttsFallbackText) speakFallback(ttsFallbackText);
+      else showStatus(statusEl, "Audio missing. Add mp3 files in assets/audio/…");
     }
   }
 
-  // -----------------------------
+  async function playWord(word, statusEl){
+    const src = wordAudio[word];
+    await playAudio(src, statusEl, `Build the word: ${word}.`);
+    if (!src) showStatus(statusEl, "Tip: Add recorded word mp3s in assets/audio/words/");
+  }
+
+  // =============================
   // Grade selection
-  // -----------------------------
+  // =============================
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
   const gradeRow = document.getElementById("gradeRow");
+
   function renderGrades(){
     gradeRow.querySelectorAll(".pill").forEach(b=>{
       b.classList.toggle("active", b.dataset.grade === grade);
     });
     localStorage.setItem(PREF_GRADE_KEY, grade);
 
-    // update note depending on diagnostic
     const d = load(DIAG_KEY, null);
     const note = document.getElementById("diagNote");
     if (!d || d.grade !== grade) {
@@ -317,6 +358,7 @@
       note.textContent = `Diagnostic saved for Grade ${grade}. You can choose a game now!`;
     }
   }
+
   gradeRow.querySelectorAll(".pill").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       grade = btn.dataset.grade;
@@ -325,13 +367,9 @@
     });
   });
 
-  // -----------------------------
-  // Question banks by grade
-  // Diagnostic includes:
-  // - letter name
-  // - letter sound
-  // - vowels
-  // -----------------------------
+  // =============================
+  // Banks by grade (Diagnostic + Games)
+  // =============================
   const banks = {
     "K": {
       letterNames: ["A","M","S","T","B","R"],
@@ -370,13 +408,122 @@
     }
   };
 
-  // -----------------------------
-  // Diagnostic creation
-  // Types:
-  // name -> identify name of shown letter
-  // sound -> identify letter(s) that match sound
-  // vowel -> identify vowel letter from sound
-  // -----------------------------
+  const pictureItems = {
+    "K": [
+      { emoji:"🐱", word:"cat", start:"c", prompt:"Pick the word for this picture." },
+      { emoji:"🐶", word:"dog", start:"d", prompt:"Pick the word for this picture." },
+      { emoji:"🌞", word:"sun", start:"s", prompt:"Pick the word for this picture." }
+    ],
+    "1": [
+      { emoji:"🛳️", word:"ship", start:"sh", prompt:"Pick the word for this picture." },
+      { emoji:"🍟", word:"chips", start:"ch", prompt:"Pick the word for this picture." },
+      { emoji:"👍", word:"thin", start:"th", prompt:"Pick the word for this picture." }
+    ],
+    "2": [
+      { emoji:"⛵", word:"boat", start:"oa", prompt:"Pick the word for this picture." },
+      { emoji:"🌧️", word:"rain", start:"ai", prompt:"Pick the word for this picture." },
+      { emoji:"🦶", word:"feet", start:"ee", prompt:"Pick the word for this picture." }
+    ]
+  };
+
+  const cvcItems = {
+    "K": [
+      { prompt:"Pick the CVC word for: 🐱", correct:"cat", choices:["cat","cake","cap"] },
+      { prompt:"Pick the CVC word for: 🧢", correct:"cap", choices:["cap","cope","cup"] },
+      { prompt:"Pick the CVC word for: ☀️", correct:"sun", choices:["sun","sand","seen"] }
+    ],
+    "1": [
+      { prompt:"Pick the CVC word for: 🐷", correct:"pig", choices:["pig","page","peg"] },
+      { prompt:"Pick the CVC word for: 🧤", correct:"mit", choices:["mit","mate","met"] },
+      { prompt:"Pick the CVC word for: 🐸", correct:"frog", choices:["frog","from","free"] }
+    ],
+    "2": [
+      { prompt:"Pick the word with a vowel team: 🌧️", correct:"rain", choices:["rain","ran","rin"] },
+      { prompt:"Pick the word with a vowel team: 🦶", correct:"feet", choices:["feet","fit","fat"] },
+      { prompt:"Pick the word with a vowel team: ⛵", correct:"boat", choices:["boat","bot","bat"] }
+    ]
+  };
+
+  // CVC Drag Builder sets (safe, simple)
+  const cvcDragSets = {
+    "K": [
+      { word:"cat", tiles:["c","a","t","m","s","p"] },
+      { word:"map", tiles:["m","a","p","t","s","c"] },
+      { word:"sun", tiles:["s","u","n","a","t","m"] }
+    ],
+    "1": [
+      { word:"cap", tiles:["c","a","p","t","m","s"] },
+      { word:"pin", tiles:["p","i","n","a","t","m"] },
+      { word:"bed", tiles:["b","e","d","a","t","m"] }
+    ],
+    "2": [
+      { word:"cat", tiles:["c","a","t","p","i","n"] },
+      { word:"map", tiles:["m","a","p","b","e","d"] },
+      { word:"sun", tiles:["s","u","n","c","a","t"] }
+    ]
+  };
+
+  // =============================
+  // Progress (stars)
+  // =============================
+  function getProgress(){
+    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null });
+  }
+  function setProgress(p){ save(PROG_KEY, p); }
+
+  function addPhonicsStar(){
+    const p = getProgress();
+    p.phonicsStars = (p.phonicsStars || 0) + 1;
+    setProgress(p);
+    renderStars();
+  }
+
+  function renderStars(){
+    const p = getProgress();
+    document.getElementById("starCount").textContent = p.phonicsStars || 0;
+  }
+
+  // =============================
+  // Panels & UI refs
+  // =============================
+  const diagPanel = document.getElementById("diagPanel");
+  const gamesPanel = document.getElementById("gamesPanel");
+  const playPanel = document.getElementById("playPanel");
+
+  const diagQEl = document.getElementById("diagQ");
+  const diagHintEl = document.getElementById("diagHint");
+  const diagChoicesEl = document.getElementById("diagChoices");
+  const diagResultEl = document.getElementById("diagResult");
+  const diagStatusEl = document.getElementById("diagStatus");
+  const diagScoreEl = document.getElementById("diagScore");
+  const diagTotalEl = document.getElementById("diagTotal");
+
+  const playTitleEl = document.getElementById("playTitle");
+  const playQEl = document.getElementById("playQ");
+  const playHintEl = document.getElementById("playHint");
+  const playChoicesEl = document.getElementById("playChoices");
+  const playResultEl = document.getElementById("playResult");
+  const playStatusEl = document.getElementById("playStatus");
+
+  const pictureBox = document.getElementById("pictureBox");
+  const pictureEmoji = document.getElementById("pictureEmoji");
+  const pictureCaption = document.getElementById("pictureCaption");
+
+  const cvcDragBox = document.getElementById("cvcDragBox");
+  const cvcTilesEl = document.getElementById("cvcTiles");
+  const cvcBuiltEl = document.getElementById("cvcBuilt");
+  const cvcClearBtn = document.getElementById("cvcClearBtn");
+  const cvcCheckBtn = document.getElementById("cvcCheckBtn");
+  const slotEls = Array.from(document.querySelectorAll(".cvc-slot"));
+
+  // =============================
+  // Diagnostic
+  // =============================
+  let diagQs = [];
+  let diagIdx = 0;
+  let diagCorrect = 0;
+  let lastDiagQ = null;
+
   function buildDiagnostic(g){
     const b = banks[g];
 
@@ -412,99 +559,6 @@
     return shuffle([...nameQs, ...soundQs, ...vowelQs]).slice(0, 10);
   }
 
-  // -----------------------------
-  // Games pools by grade
-  // -----------------------------
-  const pictureItems = {
-    "K": [
-      { emoji:"🐱", word:"cat", start:"c", soundKey:"t", prompt:"Pick the word for this picture." }, // soundKey unused here (safe)
-      { emoji:"🐶", word:"dog", start:"d", soundKey:"t", prompt:"Pick the word for this picture." },
-      { emoji:"🌞", word:"sun", start:"s", soundKey:"s", prompt:"Pick the word for this picture." }
-    ],
-    "1": [
-      { emoji:"🛳️", word:"ship", start:"sh", soundKey:"sh", prompt:"Pick the word for this picture." },
-      { emoji:"🍟", word:"chips", start:"ch", soundKey:"ch", prompt:"Pick the word for this picture." },
-      { emoji:"👍", word:"thin", start:"th", soundKey:"th", prompt:"Pick the word for this picture." }
-    ],
-    "2": [
-      { emoji:"⛵", word:"boat", start:"oa", soundKey:"long-o", prompt:"Pick the word for this picture." },
-      { emoji:"🌧️", word:"rain", start:"ai", soundKey:"long-a", prompt:"Pick the word for this picture." },
-      { emoji:"🦶", word:"feet", start:"ee", soundKey:"long-e", prompt:"Pick the word for this picture." }
-    ]
-  };
-
-  const cvcItems = {
-    "K": [
-      { prompt:"Pick the CVC word for: 🐱", correct:"cat", choices:["cat","cake","cap"] },
-      { prompt:"Pick the CVC word for: 🧢", correct:"cap", choices:["cap","cope","cup"] },
-      { prompt:"Pick the CVC word for: ☀️", correct:"sun", choices:["sun","sand","seen"] }
-    ],
-    "1": [
-      { prompt:"Pick the CVC word for: 🐷", correct:"pig", choices:["pig","page","peg"] },
-      { prompt:"Pick the CVC word for: 🧤", correct:"mit", choices:["mit","mate","met"] },
-      { prompt:"Pick the CVC word for: 🐸", correct:"frog", choices:["frog","from","free"] } // slightly harder (blend)
-    ],
-    "2": [
-      { prompt:"Pick the word with a long vowel team: 🌧️", correct:"rain", choices:["rain","ran","rin"] },
-      { prompt:"Pick the word with a long vowel team: 🦶", correct:"feet", choices:["feet","fit","fat"] },
-      { prompt:"Pick the word with a long vowel team: ⛵", correct:"boat", choices:["boat","bot","bat"] }
-    ]
-  };
-
-  // -----------------------------
-  // Progress (stars)
-  // -----------------------------
-  function getProgress(){
-    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null });
-  }
-  function setProgress(p){ save(PROG_KEY, p); }
-
-  function addPhonicsStar(){
-    const p = getProgress();
-    p.phonicsStars = (p.phonicsStars || 0) + 1;
-    setProgress(p);
-    renderStars();
-  }
-
-  function renderStars(){
-    const p = getProgress();
-    document.getElementById("starCount").textContent = p.phonicsStars || 0;
-  }
-
-  // -----------------------------
-  // Panels & UI refs
-  // -----------------------------
-  const diagPanel = document.getElementById("diagPanel");
-  const gamesPanel = document.getElementById("gamesPanel");
-  const playPanel = document.getElementById("playPanel");
-
-  const diagQEl = document.getElementById("diagQ");
-  const diagHintEl = document.getElementById("diagHint");
-  const diagChoicesEl = document.getElementById("diagChoices");
-  const diagResultEl = document.getElementById("diagResult");
-  const diagStatusEl = document.getElementById("diagStatus");
-  const diagScoreEl = document.getElementById("diagScore");
-  const diagTotalEl = document.getElementById("diagTotal");
-
-  const playTitleEl = document.getElementById("playTitle");
-  const playQEl = document.getElementById("playQ");
-  const playHintEl = document.getElementById("playHint");
-  const playChoicesEl = document.getElementById("playChoices");
-  const playResultEl = document.getElementById("playResult");
-  const playStatusEl = document.getElementById("playStatus");
-
-  const pictureBox = document.getElementById("pictureBox");
-  const pictureEmoji = document.getElementById("pictureEmoji");
-  const pictureCaption = document.getElementById("pictureCaption");
-
-  // -----------------------------
-  // Diagnostic State
-  // -----------------------------
-  let diagQs = [];
-  let diagIdx = 0;
-  let diagCorrect = 0;
-  let lastDiagQ = null;
-
   function renderDiag(){
     const q = diagQs[diagIdx];
     lastDiagQ = q;
@@ -513,11 +567,10 @@
     diagTotalEl.textContent = diagQs.length;
     diagScoreEl.textContent = diagCorrect;
 
-    if (q.type === "sound" || q.type === "vowel"){
-      diagQEl.textContent = q.prompt + ` (${q.soundLabel})`;
-    } else {
-      diagQEl.textContent = q.prompt;
-    }
+    diagQEl.textContent = (q.type === "sound" || q.type === "vowel")
+      ? `${q.prompt} (${q.soundLabel})`
+      : q.prompt;
+
     diagHintEl.textContent = q.hint || "";
 
     diagChoicesEl.innerHTML = "";
@@ -550,13 +603,10 @@
     const scorePct = Math.round((diagCorrect / total) * 100);
 
     save(DIAG_KEY, { grade, scorePct, date: Date.now() });
-
     diagResultEl.textContent = `Done! Your score: ${scorePct}%. Now choose a game 🎮`;
-    renderGrades();
 
-    // show games panel
-    gamesPanel.style.display = "block";
-    playPanel.style.display = "none";
+    renderGrades();
+    setPanels("games");
   }
 
   function playDiagSound(){
@@ -564,26 +614,44 @@
 
     if (lastDiagQ.type === "name"){
       const L = lastDiagQ.letter;
-      const src = letterAudio[L] || "";
+      const src = letterAudio[L];
       playAudio(src, diagStatusEl, `Letter ${L}`);
     } else {
-      const src = soundAudio[lastDiagQ.soundKey] || "";
-      playAudio(src, diagStatusEl, `${lastDiagQ.soundLabel}`);
+      const src = soundAudio[lastDiagQ.soundKey];
+      playAudio(src, diagStatusEl, lastDiagQ.soundLabel);
     }
   }
 
-  // -----------------------------
-  // Games
-  // -----------------------------
-  let currentGame = null;
-  let gameIdx = 0;
-  let lastPlayQ = null;
-
+  // =============================
+  // Panels
+  // =============================
   function setPanels(show){
     diagPanel.style.display = (show === "diag") ? "block" : "none";
     gamesPanel.style.display = (show === "games") ? "block" : "none";
     playPanel.style.display = (show === "play") ? "block" : "none";
   }
+
+  function resetPanelsForGrade(){
+    diagQEl.textContent = "Press “Start Diagnostic” to begin.";
+    diagHintEl.textContent = "";
+    diagChoicesEl.innerHTML = "";
+    diagResultEl.textContent = "";
+    diagScoreEl.textContent = "0";
+    diagTotalEl.textContent = "0";
+
+    diagQs = [];
+    diagIdx = 0;
+    diagCorrect = 0;
+    lastDiagQ = null;
+
+    setPanels("diag");
+  }
+
+  // =============================
+  // Games (multiple choice)
+  // =============================
+  let currentGame = null;
+  let lastPlayQ = null;
 
   function buildGameQuestion(gameType){
     const b = banks[grade];
@@ -602,38 +670,25 @@
     }
 
     if (gameType === "nameToSound"){
-      // pick a letter from letterNames
       const L = b.letterNames[Math.floor(Math.random() * b.letterNames.length)];
-      // map simple letter to a sound label for K/1; for grade2 use vowel teams label if letter isn't in mapping
-      const map = {
-        "K": { "M":"/m/","S":"/s/","T":"/t/","A":"A","B":"B","R":"R" },
-        "1": { "B":"B","R":"R","T":"T","G":"G","P":"P","V":"V" },
-        "2": { "G":"G","P":"P","V":"V","R":"R","S":"S","T":"T" }
-      };
-      const label = (map[grade] && map[grade][L]) ? map[grade][L] : L;
+      const soundChoices = shuffle(b.letterSounds.map(x=>x.label)).slice(0,3);
+      let correctLabel = (b.letterSounds[0] && b.letterSounds[0].label) ? b.letterSounds[0].label : soundChoices[0];
 
-      // provide sound choices (labels)
-      const choices = shuffle(
-        (b.letterSounds.map(x=>x.label)).slice(0,3)
-      );
-      // ensure correct label appears for K/1 sound letters (only if we have it in letterSounds)
-      // For nameToSound we want a sound label as correct:
-      let correctLabel = null;
-      const found = b.letterSounds.find(x=>x.correct === L || x.correct === (L+L)); // simple
+      // If we can find a matching sound item by first letter (K level), use it:
+      const found = b.letterSounds.find(x => x.correct === L);
       if (found) correctLabel = found.label;
-      else correctLabel = choices[0]; // fallback (still playable)
 
-      if (!choices.includes(correctLabel)){
-        choices[Math.floor(Math.random()*choices.length)] = correctLabel;
+      if (!soundChoices.includes(correctLabel)){
+        soundChoices[Math.floor(Math.random()*soundChoices.length)] = correctLabel;
       }
 
       return {
         type:"nameToSound",
         prompt:`What sound does this letter make?  ${L}`,
-        hint:"Tap 🔊 to hear choices if you want.",
+        hint:"Tap 🔊 to hear the letter name. Then choose the sound.",
         letter: L,
         correct: correctLabel,
-        choices: shuffle(choices)
+        choices: shuffle(soundChoices)
       };
     }
 
@@ -679,44 +734,40 @@
     return null;
   }
 
-  function startGame(gameType){
-    currentGame = gameType;
-    gameIdx = 0;
-    setPanels("play");
-    renderGameQuestion();
+  function showChoiceMode(){
+    // show/hide sub-areas
+    cvcDragBox.style.display = "none";
+    pictureBox.style.display = "none";
+    playChoicesEl.style.display = "grid";
   }
 
   function renderGameQuestion(){
+    showChoiceMode();
+
     const q = buildGameQuestion(currentGame);
     lastPlayQ = q;
 
     playResultEl.textContent = "";
     playChoicesEl.innerHTML = "";
 
-    pictureBox.style.display = "none";
-
-    // title
     const titles = {
       soundToName: "Sound → Name 🔊",
       nameToSound: "Name → Sound 🔤",
       pictureLabel: "Picture Labeling 🖼️",
       cvcWords: "CVC Words 🧱",
-      vowels: "Vowels 🍀"
+      vowels: "Vowels 🍀",
+      cvcDrag: "CVC Drag Builder 🧩"
     };
     playTitleEl.textContent = titles[currentGame] || "Game 🎮";
 
-    // question
-    if (q.type === "soundToName"){
-      playQEl.textContent = q.prompt + ` (${q.soundLabel})`;
-    } else if (q.type === "vowels"){
-      playQEl.textContent = q.prompt + ` (${q.soundLabel})`;
+    if (q.type === "soundToName" || q.type === "vowels"){
+      playQEl.textContent = `${q.prompt} (${q.soundLabel})`;
     } else {
       playQEl.textContent = q.prompt;
     }
 
     playHintEl.textContent = q.hint || "";
 
-    // picture mode
     if (q.type === "pictureLabel"){
       pictureBox.style.display = "block";
       pictureEmoji.textContent = q.pictureEmoji;
@@ -737,33 +788,30 @@
   }
 
   function playGameSound(){
-    if (!lastPlayQ) { showStatus(playStatusEl, "Pick a game first!"); return; }
+    if (!lastPlayQ && currentGame !== "cvcDrag") {
+      showStatus(playStatusEl, "Pick a game first!");
+      return;
+    }
 
-    if (lastPlayQ.type === "soundToName"){
-      const src = soundAudio[lastPlayQ.soundKey] || "";
-      playAudio(src, playStatusEl, lastPlayQ.soundLabel);
+    if (currentGame === "cvcDrag"){
+      if (cvcCurrent) playWord(cvcCurrent.word, playStatusEl);
+      else showStatus(playStatusEl, "Press Next to get a word!");
       return;
     }
-    if (lastPlayQ.type === "vowels"){
-      const src = soundAudio[lastPlayQ.soundKey] || "";
-      playAudio(src, playStatusEl, lastPlayQ.soundLabel);
+
+    if (lastPlayQ.type === "soundToName" || lastPlayQ.type === "vowels"){
+      playAudio(soundAudio[lastPlayQ.soundKey], playStatusEl, lastPlayQ.soundLabel);
       return;
     }
+
     if (lastPlayQ.type === "nameToSound"){
-      // Say the letter name as guidance
       const L = lastPlayQ.letter;
-      const src = letterAudio[L] || "";
-      playAudio(src, playStatusEl, `Letter ${L}`);
+      playAudio(letterAudio[L], playStatusEl, `Letter ${L}`);
       return;
     }
 
-    // other games: speak prompt
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(lastPlayQ.prompt);
-      u.rate = 1; u.pitch = 1.05;
-      window.speechSynthesis.speak(u);
-    }
+    // otherwise speak question
+    speakFallback(lastPlayQ.prompt);
   }
 
   function checkGame(choice){
@@ -776,9 +824,128 @@
     }
   }
 
-  // -----------------------------
-  // Buttons (UI)
-  // -----------------------------
+  // =============================
+  // CVC Drag Builder
+  // =============================
+  let cvcCurrent = null;
+  let placed = ["","",""];
+  let tappingLetter = null;
+
+  function styleSlots(){
+    slotEls.forEach((slot, idx)=>{
+      // Inline style so it works even if you don't edit styles.css
+      slot.style.width = "90px";
+      slot.style.height = "90px";
+      slot.style.borderRadius = "22px";
+      slot.style.display = "flex";
+      slot.style.alignItems = "center";
+      slot.style.justifyContent = "center";
+      slot.style.fontSize = "34px";
+      slot.style.fontWeight = "900";
+      slot.style.textTransform = "uppercase";
+      slot.style.border = "3px dashed rgba(0,0,0,0.12)";
+      slot.style.background = "rgba(255,255,255,0.75)";
+      slot.style.transition = "transform 0.12s ease";
+
+      slot.addEventListener("dragover", (e)=> e.preventDefault());
+      slot.addEventListener("drop", (e)=>{
+        e.preventDefault();
+        const letter = e.dataTransfer.getData("text/plain") || "";
+        if (!letter) return;
+        placed[idx] = letter;
+        slot.textContent = letter.toUpperCase();
+        updateBuilt();
+      });
+
+      // Mobile: tap tile then tap slot
+      slot.addEventListener("click", ()=>{
+        if (!tappingLetter) return;
+        placed[idx] = tappingLetter;
+        slot.textContent = tappingLetter.toUpperCase();
+        tappingLetter = null;
+        updateBuilt();
+      });
+    });
+  }
+
+  function updateBuilt(){
+    const word = placed.map(x=>x || "_").join("");
+    cvcBuiltEl.textContent = word;
+  }
+
+  function clearSlots(){
+    placed = ["","",""];
+    slotEls.forEach(s=> s.textContent = "");
+    updateBuilt();
+  }
+
+  function makeTile(letter){
+    const tile = document.createElement("div");
+    tile.className = "card";
+    tile.style.width = "90px";
+    tile.style.padding = "16px";
+    tile.style.textAlign = "center";
+    tile.style.cursor = "grab";
+    tile.setAttribute("draggable", "true");
+    tile.innerHTML = `<div style="font-size:34px; font-weight:900; text-transform:uppercase;">${letter}</div><div class="small">drag</div>`;
+
+    tile.addEventListener("dragstart", (e)=>{
+      e.dataTransfer.setData("text/plain", letter);
+      tile.style.opacity = "0.6";
+    });
+    tile.addEventListener("dragend", ()=>{
+      tile.style.opacity = "1";
+    });
+
+    // Tap support
+    tile.addEventListener("click", ()=>{
+      tappingLetter = letter;
+      showStatus(playStatusEl, `Tap a box to place "${letter.toUpperCase()}".`);
+    });
+
+    return tile;
+  }
+
+  function showDragMode(){
+    // hide other modes
+    pictureBox.style.display = "none";
+    playChoicesEl.style.display = "none";
+
+    cvcDragBox.style.display = "block";
+    playTitleEl.textContent = "CVC Drag Builder 🧩";
+    playQEl.textContent = "Listen to the word. Drag letters into the boxes to build it!";
+    playHintEl.textContent = "Tap 🔊 to hear the word again. Then build it.";
+    playResultEl.textContent = "";
+  }
+
+  function pickNewCvcPuzzle(){
+    const set = cvcDragSets[grade] || cvcDragSets["K"];
+    cvcCurrent = set[Math.floor(Math.random() * set.length)];
+
+    // render tiles
+    cvcTilesEl.innerHTML = "";
+    cvcCurrent.tiles.forEach(l => cvcTilesEl.appendChild(makeTile(l)));
+
+    clearSlots();
+    playWord(cvcCurrent.word, playStatusEl);
+  }
+
+  function checkCvcPuzzle(){
+    if (!cvcCurrent) return;
+    const built = placed.join("").toLowerCase();
+
+    if (built === cvcCurrent.word){
+      playResultEl.textContent = "Correct! ⭐";
+      addPhonicsStar();
+    } else {
+      playResultEl.textContent = "Not yet — listen again and try 🙂";
+      playWord(cvcCurrent.word, playStatusEl);
+    }
+  }
+
+  // =============================
+  // Buttons
+  // =============================
   document.getElementById("startDiagBtn").addEventListener("click", ()=>{
     diagQs = buildDiagnostic(grade);
     diagIdx = 0;
@@ -790,12 +957,7 @@
   });
 
   document.getElementById("openGamesBtn").addEventListener("click", ()=>{
-    // If diagnostic not done for this grade, still allow games (but message)
     setPanels("games");
-    const d = load(DIAG_KEY, null);
-    if (!d || d.grade !== grade) {
-      showStatus(diagStatusEl, "You can play now — but diagnostic helps match practice!");
-    }
   });
 
   document.getElementById("diagSoundBtn").addEventListener("click", playDiagSound);
@@ -803,9 +965,8 @@
   document.getElementById("diagNextBtn").addEventListener("click", ()=>{
     if (!diagQs.length) return;
 
-    // if they didn't answer, treat as incorrect
-    if (!diagResultEl.textContent) {
-      // no score change
+    // if no answer chosen, treat as skipped
+    if (!diagResultEl.textContent){
       diagResultEl.textContent = "Skipped 🙂";
     }
 
@@ -816,7 +977,6 @@
 
   document.getElementById("diagSkipBtn").addEventListener("click", ()=>{
     if (!diagQs.length) return;
-
     diagResultEl.textContent = "Skipped 🙂";
     diagIdx++;
     if (diagIdx >= diagQs.length) finishDiag();
@@ -825,31 +985,36 @@
 
   document.getElementById("diagResetBtn").addEventListener("click", ()=>{
     localStorage.removeItem(DIAG_KEY);
-    diagQs = [];
-    diagIdx = 0;
-    diagCorrect = 0;
-    lastDiagQ = null;
-
-    diagQEl.textContent = "Press “Start Diagnostic” to begin.";
-    diagHintEl.textContent = "";
-    diagChoicesEl.innerHTML = "";
-    diagResultEl.textContent = "";
-    diagScoreEl.textContent = "0";
-    diagTotalEl.textContent = "0";
-
+    resetPanelsForGrade();
     renderGrades();
     alert("Diagnostic reset!");
   });
 
+  // choose a game
   document.querySelectorAll("[data-game]").forEach(btn=>{
-    btn.addEventListener("click", ()=> startGame(btn.dataset.game));
+    btn.addEventListener("click", ()=>{
+      currentGame = btn.dataset.game;
+      setPanels("play");
+
+      if (currentGame === "cvcDrag"){
+        showDragMode();
+        pickNewCvcPuzzle();
+      } else {
+        renderGameQuestion();
+      }
+    });
   });
 
+  // sound button in play panel
   document.getElementById("playSoundBtn").addEventListener("click", playGameSound);
 
+  // next button behavior
   document.getElementById("playNextBtn").addEventListener("click", ()=>{
-    gameIdx++;
-    renderGameQuestion();
+    if (currentGame === "cvcDrag"){
+      pickNewCvcPuzzle();
+    } else {
+      renderGameQuestion();
+    }
   });
 
   document.getElementById("backToGamesBtn").addEventListener("click", ()=>{
@@ -864,24 +1029,14 @@
     alert("Phonics stars reset!");
   });
 
-  function resetPanelsForGrade(){
-    // Keep diagnostic panel visible, but reset the prompt
-    diagQEl.textContent = "Press “Start Diagnostic” to begin.";
-    diagHintEl.textContent = "";
-    diagChoicesEl.innerHTML = "";
-    diagResultEl.textContent = "";
-    diagScoreEl.textContent = "0";
-    diagTotalEl.textContent = "0";
-    diagQs = [];
-    lastDiagQ = null;
+  // CVC drag buttons
+  cvcClearBtn.addEventListener("click", clearSlots);
+  cvcCheckBtn.addEventListener("click", checkCvcPuzzle);
 
-    // show diag panel and hide others
-    setPanels("diag");
-  }
-
-  // -----------------------------
+  // =============================
   // Init
-  // -----------------------------
+  // =============================
+  styleSlots();
   renderGrades();
   renderStars();
   resetPanelsForGrade();
