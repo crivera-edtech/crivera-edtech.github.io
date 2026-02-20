@@ -17,7 +17,7 @@
         <li><a href="index.html">Home</a></li>
 
         <li class="dropdown">
-          <a href="#">Subjects</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
           <div class="dropdown-menu">
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
@@ -27,7 +27,7 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Resources</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
           <div class="dropdown-menu">
             <a href="resources.html">🎥 Kids Resources</a>
             <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
@@ -36,7 +36,7 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Student</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
             <a href="student-login.html">🧒 Student Login</a>
             <a href="progress.html">📊 My Progress</a>
@@ -60,9 +60,9 @@
       <div class="kid-big">Start Here (Pick a Grade)</div>
 
       <div class="badge-row">
-        <button class="pill active" data-grade="K">Kindergarten</button>
-        <button class="pill" data-grade="1">Grade 1</button>
-        <button class="pill" data-grade="2">Grade 2</button>
+        <button class="pill active" data-grade="K" type="button">Kindergarten</button>
+        <button class="pill" data-grade="1" type="button">Grade 1</button>
+        <button class="pill" data-grade="2" type="button">Grade 2</button>
       </div>
 
       <div class="quick-strip">
@@ -95,36 +95,38 @@
     <h2 class="section-title">Today’s Mission 🌟</h2>
 
     <div class="mission game-box wide">
+
+      <!-- Left: Compact mission -->
       <div>
-        <div class="mission-item">
-          <div class="left">
+        <div class="kid-big">Mini Goals</div>
+        <div class="small">Complete these to finish today’s mission.</div>
+
+        <div class="mission-list">
+          <div class="mission-item">
             <div class="chk" id="m1chk">✓</div>
-            <div>Answer 2 phonics questions</div>
+            <div class="label">Answer 2 phonics questions</div>
+            <div class="small" id="m1txt">0 / 2</div>
           </div>
-          <div class="small" id="m1txt">0 / 2</div>
-        </div>
 
-        <div class="mission-item">
-          <div class="left">
+          <div class="mission-item">
             <div class="chk" id="m2chk">✓</div>
-            <div>Read 1 passage</div>
+            <div class="label">Read 1 passage</div>
+            <div class="small" id="m2txt">0 / 1</div>
           </div>
-          <div class="small" id="m2txt">0 / 1</div>
-        </div>
 
-        <div class="mission-item">
-          <div class="left">
+          <div class="mission-item">
             <div class="chk" id="m3chk">✓</div>
-            <div>Solve 2 math questions</div>
+            <div class="label">Solve 2 math questions</div>
+            <div class="small" id="m3txt">0 / 2</div>
           </div>
-          <div class="small" id="m3txt">0 / 2</div>
         </div>
 
-        <div class="small" style="margin-top:10px;">Mission Progress</div>
+        <div class="small" style="margin-top:12px;">Mission Progress</div>
         <div class="progressbar"><div id="missionBar"></div></div>
         <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
       </div>
 
+      <!-- Right: helper + rewards -->
       <div>
         <div class="helper">
           <div class="face" id="helperFace">🦄</div>
@@ -170,6 +172,7 @@
           </div>
         </div>
       </div>
+
     </div>
 
   </div>
@@ -178,15 +181,61 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
-  // -----------------------------
+  // =========================================================
+  // Dropdowns: click-to-open (works on phones + desktop)
+  // =========================================================
+  (function(){
+    const dropdowns = Array.from(document.querySelectorAll(".dropdown"));
+    const toggles = Array.from(document.querySelectorAll(".dropdown-toggle"));
+
+    function closeAll(except){
+      dropdowns.forEach(dd=>{
+        if (dd !== except) {
+          dd.classList.remove("open");
+          const t = dd.querySelector(".dropdown-toggle");
+          if (t) t.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    toggles.forEach(t=>{
+      t.addEventListener("click", (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+
+        const dd = t.closest(".dropdown");
+        const isOpen = dd.classList.contains("open");
+        closeAll(dd);
+
+        if (!isOpen){
+          dd.classList.add("open");
+          t.setAttribute("aria-expanded", "true");
+        } else {
+          dd.classList.remove("open");
+          t.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    // click outside closes
+    document.addEventListener("click", ()=> closeAll(null));
+
+    // Esc closes
+    document.addEventListener("keydown", (e)=>{
+      if (e.key === "Escape") closeAll(null);
+    });
+  })();
+
+  // =========================================================
   // Grade preference
-  // -----------------------------
+  // =========================================================
   const PREF_GRADE_KEY = "bloom_pref_grade";
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
 
   function setGrade(g){
     grade = g;
     localStorage.setItem(PREF_GRADE_KEY, g);
+
     document.querySelectorAll(".pill[data-grade]").forEach(b=>{
       b.classList.toggle("active", b.dataset.grade === grade);
     });
@@ -201,9 +250,9 @@
     btn.onclick = ()=> setGrade(btn.dataset.grade);
   });
 
-  // -----------------------------
+  // =========================================================
   // Missions (Daily)
-  // -----------------------------
+  // =========================================================
   const MISSION_KEY = "bloom_daily_mission";
   const PROG_KEY = "bloom_progress";
 
@@ -272,9 +321,9 @@
     }
   }
 
-  // -----------------------------
+  // =========================================================
   // Badge preview (unlocks)
-  // -----------------------------
+  // =========================================================
   function getProgress(){
     return load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
