@@ -21,7 +21,6 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 html, body { height: 100%; }
 
 body{
@@ -31,13 +30,11 @@ body{
   line-height: 1.55;
 }
 
-/* ---------- Layout ---------- */
 .container{
   width: min(1100px, 92%);
   margin: 0 auto;
 }
 
-/* Center most page content nicely */
 .section{
   padding: 34px 0 54px;
 }
@@ -61,36 +58,41 @@ header{
 header .container{
   display: flex;
   align-items: center;
-  justify-content: center; /* center everything */
+  justify-content: center;
   flex-wrap: wrap;
   gap: 14px;
   padding: 14px 0;
 }
 
 .logo{
-  font-weight: 800;
-  font-size: 28px; /* bigger, bubbly */
+  font-weight: 900;
+  font-size: 34px;
   color: #fff;
   letter-spacing: .2px;
   text-align: center;
+}
+
+nav{
+  width: 100%;
 }
 
 nav ul{
   list-style: none;
   display: flex;
   align-items: center;
-  justify-content: center; /* centered nav */
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 0;
-  margin: 0;
 }
 
+/* buttons in nav */
 nav a{
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: #fff;
   text-decoration: none;
-  font-weight: 800;
+  font-weight: 900;
   padding: 10px 14px;
   border-radius: 999px;
   transition: transform .12s ease, background .12s ease;
@@ -101,45 +103,61 @@ nav a:hover{
   transform: translateY(-1px);
 }
 
-/* Dropdown */
-.dropdown{ position: relative; }
-.dropdown > a{ cursor: pointer; }
+/* ---------- Dropdown (click-to-open) ---------- */
+.dropdown{
+  position: relative;
+}
 
+.dropdown-toggle{
+  cursor: pointer;
+  user-select: none;
+}
+
+.dropdown-toggle::after{
+  content: " ▾";
+  font-weight: 900;
+  opacity: 0.95;
+}
+
+/* menu */
 .dropdown-menu{
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
-  min-width: 220px;
+  min-width: 240px;
   background: var(--white);
   border-radius: 18px;
   box-shadow: var(--shadow2);
   padding: 10px;
-  display: none;
   border: 2px solid rgba(47, 122, 85, 0.12);
+
+  display: none;
 }
 
 .dropdown-menu a{
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--ink);
   padding: 10px 12px;
   border-radius: 14px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .dropdown-menu a:hover{
   background: var(--mint2);
-  transform: none;
 }
 
-.dropdown:hover .dropdown-menu{
+/* open state */
+.dropdown.open .dropdown-menu{
   display: block;
 }
 
 /* ---------- Hero ---------- */
 .hero{
   padding: 54px 0 40px;
-  text-align: center; /* centered */
+  text-align: center;
   background: linear-gradient(90deg, #d8f3e5, #effbf5);
   border-bottom: 1px solid rgba(47,122,85,0.12);
 }
@@ -162,7 +180,6 @@ nav a:hover{
   font-size: 15px;
 }
 
-/* Quick strip (centered buttons row) */
 .quick-strip{
   margin-top: 16px;
   display: flex;
@@ -211,10 +228,10 @@ nav a:hover{
   box-shadow: 0 14px 22px rgba(18,60,40,0.10);
 }
 
-/* ---------- Pills (grade buttons) ---------- */
+/* ---------- Pills ---------- */
 .badge-row{
   display: flex;
-  justify-content: center; /* centered row */
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
 }
@@ -232,13 +249,12 @@ nav a:hover{
 }
 
 .pill:hover{ transform: translateY(-1px); background: var(--mint2); }
-
 .pill.active{
   background: linear-gradient(135deg, var(--mint2), var(--mint));
   border-color: rgba(47,122,85,0.25);
 }
 
-/* ---------- Cards / Boxes ---------- */
+/* ---------- Boxes / Cards ---------- */
 .game-box{
   background: rgba(255,255,255,0.85);
   border: 2px solid rgba(47,122,85,0.10);
@@ -247,9 +263,7 @@ nav a:hover{
   padding: 18px;
 }
 
-.game-box.wide{
-  padding: 22px;
-}
+.game-box.wide{ padding: 20px; }
 
 .card{
   background: #fff;
@@ -272,7 +286,7 @@ nav a:hover{
   color: var(--muted);
 }
 
-/* ---------- Grids (centered) ---------- */
+/* ---------- Grids ---------- */
 .grid-3{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -280,7 +294,7 @@ nav a:hover{
   align-items: stretch;
 }
 
-/* ---------- Bubble navigation (home bubbles) ---------- */
+/* ---------- Bubble nav ---------- */
 .bubbles{
   margin-top: 18px;
   display: grid;
@@ -318,13 +332,160 @@ footer{
   padding: 18px 0;
   text-align: center;
   color: #fff;
-  font-weight: 800;
+  font-weight: 900;
   background: linear-gradient(135deg, #2f7a55, #46a36f);
 }
 
 /* =========================================================
-   PROGRESS PAGE LAYOUT (LEFT SIDEBAR)
-   Only affects progress.html because it uses these classes.
+   INDEX: Compact Mission + Helper + Rewards
+   ========================================================= */
+
+.mission{
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* compact mission list */
+.mission-list{
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mission-item{
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 10px;
+
+  background: linear-gradient(135deg, #ffffff, #f7fffb);
+  border: 2px solid rgba(47,122,85,0.10);
+  border-radius: 18px;
+  padding: 10px 12px;
+}
+
+.mission-item .label{
+  font-weight: 900;
+}
+
+.chk{
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(47,122,85,0.20);
+  background: #fff;
+  color: rgba(47,122,85,0.30);
+  font-weight: 900;
+}
+
+.chk.done{
+  background: linear-gradient(135deg, var(--mint2), var(--mint));
+  border-color: rgba(47,122,85,0.30);
+  color: var(--green);
+}
+
+/* slim bar */
+.progressbar{
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(47,122,85,0.12);
+  border: 1px solid rgba(47,122,85,0.12);
+  overflow: hidden;
+}
+
+.progressbar > div{
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, var(--green2), var(--green));
+  border-radius: 999px;
+}
+
+/* helper compact */
+.helper{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: linear-gradient(135deg, var(--mint2), #ffffff);
+  border: 2px solid rgba(47,122,85,0.12);
+  border-radius: 20px;
+  padding: 12px;
+}
+
+.face{
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  background: #fff;
+  border: 2px solid rgba(47,122,85,0.12);
+  box-shadow: 0 10px 18px rgba(18,60,40,0.06);
+}
+
+.helper .title{
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.helper .msg{
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+/* rewards compact tiles */
+.badges{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.badge-tile{
+  border-radius: 18px;
+  padding: 12px;
+  border: 2px solid rgba(47,122,85,0.10);
+  background: linear-gradient(135deg, #ffffff, #f7fffb);
+}
+
+.badge-tile .top{
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge-tile .icon{
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--mint2), #ffffff);
+  border: 2px solid rgba(47,122,85,0.12);
+  font-size: 22px;
+}
+
+.badge-tile .name{
+  font-weight: 900;
+}
+
+.badge-tile .req{
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.badge-tile.locked{ opacity: 0.75; }
+
+/* =========================================================
+   PROGRESS PAGE: Left sidebar layout
    ========================================================= */
 .progress-layout{
   display: grid;
@@ -335,15 +496,7 @@ footer{
 
 .progress-left{
   position: sticky;
-  top: 92px; /* under the sticky header */
-}
-
-.progress-left .card{
-  border-radius: var(--radius);
-}
-
-.progress-right .game-box{
-  text-align: center;
+  top: 92px;
 }
 
 .stat-row{
@@ -369,20 +522,7 @@ footer{
 .stat .label{
   font-size: 13px;
   color: var(--muted);
-  font-weight: 800;
-}
-
-.mission{
-  margin-top: 12px;
-  background: linear-gradient(135deg, var(--mint2), #ffffff);
-  border: 2px dashed rgba(47,122,85,0.25);
-  border-radius: 18px;
-  padding: 12px;
-}
-
-.mission h3{
-  font-size: 18px;
-  margin-bottom: 6px;
+  font-weight: 900;
 }
 
 .meter{
@@ -405,14 +545,15 @@ footer{
   .grid-3{ grid-template-columns: 1fr; }
   .bubbles{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-  .progress-layout{
-    grid-template-columns: 1fr;
-  }
-  .progress-left{
-    position: static;
-  }
+  .mission{ grid-template-columns: 1fr; }
+  .progress-layout{ grid-template-columns: 1fr; }
+  .progress-left{ position: static; }
 }
 
 @media (max-width: 520px){
   .bubbles{ grid-template-columns: 1fr; }
+  .dropdown-menu{
+    left: 50%;
+    min-width: 220px;
+  }
 }
