@@ -54,28 +54,28 @@
 <section class="hero">
   <div class="container">
     <h1>Learn & Play 🌿✨</h1>
-    <p>Pick a grade and start fast — phonics, reading, math, tracing, and fun rewards!</p>
+    <p>Pick a grade and start fast — phonics, reading, math, and fun rewards!</p>
 
     <div class="game-box wide" style="margin-top:16px;">
-      <div class="kid-big">Start Here (Pick a Grade)</div>
+      <div class="kid-big" style="text-align:center;">Start Here (Pick a Grade)</div>
 
-      <div class="badge-row">
-        <button class="pill active" data-grade="K" type="button">Kindergarten</button>
-        <button class="pill" data-grade="1" type="button">Grade 1</button>
-        <button class="pill" data-grade="2" type="button">Grade 2</button>
+      <!-- ✅ Updated: grade pills now same size as row 2 by using btn secondary -->
+      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
+        <button class="btn secondary grade-btn active" data-grade="K" type="button">Kindergarten</button>
+        <button class="btn secondary grade-btn" data-grade="1" type="button">Grade 1</button>
+        <button class="btn secondary grade-btn" data-grade="2" type="button">Grade 2</button>
       </div>
 
-      <div class="quick-strip">
+      <!-- ✅ Updated: removed Trace a Letter -->
+      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
         <a class="btn" id="startPhonics" href="phonics.html">Start Phonics</a>
         <a class="btn secondary" id="startReading" href="reading.html">Start Reading</a>
         <a class="btn secondary" id="startMath" href="math.html">Start Math</a>
-        <a class="btn secondary" href="resources.html#tracing">Trace a Letter</a>
       </div>
 
-      <div class="hero-note">Tip: Your grade choice is saved on this device.</div>
+      <div class="hero-note" style="text-align:center;">Tip: Your grade choice is saved on this device.</div>
     </div>
 
-    <!-- ✅ REMOVED THE BIG BUTTONS / BUBBLES SECTION -->
   </div>
 </section>
 
@@ -176,7 +176,8 @@
   function setGrade(g){
     grade = g;
     localStorage.setItem(PREF_GRADE_KEY, g);
-    document.querySelectorAll(".pill[data-grade]").forEach(b=>{
+
+    document.querySelectorAll(".grade-btn[data-grade]").forEach(b=>{
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
@@ -186,7 +187,7 @@
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
   }
 
-  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
+  document.querySelectorAll(".grade-btn[data-grade]").forEach(btn=>{
     btn.onclick = ()=> setGrade(btn.dataset.grade);
   });
 
@@ -241,7 +242,6 @@
     document.getElementById("missionBar").style.width = pct + "%";
     document.getElementById("missionPct").textContent = `${pct}% complete`;
 
-    // Helper reacts
     const face = document.getElementById("helperFace");
     const title = document.getElementById("helperTitle");
     const msg = document.getElementById("helperMsg");
