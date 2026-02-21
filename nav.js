@@ -1,48 +1,52 @@
-// BloomELearning nav.js
-// Click-to-open dropdowns (mobile + desktop)
+/* nav.js - BloomELearning dropdown behavior (mobile + desktop friendly)
+   - Removes "Letter Tracing" from Subjects menu
+*/
 
 (function () {
-  const dropdowns = Array.from(document.querySelectorAll(".dropdown"));
-  const toggles = Array.from(document.querySelectorAll(".dropdown-toggle"));
-
-  function closeAll(except) {
-    dropdowns.forEach((dd) => {
-      if (dd !== except) {
-        dd.classList.remove("open");
-        const t = dd.querySelector(".dropdown-toggle");
-        if (t) t.setAttribute("aria-expanded", "false");
-      }
+  // Close all open dropdown menus
+  function closeAll() {
+    document.querySelectorAll(".dropdown").forEach((dd) => {
+      dd.classList.remove("open");
+      const toggle = dd.querySelector(".dropdown-toggle");
+      if (toggle) toggle.setAttribute("aria-expanded", "false");
     });
   }
 
-  toggles.forEach((t) => {
-    t.addEventListener("click", (e) => {
+  // Toggle a single dropdown
+  function toggleDropdown(dd) {
+    const isOpen = dd.classList.contains("open");
+    closeAll();
+    if (!isOpen) {
+      dd.classList.add("open");
+      const toggle = dd.querySelector(".dropdown-toggle");
+      if (toggle) toggle.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    const toggle = e.target.closest(".dropdown-toggle");
+    const insideMenu = e.target.closest(".dropdown-menu");
+    const dropdown = e.target.closest(".dropdown");
+
+    // Click on a dropdown toggle
+    if (toggle && dropdown) {
       e.preventDefault();
-      e.stopPropagation();
+      toggleDropdown(dropdown);
+      return;
+    }
 
-      const dd = t.closest(".dropdown");
-      const isOpen = dd.classList.contains("open");
+    // Click inside dropdown menu (let links work)
+    if (insideMenu) return;
 
-      closeAll(dd);
-
-      if (!isOpen) {
-        dd.classList.add("open");
-        t.setAttribute("aria-expanded", "true");
-      } else {
-        dd.classList.remove("open");
-        t.setAttribute("aria-expanded", "false");
-      }
-    });
+    // Click anywhere else closes dropdowns
+    closeAll();
   });
 
-  // Click outside closes all
-  document.addEventListener("click", () => closeAll(null));
-
-  // Escape closes
+  // Escape closes menus
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeAll(null);
+    if (e.key === "Escape") closeAll();
   });
 
-  // If the window resizes, close menus (prevents weird positioning)
-  window.addEventListener("resize", () => closeAll(null));
+  // Optional: close on scroll (feels cleaner)
+  window.addEventListener("scroll", closeAll, { passive: true });
 })();
