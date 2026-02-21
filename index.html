@@ -22,7 +22,6 @@
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
             <a href="math.html">➕ Math</a>
-            <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
 
@@ -54,26 +53,22 @@
 <section class="hero">
   <div class="container">
     <h1>Learn & Play 🌿✨</h1>
-    <p>Pick a grade and start fast — phonics, reading, math, and fun rewards!</p>
+    <p>Pick a grade and jump right in!</p>
 
     <div class="game-box wide" style="margin-top:16px;">
-      <div class="kid-big" style="text-align:center;">Start Here (Pick a Grade)</div>
+      <div class="kid-big">Start Here (Pick a Grade)</div>
 
-      <!-- ✅ Updated: grade pills now same size as row 2 by using btn secondary -->
-      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
-        <button class="btn secondary grade-btn active" data-grade="K" type="button">Kindergarten</button>
-        <button class="btn secondary grade-btn" data-grade="1" type="button">Grade 1</button>
-        <button class="btn secondary grade-btn" data-grade="2" type="button">Grade 2</button>
+      <div class="badge-row">
+        <button class="pill active" data-grade="K">Kindergarten</button>
+        <button class="pill" data-grade="1">Grade 1</button>
+        <button class="pill" data-grade="2">Grade 2</button>
       </div>
 
-      <!-- ✅ Updated: removed Trace a Letter -->
-      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
+      <div class="quick-strip">
         <a class="btn" id="startPhonics" href="phonics.html">Start Phonics</a>
         <a class="btn secondary" id="startReading" href="reading.html">Start Reading</a>
         <a class="btn secondary" id="startMath" href="math.html">Start Math</a>
       </div>
-
-      <div class="hero-note" style="text-align:center;">Tip: Your grade choice is saved on this device.</div>
     </div>
 
   </div>
@@ -166,36 +161,29 @@
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
+<script src="./nav.js"></script>
 <script>
-  // -----------------------------
-  // Grade preference
-  // -----------------------------
   const PREF_GRADE_KEY = "bloom_pref_grade";
+  const PROG_KEY = "bloom_progress";
+  const MISSION_KEY = "bloom_daily_mission";
+
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
 
   function setGrade(g){
     grade = g;
     localStorage.setItem(PREF_GRADE_KEY, g);
-
-    document.querySelectorAll(".grade-btn[data-grade]").forEach(b=>{
+    document.querySelectorAll(".pill[data-grade]").forEach(b=>{
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
-    // Pass grade in URL (optional use on other pages)
     document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
   }
 
-  document.querySelectorAll(".grade-btn[data-grade]").forEach(btn=>{
+  document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
     btn.onclick = ()=> setGrade(btn.dataset.grade);
   });
-
-  // -----------------------------
-  // Missions (Daily)
-  // -----------------------------
-  const MISSION_KEY = "bloom_daily_mission";
-  const PROG_KEY = "bloom_progress";
 
   function todayKey(){
     const d = new Date();
@@ -223,7 +211,6 @@
 
   function renderMission(){
     const ms = ensureMission();
-
     const g1 = 2, g2 = 1, g3 = 2;
 
     document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
@@ -261,9 +248,6 @@
     }
   }
 
-  // -----------------------------
-  // Badge preview (unlocks)
-  // -----------------------------
   function getProgress(){
     return load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
@@ -272,18 +256,13 @@
 
   function renderBadges(){
     const p = getProgress();
-
     const mathUnlocked = (p.mathStars || 0) >= 10;
     const readUnlocked = (p.readingStars || 0) >= 5;
     const phonicsUnlocked = (p.phonicsStars || 0) >= 10;
 
-    const bMath = document.getElementById("bMath");
-    const bRead = document.getElementById("bRead");
-    const bPhon = document.getElementById("bPhonics");
-
-    bMath.classList.toggle("locked", !mathUnlocked);
-    bRead.classList.toggle("locked", !readUnlocked);
-    bPhon.classList.toggle("locked", !phonicsUnlocked);
+    document.getElementById("bMath").classList.toggle("locked", !mathUnlocked);
+    document.getElementById("bRead").classList.toggle("locked", !readUnlocked);
+    document.getElementById("bPhonics").classList.toggle("locked", !phonicsUnlocked);
 
     document.getElementById("bMathReq").textContent =
       mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
@@ -295,12 +274,10 @@
       phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
   }
 
-  // Init
   setGrade(grade);
   renderMission();
   renderBadges();
 </script>
 
-<script src="./nav.js"></script>
 </body>
 </html>
