@@ -14,7 +14,7 @@
     <div class="logo">BloomELearning ✨</div>
     <nav>
       <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
 
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
@@ -50,20 +50,18 @@
 <section class="hero">
   <div class="container">
     <h1>Learn & Play 🌿✨</h1>
-    <p>Pick a subject and start learning fast — phonics, reading, math, and fun rewards!</p>
+    <p>Pick a grade, then start phonics, reading, and math with rewards!</p>
 
-    <!-- Start Here: Grade + Subject buttons -->
+    <!-- Start Here Box -->
     <div class="game-box wide" style="margin-top:16px;">
       <div class="kid-big" style="text-align:center;">Start Here (Pick a Grade)</div>
 
-      <!-- Grade pills (same size) -->
-      <div class="badge-row" style="justify-content:center;">
+      <div class="badge-row" style="justify-content:center; margin-top:10px;">
         <button class="pill active pill-lg" data-grade="K">Kindergarten</button>
         <button class="pill pill-lg" data-grade="1">Grade 1</button>
         <button class="pill pill-lg" data-grade="2">Grade 2</button>
       </div>
 
-      <!-- Subject buttons (same size row, no Trace a Letter) -->
       <div class="quick-strip" style="justify-content:center; margin-top:14px;">
         <a class="btn btn-lg" id="startPhonics" href="phonics.html">Start Phonics</a>
         <a class="btn secondary btn-lg" id="startReading" href="reading.html">Start Reading</a>
@@ -71,19 +69,7 @@
       </div>
     </div>
 
-    <!-- Bubbles -->
-    <div class="bubbles" style="margin-top:18px;">
-      <a class="bubble" href="phonics.html"><span class="emoji">🔤</span><span class="text">Phonics</span></a>
-      <a class="bubble" href="reading.html"><span class="emoji">📖</span><span class="text">Reading</span></a>
-      <a class="bubble" href="math.html"><span class="emoji">➕</span><span class="text">Math</span></a>
-      <a class="bubble" href="resources.html"><span class="emoji">🎥</span><span class="text">Kids Resources</span></a>
-
-      <a class="bubble" href="progress.html"><span class="emoji">📊</span><span class="text">My Progress</span></a>
-      <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Sticker Book</span></a>
-      <a class="bubble" href="student-login.html"><span class="emoji">🧒</span><span class="text">Student Login</span></a>
-      <a class="bubble" href="parent-resources.html"><span class="emoji">🧑‍🏫</span><span class="text">Parent Hub</span></a>
-    </div>
-
+    <!-- ✅ REMOVED: The big pill grid section that you showed in the screenshot -->
   </div>
 </section>
 
@@ -91,10 +77,9 @@
   <div class="container">
     <h2 class="section-title">Today’s Mission 🌟</h2>
 
-    <!-- Smaller + cleaner mission layout -->
-    <div class="mission game-box wide" style="max-width:920px; margin:0 auto;">
-      <div class="mission-left">
-        <div class="mission-item compact">
+    <div class="mission game-box wide">
+      <div>
+        <div class="mission-item">
           <div class="left">
             <div class="chk" id="m1chk">✓</div>
             <div>Answer 2 phonics questions</div>
@@ -102,7 +87,7 @@
           <div class="small" id="m1txt">0 / 2</div>
         </div>
 
-        <div class="mission-item compact">
+        <div class="mission-item">
           <div class="left">
             <div class="chk" id="m2chk">✓</div>
             <div>Read 1 passage</div>
@@ -110,7 +95,7 @@
           <div class="small" id="m2txt">0 / 1</div>
         </div>
 
-        <div class="mission-item compact">
+        <div class="mission-item">
           <div class="left">
             <div class="chk" id="m3chk">✓</div>
             <div>Solve 2 math questions</div>
@@ -118,13 +103,12 @@
           <div class="small" id="m3txt">0 / 2</div>
         </div>
 
-        <div class="progressbar" style="margin-top:10px;">
-          <div id="missionBar"></div>
-        </div>
+        <div class="small" style="margin-top:10px;">Mission Progress</div>
+        <div class="progressbar"><div id="missionBar"></div></div>
         <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
       </div>
 
-      <div class="mission-right">
+      <div>
         <div class="helper">
           <div class="face" id="helperFace">🦄</div>
           <div>
@@ -135,30 +119,31 @@
 
         <div class="game-box" style="margin-top:12px;">
           <div class="kid-big">Rewards Preview 🎁</div>
+          <p class="small">Earn ⭐ to unlock sticker packs.</p>
 
-          <div class="badges" style="margin-top:10px;">
+          <div class="badges" style="margin-top:12px;">
             <div class="badge-tile" id="bMath">
               <div class="top">
                 <div class="icon">➕</div>
-                <div class="name">Math Pack</div>
+                <div class="name">Math Sticker Pack</div>
               </div>
-              <div class="req" id="bMathReq"></div>
+              <div class="req" id="bMathReq">Unlock at 10 Math ⭐</div>
             </div>
 
             <div class="badge-tile" id="bRead">
               <div class="top">
                 <div class="icon">📖</div>
-                <div class="name">Reading Pack</div>
+                <div class="name">Reading Sticker Pack</div>
               </div>
-              <div class="req" id="bReadReq"></div>
+              <div class="req" id="bReadReq">Unlock at 5 Reading ⭐</div>
             </div>
 
             <div class="badge-tile" id="bPhonics">
               <div class="top">
                 <div class="icon">🔤</div>
-                <div class="name">Phonics Pack</div>
+                <div class="name">Phonics Sticker Pack</div>
               </div>
-              <div class="req" id="bPhonicsReq"></div>
+              <div class="req" id="bPhonicsReq">Unlock at 10 Phonics ⭐</div>
             </div>
           </div>
 
@@ -186,12 +171,11 @@
   function setGrade(g){
     grade = g;
     localStorage.setItem(PREF_GRADE_KEY, g);
-
     document.querySelectorAll(".pill[data-grade]").forEach(b=>{
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
-    // Pass grade in URL
+    // Pass grade in URL (used by subject pages if you want)
     document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
@@ -209,8 +193,12 @@
 
   function todayKey(){
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
   }
+
   function load(key, fallback){
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
@@ -229,7 +217,6 @@
 
   function renderMission(){
     const ms = ensureMission();
-
     const g1 = 2, g2 = 1, g3 = 2;
 
     document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
@@ -255,15 +242,15 @@
     if (pct === 100){
       face.textContent = "🎉";
       title.textContent = "Mission Complete!";
-      msg.textContent = "Great job! Go grab stickers!";
+      msg.textContent = "Yay! You finished today’s mission. Go get stickers!";
     } else if (pct >= 34){
       face.textContent = "🦉";
       title.textContent = "Owl Helper";
-      msg.textContent = "Nice work! Keep going!";
+      msg.textContent = "Nice work! Keep going — you’re almost there.";
     } else {
       face.textContent = "🦄";
       title.textContent = "Unicorn Coach";
-      msg.textContent = "Pick a subject and start earning stars!";
+      msg.textContent = "Pick a game and start earning stars today!";
     }
   }
 
@@ -271,7 +258,9 @@
   // Badge preview (unlocks)
   // -----------------------------
   function getProgress(){
-    return load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
+    return load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
   }
 
   function renderBadges(){
@@ -281,9 +270,13 @@
     const readUnlocked = (p.readingStars || 0) >= 5;
     const phonicsUnlocked = (p.phonicsStars || 0) >= 10;
 
-    document.getElementById("bMath").classList.toggle("locked", !mathUnlocked);
-    document.getElementById("bRead").classList.toggle("locked", !readUnlocked);
-    document.getElementById("bPhonics").classList.toggle("locked", !phonicsUnlocked);
+    const bMath = document.getElementById("bMath");
+    const bRead = document.getElementById("bRead");
+    const bPhon = document.getElementById("bPhonics");
+
+    bMath.classList.toggle("locked", !mathUnlocked);
+    bRead.classList.toggle("locked", !readUnlocked);
+    bPhon.classList.toggle("locked", !phonicsUnlocked);
 
     document.getElementById("bMathReq").textContent =
       mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
