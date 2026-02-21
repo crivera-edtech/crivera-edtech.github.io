@@ -22,7 +22,6 @@
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
             <a href="math.html">➕ Math</a>
-            <a href="letter-formation.html">✍️ Letter Tracing</a>
           </div>
         </li>
 
@@ -54,183 +53,117 @@
 <section class="hero">
   <div class="container">
     <h1>Math ➕</h1>
-    <p>Choose your grade, take a quick math diagnostic, then play fun math games made for you!</p>
+    <p>Take a quick diagnostic, then pick a fun math game!</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Start Here 🌟</h2>
 
     <div class="game-box wide">
-
-      <!-- Grade -->
       <div class="kid-big" style="text-align:center;">Choose Grade 🌟</div>
-      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
-        <button class="btn secondary grade-btn active" data-grade="K" type="button">Kindergarten</button>
-        <button class="btn secondary grade-btn" data-grade="1" type="button">Grade 1</button>
-        <button class="btn secondary grade-btn" data-grade="2" type="button">Grade 2</button>
+
+      <div class="badge-row" style="justify-content:center;">
+        <button class="pill active" data-grade="K">Kindergarten</button>
+        <button class="pill" data-grade="1">Grade 1</button>
+        <button class="pill" data-grade="2">Grade 2</button>
       </div>
 
-      <!-- Actions -->
       <div class="quick-strip" style="justify-content:center; margin-top:12px;">
-        <button class="btn" id="startDiagBtn" type="button">Start Diagnostic</button>
-        <button class="btn secondary" id="recommendedBtn" type="button" disabled>Recommended Path</button>
-        <button class="btn secondary" id="chooseGameBtn" type="button" disabled>Choose a Game</button>
+        <button class="btn" id="startDiagBtn">Start 10-Question Diagnostic</button>
+        <button class="btn secondary" id="goGamesBtn" disabled style="opacity:.6;">Choose a Game</button>
         <a class="btn secondary" href="progress.html">My Progress</a>
       </div>
-
-      <div class="hero-note" style="text-align:center; margin-top:10px;">
-        Tip: Do the diagnostic first so games match your math needs.
-      </div>
-
-      <!-- Diagnostic Panel -->
-      <div id="diagPanel" class="game-box" style="margin-top:16px; display:none;">
-        <div class="kid-big">Math Diagnostic ✅</div>
-        <p class="small">Answer 10 questions. We’ll recommend what to practice next.</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <div class="small" id="diagProgressText">Question 1 of 10</div>
-
-          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-top:10px;">
-            <div class="kid-big" id="diagQuestion" style="margin:0; flex:1;">Press “Start Diagnostic”.</div>
-            <button class="btn secondary" id="diagSpeakBtn" type="button" title="Read aloud">🔊</button>
-          </div>
-
-          <div class="small" id="diagHint" style="margin-top:6px;"></div>
-
-          <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
-
-          <div class="quick-strip" style="justify-content:center; margin-top:12px;">
-            <button class="btn secondary" id="diagNextBtn" type="button" disabled>Next</button>
-            <button class="btn secondary" id="diagRestartBtn" type="button">Restart</button>
-          </div>
-
-          <div class="kid-big" id="diagFeedback" style="margin-top:12px;"></div>
-        </div>
-      </div>
-
-      <!-- Results Panel -->
-      <div id="resultsPanel" class="game-box" style="margin-top:16px; display:none;">
-        <div class="kid-big">Results 🌿</div>
-        <p class="small" id="resultsSummary">Nice work!</p>
-
-        <div class="grid-3" style="margin-top:12px;">
-          <div class="card" style="text-align:center;">
-            <h3 style="font-size:22px; margin-bottom:6px;">Score</h3>
-            <div class="kid-big" id="scoreBox">0 / 10</div>
-          </div>
-          <div class="card" style="text-align:center;">
-            <h3 style="font-size:22px; margin-bottom:6px;">Needs Practice</h3>
-            <div class="small" id="needsBox">—</div>
-          </div>
-          <div class="card" style="text-align:center;">
-            <h3 style="font-size:22px; margin-bottom:6px;">Recommended Next</h3>
-            <div class="small" id="readyBox">—</div>
-          </div>
-        </div>
-
-        <!-- Game length (after diagnostic) -->
-        <div class="game-box" style="margin-top:14px;">
-          <div class="small" style="text-align:center; margin-bottom:10px;">Choose Game Length</div>
-          <div class="quick-strip" style="justify-content:center;">
-            <button class="btn secondary len-btn active" data-len="5" type="button">5 Rounds</button>
-            <button class="btn secondary len-btn" data-len="10" type="button">10 Rounds</button>
-            <button class="btn secondary len-btn" data-len="endless" type="button">Endless</button>
-          </div>
-        </div>
-
-        <div class="quick-strip" style="justify-content:center; margin-top:14px;">
-          <button class="btn" id="goRecommendedBtn" type="button">Start Recommended Path</button>
-          <button class="btn secondary" id="goChooseGameBtn" type="button">Choose a Game</button>
-          <button class="btn secondary" id="retakeBtn" type="button">Retake Diagnostic</button>
-        </div>
-      </div>
-
-      <!-- Game Hub -->
-      <div id="gameHub" class="game-box" style="margin-top:16px; display:none;">
-        <div class="kid-big">Pick a Math Game 🎮</div>
-        <p class="small">Choose what you want to practice. (Games change by grade!)</p>
-
-        <div class="game-box" style="margin-top:12px;">
-          <div class="small" style="text-align:center; margin-bottom:10px;">Game Length</div>
-          <div class="quick-strip" style="justify-content:center;">
-            <button class="btn secondary len-btn" data-len="5" type="button">5 Rounds</button>
-            <button class="btn secondary len-btn" data-len="10" type="button">10 Rounds</button>
-            <button class="btn secondary len-btn" data-len="endless" type="button">Endless</button>
-          </div>
-        </div>
-
-        <div class="grid-3" style="margin-top:12px;">
-          <div class="card pick" data-game="counting">
-            <h3>🍎 Count & Tap</h3>
-            <p class="small">Count objects and choose the number.</p>
-            <div class="small tag" id="tagCount"></div>
-          </div>
-
-          <div class="card pick" data-game="numberLine">
-            <h3>🪜 Number Line Hop</h3>
-            <p class="small">Jump forward/back to find the answer.</p>
-            <div class="small tag" id="tagLine"></div>
-          </div>
-
-          <div class="card pick" data-game="facts">
-            <h3>⚡ Speed Facts</h3>
-            <p class="small">Quick add/subtract with instant feedback.</p>
-            <div class="small tag" id="tagFacts"></div>
-          </div>
-
-          <div class="card pick" data-game="placeValue">
-            <h3>🧱 Place Value Builder</h3>
-            <p class="small">Build numbers with tens & ones (G2).</p>
-            <div class="small tag" id="tagPV"></div>
-          </div>
-
-          <div class="card pick" data-game="wordProblems">
-            <h3>🧺 Word Problem Picnic</h3>
-            <p class="small">Solve mini story problems.</p>
-            <div class="small tag" id="tagWP"></div>
-          </div>
-
-          <div class="card pick" data-game="shapes">
-            <h3>🔷 Shape Safari</h3>
-            <p class="small">Pick the shape and its features.</p>
-            <div class="small tag" id="tagShapes"></div>
-          </div>
-        </div>
-
-        <div class="hero-note" style="text-align:center; margin-top:12px;">
-          Earn ⭐ for correct answers. Stars save on this device.
-        </div>
-      </div>
-
-      <!-- Game Stage -->
-      <div id="gameStage" class="game-box" style="margin-top:16px; display:none;">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-          <div>
-            <div class="kid-big" id="gameTitle">Game</div>
-            <div class="small" id="gameDesc"></div>
-          </div>
-          <div class="quick-strip" style="justify-content:flex-end;">
-            <button class="btn secondary" id="backToHubBtn" type="button">← Back</button>
-            <button class="btn secondary" id="newRoundBtn" type="button">New Round</button>
-            <button class="btn secondary" id="speakBtn" type="button" title="Read aloud">🔊</button>
-          </div>
-        </div>
-
-        <div class="game-box" style="margin-top:12px;">
-          <div class="small" id="roundText">Round 1</div>
-          <div class="kid-big" id="promptText" style="margin-top:6px;">Prompt</div>
-          <div class="small" id="promptHint" style="margin-top:6px;"></div>
-
-          <div id="stageBody" style="margin-top:14px;"></div>
-
-          <div class="kid-big" id="stageFeedback" style="margin-top:12px;"></div>
-          <div class="small" id="starsText" style="margin-top:6px;"></div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- DIAGNOSTIC -->
+    <div class="game-box wide" id="diagWrap" style="margin-top:16px; display:none;">
+      <div class="kid-big">Math Diagnostic ✅</div>
+
+      <div class="game-box" style="margin-top:12px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+          <div style="flex:1;">
+            <div class="small" id="diagMeta">Question 1 of 10</div>
+            <div class="kid-big" id="diagQ">Question loads…</div>
+          </div>
+          <button class="btn secondary" id="diagSoundBtn" title="Read aloud" aria-label="Read aloud">🔊</button>
+        </div>
+
+        <div class="small" id="diagSupport" style="margin-top:6px;"></div>
+        <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
+        <div class="kid-big" id="diagResult" style="margin-top:14px;"></div>
+
+        <div class="quick-strip" style="justify-content:flex-start; margin-top:10px;">
+          <button class="btn" id="diagNextBtn">Next</button>
+          <button class="btn secondary" id="diagSkipBtn">Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER DIAG -->
+    <div class="game-box wide" id="afterDiagWrap" style="margin-top:16px; display:none;">
+      <div class="kid-big">Your Plan 🌿</div>
+
+      <div class="game-box" style="margin-top:12px;">
+        <div class="grid-3">
+          <div class="card" style="text-align:center;">
+            <h3 style="margin-bottom:6px;">Score</h3>
+            <div class="kid-big" id="planScore">—</div>
+            <div class="small" id="planGrade">—</div>
+          </div>
+
+          <div class="card" style="text-align:center;">
+            <h3 style="margin-bottom:6px;">Recommended Path</h3>
+            <div class="small" id="planPath" style="line-height:1.5;">—</div>
+          </div>
+
+          <div class="card" style="text-align:center;">
+            <h3 style="margin-bottom:6px;">Game Length</h3>
+            <div class="kid-big" id="planLen">—</div>
+            <div class="small" id="planLenNote">—</div>
+          </div>
+        </div>
+
+        <div class="quick-strip" style="justify-content:center; margin-top:12px;">
+          <button class="btn" id="openGamesBtn">Open Games</button>
+          <button class="btn secondary" id="retakeBtn">Retake Diagnostic</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUB -->
+    <div class="game-box wide" id="hub" style="margin-top:16px; display:none;">
+      <div class="kid-big">Choose a Math Game 🎮</div>
+      <p class="small" id="hubDesc" style="margin-top:6px;"></p>
+      <div class="grid-3" id="cards" style="margin-top:14px;"></div>
+    </div>
+
+    <!-- PLAYER -->
+    <div class="game-box wide" id="playWrap" style="margin-top:16px; display:none;">
+      <div class="kid-big" id="gameTitle">Game</div>
+
+      <div class="game-box" style="margin-top:12px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+          <div style="flex:1;">
+            <div class="small" id="gameMeta">—</div>
+            <div class="kid-big" id="prompt">Prompt…</div>
+          </div>
+          <button class="btn secondary" id="soundBtn" title="Read aloud" aria-label="Read aloud">🔊</button>
+        </div>
+
+        <div class="small" id="support" style="margin-top:6px;"></div>
+        <div id="stage" style="margin-top:14px;"></div>
+        <div class="kid-big" id="result" style="margin-top:14px;"></div>
+
+        <div class="quick-strip" style="justify-content:flex-start; margin-top:12px;">
+          <button class="btn" id="nextBtn">Next</button>
+          <button class="btn secondary" id="backBtn">Back to Games</button>
+        </div>
+
+        <div class="small" style="margin-top:10px;">Earn ⭐ for correct answers.</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -238,31 +171,20 @@
 
 <script src="./nav.js"></script>
 <script>
-  // -----------------------------
-  // Storage Keys
-  // -----------------------------
-  const PREF_GRADE_KEY = "bloom_pref_grade";
-  const PREF_LEN_KEY   = "bloom_pref_math_len";
-  const MATH_DIAG_KEY  = "bloom_math_diag_v1";
-  const PROG_KEY       = "bloom_progress";
+  const PROG_KEY = "bloom_progress";
+  const MATH_DIAG_KEY = "bloom_math_diag";
 
-  // -----------------------------
-  // Helpers
-  // -----------------------------
   function load(key, fallback){
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
   }
-  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
-  function shuffle(arr){
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+  function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+
+  function addStar(){
+    const p = load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0 });
+    p.mathStars = (p.mathStars || 0) + 1;
+    save(PROG_KEY, p);
   }
-  function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
   function speak(text){
     if (!("speechSynthesis" in window)) return;
@@ -273,755 +195,484 @@
     speechSynthesis.speak(u);
   }
 
-  function addMathStar(){
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
-    p.mathStars = (p.mathStars || 0) + 1;
-    save(PROG_KEY, p);
-    return p.mathStars;
-  }
-  function getMathStars(){
-    const p = load(PROG_KEY, {
-      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
-    });
-    return (p.mathStars || 0);
-  }
-
-  // -----------------------------
-  // UI refs
-  // -----------------------------
-  const startDiagBtn = document.getElementById("startDiagBtn");
-  const chooseGameBtn = document.getElementById("chooseGameBtn");
-  const recommendedBtn = document.getElementById("recommendedBtn");
-
-  const diagPanel = document.getElementById("diagPanel");
-  const resultsPanel = document.getElementById("resultsPanel");
-  const gameHub = document.getElementById("gameHub");
-  const gameStage = document.getElementById("gameStage");
-
-  const diagQuestion = document.getElementById("diagQuestion");
-  const diagHint = document.getElementById("diagHint");
-  const diagChoices = document.getElementById("diagChoices");
-  const diagProgressText = document.getElementById("diagProgressText");
-  const diagNextBtn = document.getElementById("diagNextBtn");
-  const diagRestartBtn = document.getElementById("diagRestartBtn");
-  const diagFeedback = document.getElementById("diagFeedback");
-  const diagSpeakBtn = document.getElementById("diagSpeakBtn");
-
-  const scoreBox = document.getElementById("scoreBox");
-  const needsBox = document.getElementById("needsBox");
-  const readyBox = document.getElementById("readyBox");
-  const resultsSummary = document.getElementById("resultsSummary");
-  const goChooseGameBtn = document.getElementById("goChooseGameBtn");
-  const goRecommendedBtn = document.getElementById("goRecommendedBtn");
-  const retakeBtn = document.getElementById("retakeBtn");
-
-  const tagCount = document.getElementById("tagCount");
-  const tagLine = document.getElementById("tagLine");
-  const tagFacts = document.getElementById("tagFacts");
-  const tagPV = document.getElementById("tagPV");
-  const tagWP = document.getElementById("tagWP");
-  const tagShapes = document.getElementById("tagShapes");
-
-  const gameTitle = document.getElementById("gameTitle");
-  const gameDesc = document.getElementById("gameDesc");
-  const roundText = document.getElementById("roundText");
-  const promptText = document.getElementById("promptText");
-  const promptHint = document.getElementById("promptHint");
-  const stageBody = document.getElementById("stageBody");
-  const stageFeedback = document.getElementById("stageFeedback");
-  const starsText = document.getElementById("starsText");
-
-  const backToHubBtn = document.getElementById("backToHubBtn");
-  const newRoundBtn = document.getElementById("newRoundBtn");
-  const speakBtn = document.getElementById("speakBtn");
-
-  function showOnly(panel){
-    diagPanel.style.display = "none";
-    resultsPanel.style.display = "none";
-    gameHub.style.display = "none";
-    gameStage.style.display = "none";
-    panel.style.display = "block";
-  }
-
-  // -----------------------------
-  // Grade
-  // -----------------------------
-  let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
-  const gradeBtns = Array.from(document.querySelectorAll(".grade-btn"));
+  let grade = new URLSearchParams(location.search).get("grade") || localStorage.getItem("bloom_pref_grade") || "K";
+  const gradeButtons = document.querySelectorAll(".pill[data-grade]");
   function setGrade(g){
     grade = g;
-    localStorage.setItem(PREF_GRADE_KEY, g);
-    gradeBtns.forEach(b => b.classList.toggle("active", b.dataset.grade === grade));
-    hydrateButtons();
-    if (gameHub.style.display !== "none") renderGameTags(readSavedDiag());
+    localStorage.setItem("bloom_pref_grade", g);
+    gradeButtons.forEach(b => b.classList.toggle("active", b.dataset.grade === grade));
+    refreshGoGames();
+    refreshHub();
   }
-  gradeBtns.forEach(btn=> btn.addEventListener("click", ()=> setGrade(btn.dataset.grade)));
+  gradeButtons.forEach(btn => btn.onclick = ()=> setGrade(btn.dataset.grade));
   setGrade(grade);
 
-  // -----------------------------
-  // Game length
-  // -----------------------------
-  let gameLen = localStorage.getItem(PREF_LEN_KEY) || "5";
-  function setGameLen(v){
-    gameLen = v;
-    localStorage.setItem(PREF_LEN_KEY, v);
-    document.querySelectorAll(".len-btn").forEach(b=>{
-      b.classList.toggle("active", b.dataset.len === gameLen);
-    });
-  }
-  document.addEventListener("click", (e)=>{
-    const btn = e.target.closest(".len-btn");
-    if (!btn) return;
-    setGameLen(btn.dataset.len);
-  });
-  setGameLen(gameLen);
-
-  function calcRoundsTarget(){
-    if (gameLen === "endless") return Infinity;
-    const n = parseInt(gameLen, 10);
-    return Number.isFinite(n) ? n : 5;
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
   }
 
-  // -----------------------------
-  // Diagnostic bank (K–2)
-  // skills:
-  // K: counting, shapes, compare
-  // 1: addSub, word, shapes
-  // 2: addSub, placeValue, word
-  // -----------------------------
-  const diagBanks = {
-    K: [
-      { skill:"count", q:"Count the apples: 🍎🍎🍎🍎", choices:["3","4","5"], correct:"4", hint:"Count each apple." },
-      { skill:"count", q:"How many stars? ⭐⭐⭐⭐⭐", choices:["4","5","6"], correct:"5", hint:"Count the stars." },
-      { skill:"compare", q:"Which is MORE?", choices:["🍪🍪🍪 vs 🍪🍪","🍪🍪 vs 🍪🍪🍪","🍪🍪 vs 🍪🍪"], correct:"🍪🍪🍪 vs 🍪🍪", hint:"More means bigger group." },
-      { skill:"compare", q:"Which is LESS?", choices:["🐟🐟🐟 vs 🐟🐟","🐟🐟🐟 vs 🐟🐟🐟🐟","🐟🐟 vs 🐟"], correct:"🐟🐟 vs 🐟", hint:"Less means smaller group." },
-      { skill:"shapes", q:"Which one is a CIRCLE?", choices:["🔺","⚪","⬛"], correct:"⚪", hint:"Circle is round." },
-      { skill:"shapes", q:"Which one is a TRIANGLE?", choices:["🔺","⚪","⬛"], correct:"🔺", hint:"Triangle has 3 sides." },
-      { skill:"count", q:"Count the frogs: 🐸🐸🐸", choices:["2","3","4"], correct:"3", hint:"Count each frog." },
-      { skill:"compare", q:"Which number is bigger?", choices:["2","7","5"], correct:"7", hint:"Bigger = more." },
-      { skill:"shapes", q:"Which one is a SQUARE?", choices:["⬛","⚪","🔺"], correct:"⬛", hint:"Square has 4 equal sides." },
-      { skill:"count", q:"How many balloons? 🎈🎈🎈🎈🎈🎈", choices:["5","6","7"], correct:"6", hint:"Count them carefully." }
+  // -------- Diagnostic bank (10) --------
+  const BANK = {
+    "K": [
+      {q:"How many? 🍎🍎🍎", choices:["2","3","4"], correct:"3", focus:"count"},
+      {q:"Which number is bigger?", choices:["5","2","1"], correct:"5", focus:"compare"},
+      {q:"2 + 1 = ?", choices:["2","3","4"], correct:"3", focus:"add"},
+      {q:"5 − 2 = ?", choices:["2","3","4"], correct:"3", focus:"sub"},
+      {q:"What comes next? 1, 2, 3, __", choices:["4","5","6"], correct:"4", focus:"count"},
+      {q:"Which is a circle?", choices:["⚪","⬛","🔺"], correct:"⚪", focus:"shapes"},
+      {q:"How many? ⭐⭐", choices:["1","2","3"], correct:"2", focus:"count"},
+      {q:"3 + 2 = ?", choices:["4","5","6"], correct:"5", focus:"add"},
+      {q:"Which is smaller?", choices:["1","9","7"], correct:"1", focus:"compare"},
+      {q:"What comes before 6?", choices:["5","7","8"], correct:"5", focus:"count"}
     ],
-    1: [
-      { skill:"facts", q:"5 + 3 = ?", choices:["7","8","9"], correct:"8", hint:"Count up 3 from 5." },
-      { skill:"facts", q:"10 − 4 = ?", choices:["5","6","7"], correct:"6", hint:"Count back 4 from 10." },
-      { skill:"facts", q:"6 + 6 = ?", choices:["10","12","14"], correct:"12", hint:"Double 6." },
-      { skill:"facts", q:"9 − 5 = ?", choices:["3","4","5"], correct:"4", hint:"Count back 5." },
-      { skill:"word", q:"Lia has 4 shells. She finds 3 more. How many shells now?", choices:["6","7","8"], correct:"7", hint:"Add 4 and 3." },
-      { skill:"word", q:"Ben has 8 stickers. He gives away 2. How many left?", choices:["5","6","7"], correct:"6", hint:"Take away 2." },
-      { skill:"shapes", q:"How many sides does a triangle have?", choices:["3","4","5"], correct:"3", hint:"Triangle = 3 sides." },
-      { skill:"shapes", q:"How many corners does a square have?", choices:["3","4","5"], correct:"4", hint:"Square = 4 corners." },
-      { skill:"facts", q:"7 + 2 = ?", choices:["8","9","10"], correct:"9", hint:"Count on 2." },
-      { skill:"word", q:"There are 5 ducks in a pond. 2 more swim in. How many ducks?", choices:["6","7","8"], correct:"7", hint:"Add 5 + 2." }
+    "1": [
+      {q:"8 + 7 = ?", choices:["14","15","16"], correct:"15", focus:"add"},
+      {q:"12 − 5 = ?", choices:["6","7","8"], correct:"7", focus:"sub"},
+      {q:"Which is greater?", choices:["19","9","10"], correct:"19", focus:"compare"},
+      {q:"What comes next? 10, 12, 14, __", choices:["15","16","18"], correct:"16", focus:"patterns"},
+      {q:"9 + 6 = ?", choices:["14","15","16"], correct:"15", focus:"add"},
+      {q:"Which is an even number?", choices:["7","8","9"], correct:"8", focus:"skills"},
+      {q:"15 − 9 = ?", choices:["5","6","7"], correct:"6", focus:"sub"},
+      {q:"What is 10 + 3?", choices:["12","13","14"], correct:"13", focus:"add"},
+      {q:"Which is smaller?", choices:["11","18","20"], correct:"11", focus:"compare"},
+      {q:"How many tens in 20?", choices:["1","2","3"], correct:"2", focus:"place"}
     ],
-    2: [
-      { skill:"facts", q:"12 − 7 = ?", choices:["4","5","6"], correct:"5", hint:"Count up from 7 to 12." },
-      { skill:"facts", q:"8 + 9 = ?", choices:["16","17","18"], correct:"17", hint:"Make 10: 8+2=10, then +7." },
-      { skill:"place", q:"What is the value of the 3 in 34?", choices:["3","30","300"], correct:"30", hint:"3 tens = 30." },
-      { skill:"place", q:"Which number has 4 tens and 2 ones?", choices:["24","42","402"], correct:"42", hint:"4 tens = 40, plus 2." },
-      { skill:"word", q:"Maya has 15 marbles. She loses 6. How many marbles now?", choices:["8","9","10"], correct:"9", hint:"15 − 6." },
-      { skill:"word", q:"A box has 9 crayons. Another box has 8 crayons. How many in all?", choices:["16","17","18"], correct:"17", hint:"9 + 8." },
-      { skill:"facts", q:"14 − 8 = ?", choices:["5","6","7"], correct:"6", hint:"Count up from 8 to 14." },
-      { skill:"place", q:"Which is bigger?", choices:["39","93","30"], correct:"93", hint:"9 tens is big!" },
-      { skill:"word", q:"There are 12 birds. 5 fly away. How many birds left?", choices:["6","7","8"], correct:"7", hint:"12 − 5." },
-      { skill:"facts", q:"7 + 7 = ?", choices:["12","14","16"], correct:"14", hint:"Double 7." }
+    "2": [
+      {q:"34 + 20 = ?", choices:["44","54","64"], correct:"54", focus:"add"},
+      {q:"50 − 18 = ?", choices:["32","42","28"], correct:"32", focus:"sub"},
+      {q:"Which has more tens?", choices:["40","30","20"], correct:"40", focus:"place"},
+      {q:"What comes next? 5, 10, 15, __", choices:["18","20","25"], correct:"20", focus:"skip"},
+      {q:"Which is bigger?", choices:["67","76","66"], correct:"76", focus:"compare"},
+      {q:"What is 3 groups of 2?", choices:["5","6","7"], correct:"6", focus:"foundations"},
+      {q:"42 + 9 = ?", choices:["49","51","52"], correct:"51", focus:"add"},
+      {q:"Which is closest to 50?", choices:["49","60","40"], correct:"49", focus:"skills"},
+      {q:"60 − 30 = ?", choices:["20","30","40"], correct:"30", focus:"sub"},
+      {q:"Place value: In 58, the 5 means…", choices:["5","50","500"], correct:"50", focus:"place"}
     ]
   };
 
-  function getTenDiagQuestions(g){
-    const pool = (diagBanks[g] || diagBanks.K).slice();
-    return shuffle(pool).slice(0, 10);
+  // -------- Diagnostic state --------
+  const diagWrap = document.getElementById("diagWrap");
+  const afterWrap = document.getElementById("afterDiagWrap");
+  const hub = document.getElementById("hub");
+  const playWrap = document.getElementById("playWrap");
+
+  const diagMeta = document.getElementById("diagMeta");
+  const diagQ = document.getElementById("diagQ");
+  const diagSupport = document.getElementById("diagSupport");
+  const diagChoices = document.getElementById("diagChoices");
+  const diagResult = document.getElementById("diagResult");
+
+  let diagItems=[], dIndex=0, dScore=0, dWrong=[];
+  let lastDiag=null;
+
+  function startDiag(){
+    diagItems = shuffle(BANK[grade]).slice(0,10);
+    dIndex=0; dScore=0; dWrong=[];
+    diagWrap.style.display="block";
+    afterWrap.style.display="none";
+    hub.style.display="none";
+    playWrap.style.display="none";
+    renderDiag();
+    window.scrollTo({top: diagWrap.offsetTop-10, behavior:"smooth"});
   }
 
-  // -----------------------------
-  // Diagnostic state
-  // -----------------------------
-  let diagQs = [];
-  let diagIndex = 0;
-  let diagCorrect = 0;
-  let diagAnswered = false;
-  let diagMiss = { count:0, compare:0, shapes:0, facts:0, word:0, place:0 };
-  let lastDiagSpeakText = "";
+  function renderDiag(){
+    const it = diagItems[dIndex];
+    lastDiag = it;
+    diagMeta.textContent = `Question ${dIndex+1} of 10`;
+    diagQ.textContent = it.q;
+    diagSupport.textContent = "Tap 🔊 to read aloud.";
+    diagResult.textContent = "";
 
-  function renderDiagQuestion(){
-    diagAnswered = false;
-    diagFeedback.textContent = "";
-    diagNextBtn.disabled = true;
-
-    const q = diagQs[diagIndex];
-    diagProgressText.textContent = `Question ${diagIndex + 1} of 10`;
-
-    diagQuestion.textContent = q.q;
-    diagHint.textContent = q.hint || "";
-    lastDiagSpeakText = q.q;
-
-    diagChoices.innerHTML = "";
-    q.choices.forEach((c)=>{
+    diagChoices.innerHTML="";
+    it.choices.forEach(c=>{
       const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.style.cursor = "pointer";
-      card.innerHTML = `<h3 style="font-size:28px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.addEventListener("click", ()=> pickDiagAnswer(c));
+      card.className="card";
+      card.style.textAlign="center";
+      card.innerHTML = `<h3 style="font-size:30px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> diagAnswer(c);
       diagChoices.appendChild(card);
     });
   }
 
-  function pickDiagAnswer(choice){
-    if (diagAnswered) return;
-    diagAnswered = true;
-
-    const q = diagQs[diagIndex];
-    const correct = (choice === q.correct);
-
-    if (correct){
-      diagCorrect++;
-      diagFeedback.textContent = "Correct! ⭐";
-      speak("Correct!");
+  function diagAnswer(choice){
+    if (diagResult.textContent) return;
+    const it = diagItems[dIndex];
+    if (choice === it.correct){
+      dScore++;
+      diagResult.textContent="Correct! ⭐";
     } else {
-      diagFeedback.textContent = `Good try! ✅ Answer: ${q.correct}`;
-      if (q.skill && (q.skill in diagMiss)) diagMiss[q.skill] += 1;
-      speak("Try again.");
+      dWrong.push(it.focus);
+      diagResult.textContent=`Try again 🙂 Answer: ${it.correct}`;
     }
+  }
 
-    Array.from(diagChoices.children).forEach((card)=>{
-      const val = card.querySelector("h3")?.textContent;
-      card.style.opacity = "0.92";
-      if (val === q.correct) card.style.outline = "3px solid rgba(46, 125, 80, .35)";
-      if (val === choice && val !== q.correct) card.style.outline = "3px solid rgba(180, 60, 60, .22)";
+  function diagNext(skipped=false){
+    const it = diagItems[dIndex];
+    if (!diagResult.textContent || skipped) dWrong.push(it.focus);
+    dIndex++;
+    if (dIndex>=10) finishDiag();
+    else renderDiag();
+  }
+
+  function finishDiag(){
+    const pct = Math.round((dScore/10)*100);
+    const counts = dWrong.reduce((m,k)=>(m[k]=(m[k]||0)+1,m),{});
+    const focusOrder = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+
+    save(MATH_DIAG_KEY, {date:Date.now(), grade, score:pct, focusOrder});
+
+    document.getElementById("planScore").textContent = `${pct}%`;
+    document.getElementById("planGrade").textContent = `Grade: ${grade==="K"?"Kindergarten":"Grade "+grade}`;
+
+    const map = {count:"Counting", add:"Addition", sub:"Subtraction", compare:"Comparing", shapes:"Shapes", patterns:"Patterns", place:"Place Value", skip:"Skip Counting", skills:"Skills", foundations:"Foundations"};
+    const path = focusOrder.slice(0,3).map(k=>map[k]).filter(Boolean);
+    document.getElementById("planPath").textContent = path.length ? path.join(" → ") : "Mixed Practice";
+
+    let minutes = pct>=90 ? 6 : pct>=70 ? 8 : 10;
+    document.getElementById("planLen").textContent = `${minutes} min`;
+    document.getElementById("planLenNote").textContent = (pct>=90) ? "Try 2 quick games" : (pct>=70) ? "Try 2–3 games" : "Try 3 games";
+
+    diagWrap.style.display="none";
+    afterWrap.style.display="block";
+    refreshGoGames();
+    window.scrollTo({top: afterWrap.offsetTop-10, behavior:"smooth"});
+  }
+
+  function refreshGoGames(){
+    const saved = load(MATH_DIAG_KEY, null);
+    const ok = saved && saved.grade===grade;
+    const btn = document.getElementById("goGamesBtn");
+    btn.disabled = !ok;
+    btn.style.opacity = ok ? "1" : ".6";
+  }
+
+  // -------- Games --------
+  const GAMES = [
+    {id:"quickSolve", name:"⚡ Quick Solve", desc:"Choose the correct answer fast.", min:4, grades:["K","1","2"]},
+    {id:"compareMonster", name:"👾 Compare Monster", desc:"Pick >, <, or = to help the monster.", min:5, grades:["1","2"]},
+    {id:"tenFrame", name:"🟩 Ten-Frame Builder", desc:"Build numbers using a ten-frame.", min:5, grades:["K","1"]},
+    {id:"placeValue", name:"🧱 Place Value Blocks", desc:"Tens and ones practice.", min:6, grades:["2"]},
+    {id:"numberLine", name:"🦘 Number Line Hop", desc:"Hop along a number line to solve.", min:5, grades:["K","1","2"]}
+  ];
+
+  const hubDesc = document.getElementById("hubDesc");
+  const cards = document.getElementById("cards");
+
+  function refreshHub(){
+    const saved = load(MATH_DIAG_KEY, null);
+    hubDesc.textContent = saved && saved.grade===grade ? "Games are filtered for your grade. ⭐" : "Take the diagnostic first.";
+    const list = GAMES.filter(g=>g.grades.includes(grade));
+    cards.innerHTML="";
+    list.forEach(g=>{
+      const c = document.createElement("div");
+      c.className="card";
+      c.innerHTML = `
+        <h3 style="margin-bottom:6px;">${g.name}</h3>
+        <p class="small" style="line-height:1.5;">${g.desc}</p>
+        <p class="small" style="margin-top:8px;"><strong>Length:</strong> ${g.min} min</p>
+        <div class="quick-strip" style="margin-top:10px; justify-content:flex-start;">
+          <button class="btn secondary">Play</button>
+        </div>
+      `;
+      c.querySelector("button").onclick = ()=> startGame(g.id);
+      cards.appendChild(c);
     });
-
-    diagNextBtn.disabled = false;
   }
-
-  function saveDiag(result){ save(MATH_DIAG_KEY, result); }
-  function readSavedDiag(){ return load(MATH_DIAG_KEY, null); }
-
-  function recommendGameKey(saved){
-    const miss = saved?.misses || {};
-    const entries = Object.entries(miss);
-    let best = { key:"facts", n:-1 };
-    entries.forEach(([k,n])=>{ if ((n||0) > best.n) best = { key:k, n:n||0 }; });
-
-    // map diagnostic skills to game keys
-    if (best.n <= 0){
-      // no big misses: choose grade-appropriate “fun mix”
-      return (grade === "K") ? "counting" : (grade === "1") ? "facts" : "wordProblems";
-    }
-    if (best.key === "count") return "counting";
-    if (best.key === "compare") return "counting";
-    if (best.key === "shapes") return "shapes";
-    if (best.key === "place") return "placeValue";
-    if (best.key === "word") return "wordProblems";
-    return "facts";
-  }
-
-  function humanGameName(key){
-    const map = {
-      counting:"Count & Tap",
-      numberLine:"Number Line Hop",
-      facts:"Speed Facts",
-      placeValue:"Place Value Builder",
-      wordProblems:"Word Problem Picnic",
-      shapes:"Shape Safari"
-    };
-    return map[key] || "Speed Facts";
-  }
-
-  function finishDiagnostic(){
-    const score = diagCorrect;
-    const total = 10;
-
-    const missPairs = Object.entries(diagMiss)
-      .map(([k,n])=>({k,n}))
-      .sort((a,b)=> b.n - a.n);
-
-    const readable = (k)=>{
-      const m = { count:"Counting", compare:"Compare", shapes:"Shapes", facts:"Facts", word:"Word Problems", place:"Place Value" };
-      return m[k] || k;
-    };
-
-    const needs = (missPairs[0].n === 0)
-      ? "Nothing big — you’re doing great!"
-      : missPairs.filter(x=>x.n>0).slice(0,2).map(x=>readable(x.k)).join(", ");
-
-    const next = recommendGameKey({ misses: diagMiss, grade });
-
-    const result = { date: Date.now(), grade, score, total, misses: { ...diagMiss }, recommended: next };
-    saveDiag(result);
-
-    scoreBox.textContent = `${score} / ${total}`;
-    needsBox.textContent = needs;
-    readyBox.textContent = humanGameName(next);
-    resultsSummary.textContent = `You scored ${Math.round((score/total)*100)}% for Grade ${grade === "K" ? "K" : grade}!`;
-
-    renderGameTags(result);
-    hydrateButtons();
-
-    showOnly(resultsPanel);
-  }
-
-  // -----------------------------
-  // Tags
-  // -----------------------------
-  function renderGameTags(saved){
-    const s = saved || readSavedDiag();
-    const miss = s?.misses || {};
-
-    function mkTag(label, keys){
-      const n = keys.reduce((sum,k)=> sum + (miss[k] || 0), 0);
-      return n ? `Recommended ⭐ (missed ${n})` : `Ready ✅`;
-    }
-
-    tagCount.textContent  = mkTag("Count", ["count","compare"]);
-    tagLine.textContent   = (grade === "K") ? "Fun practice 🎉" : "Great for strategies ✅";
-    tagFacts.textContent  = mkTag("Facts", ["facts"]);
-    tagPV.textContent     = (grade === "2") ? mkTag("Place", ["place"]) : "Unlock in Grade 2 ✅";
-    tagWP.textContent     = mkTag("Word", ["word"]);
-    tagShapes.textContent = mkTag("Shapes", ["shapes"]);
-  }
-
-  // -----------------------------
-  // Enable/disable action buttons
-  // -----------------------------
-  function hydrateButtons(){
-    const saved = readSavedDiag();
-    const ok = saved && saved.grade === grade && saved.total === 10;
-    chooseGameBtn.disabled = !ok;
-    chooseGameBtn.style.opacity = ok ? "1" : ".6";
-    recommendedBtn.disabled = !ok;
-    recommendedBtn.style.opacity = ok ? "1" : ".6";
-  }
-
-  // -----------------------------
-  // Game Engine
-  // -----------------------------
-  let activeGame = null;
-  let round = 1;
-  let roundsTarget = 5;
-  let lastSpeakText = "";
-
-  function setStageHeader(title, desc){
-    gameTitle.textContent = title;
-    gameDesc.textContent = desc;
-    stageFeedback.textContent = "";
-    starsText.textContent = `Math ⭐: ${getMathStars()}`;
-  }
-
-  function setPrompt(text, hint, speakText){
-    promptText.textContent = text;
-    promptHint.textContent = hint || "";
-    stageFeedback.textContent = "";
-    const maxText = (roundsTarget === Infinity) ? "Endless" : roundsTarget;
-    roundText.textContent = `Round ${round} of ${maxText}`;
-    stageBody.innerHTML = "";
-    lastSpeakText = speakText || text;
-  }
-
-  function feedbackOk(msg){
-    stageFeedback.textContent = msg || "Correct! ⭐";
-    addMathStar();
-    starsText.textContent = `Math ⭐: ${getMathStars()}`;
-  }
-  function feedbackNo(msg){ stageFeedback.textContent = msg || "Try again 🙂"; }
 
   function openHub(){
-    renderGameTags(readSavedDiag());
-    setGameLen(gameLen);
-    showOnly(gameHub);
+    afterWrap.style.display="none";
+    diagWrap.style.display="none";
+    hub.style.display="block";
+    playWrap.style.display="none";
+    refreshHub();
+    window.scrollTo({top: hub.offsetTop-10, behavior:"smooth"});
   }
 
-  function openStage(gameKey){
-    activeGame = gameKey;
-    round = 1;
-    roundsTarget = calcRoundsTarget();
-    showOnly(gameStage);
-    runRound();
+  // -------- Player --------
+  const gameTitle = document.getElementById("gameTitle");
+  const gameMeta = document.getElementById("gameMeta");
+  const prompt = document.getElementById("prompt");
+  const support = document.getElementById("support");
+  const stage = document.getElementById("stage");
+  const result = document.getElementById("result");
+
+  let activeGame=null, gIndex=0, lastText="";
+
+  function startGame(id){
+    activeGame=id;
+    gIndex=0;
+    hub.style.display="none";
+    playWrap.style.display="block";
+    renderGame();
+    window.scrollTo({top: playWrap.offsetTop-10, behavior:"smooth"});
   }
 
-  function maybeFinish(){
-    if (roundsTarget !== Infinity && round > roundsTarget){
-      stageFeedback.textContent = "🎉 Great job! You finished your game!";
-      promptText.textContent = "Want to play another game?";
-      promptHint.textContent = "Tap ← Back to pick a new one, or press New Round.";
-      stageBody.innerHTML = "";
-      lastSpeakText = "Great job! You finished your game!";
-      return true;
-    }
-    return false;
-  }
-
-  function nextRoundSoon(){
-    setTimeout(()=>{
-      round++;
-      if (maybeFinish()) return;
-      runRound();
-    }, 650);
-  }
-
-  function runRound(){
-    stageFeedback.textContent = "";
-    starsText.textContent = `Math ⭐: ${getMathStars()}`;
-    if (maybeFinish()) return;
-
-    if (activeGame === "counting") return roundCounting();
-    if (activeGame === "numberLine") return roundNumberLine();
-    if (activeGame === "facts") return roundFacts();
-    if (activeGame === "placeValue") return roundPlaceValue();
-    if (activeGame === "wordProblems") return roundWordProblems();
-    if (activeGame === "shapes") return roundShapes();
-  }
-
-  function cardChoices(choices, correct, onCorrectMsg){
-    const grid = document.createElement("div");
-    grid.className = "grid-3";
+  function choiceCards(choices, onPick){
+    const wrap = document.createElement("div");
+    wrap.className="grid-3";
     choices.forEach(c=>{
       const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "center";
-      card.style.cursor = "pointer";
-      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=> {
-        if (String(c) === String(correct)){
-          feedbackOk(onCorrectMsg || "Correct! ⭐");
-          nextRoundSoon();
-        } else {
-          feedbackNo("Try again 🙂");
-        }
-      };
-      grid.appendChild(card);
+      card.className="card";
+      card.style.textAlign="center";
+      card.innerHTML = `<h3 style="font-size:32px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> onPick(c);
+      wrap.appendChild(card);
     });
-    stageBody.appendChild(grid);
+    return wrap;
   }
 
-  // -----------------------------
-  // Game Content
-  // -----------------------------
-  function randInt(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function renderQuickSolve(){
+    gameTitle.textContent = "⚡ Quick Solve";
+    gameMeta.textContent = "Solve and choose.";
+    result.textContent="";
 
-  // 🍎 Count & Tap
-  function roundCounting(){
-    setStageHeader("🍎 Count & Tap", "Count objects and choose the number.");
-    let n;
-    let emoji;
-    if (grade === "K"){
-      n = randInt(1, 10);
-      emoji = pick(["🍎","⭐","🐸","🎈","🍪"]);
-    } else if (grade === "1"){
-      n = randInt(6, 20);
-      emoji = pick(["🍎","⭐","🐟","🍪","🐝"]);
-    } else {
-      n = randInt(10, 30);
-      emoji = pick(["⭐","🍪","🐟","🍎"]);
-    }
-
-    const row = Array.from({length:n}, ()=>emoji).join(" ");
-    setPrompt(`Count them: ${row}`, "Count carefully, then tap the number.", `Count them. How many are there?`);
-
-    const correct = n;
-    const choices = shuffle([correct, correct + randInt(1,3), Math.max(0, correct - randInt(1,3))].map(x=>String(x)));
-    cardChoices(choices, String(correct), "Counted it! ⭐");
-  }
-
-  // 🪜 Number Line Hop
-  function roundNumberLine(){
-    setStageHeader("🪜 Number Line Hop", "Jump forward/back to find the answer.");
-    let start, move;
-    if (grade === "K"){
-      start = randInt(0, 10);
-      move = randInt(1, 5);
-    } else if (grade === "1"){
-      start = randInt(0, 20);
-      move = randInt(2, 9);
-    } else {
-      start = randInt(0, 50);
-      move = randInt(5, 15);
-    }
-    const dir = Math.random() < 0.5 ? "forward" : "back";
-    const ans = (dir === "forward") ? start + move : Math.max(0, start - move);
-
-    const hops = Array.from({length:move}, ()=> "🟩").join("");
-    setPrompt(`Start at ${start}. Hop ${dir} ${move}.`, `Hops: ${hops}`, `Start at ${start}. Hop ${dir} ${move}. What number do you land on?`);
-
-    const choices = shuffle([ans, ans + randInt(1,3), Math.max(0, ans - randInt(1,3))].map(x=>String(x)));
-    cardChoices(choices, String(ans), "Nice hopping! ⭐");
-  }
-
-  // ⚡ Speed Facts (add/sub based on grade)
-  function roundFacts(){
-    setStageHeader("⚡ Speed Facts", "Quick add/subtract with instant feedback.");
-    let a,b,op,ans;
-
-    if (grade === "K"){
-      a = randInt(0, 10);
-      b = randInt(0, 10-a);
-      op = "+";
-      ans = a + b;
-    } else if (grade === "1"){
-      const useAdd = Math.random()<0.6;
-      if (useAdd){
-        a = randInt(0, 20);
-        b = randInt(0, 20-a);
-        op = "+";
-        ans = a + b;
-      } else {
-        a = randInt(0, 20);
-        b = randInt(0, a);
-        op = "−";
-        ans = a - b;
-      }
-    } else {
-      const useAdd = Math.random()<0.55;
-      if (useAdd){
-        a = randInt(5, 20);
-        b = randInt(5, 20);
-        op = "+";
-        ans = a + b;
-      } else {
-        a = randInt(10, 30);
-        b = randInt(1, 20);
-        if (b > a) [a,b]=[b,a];
-        op = "−";
-        ans = a - b;
-      }
-    }
-
-    setPrompt(`${a} ${op} ${b} = ?`, "Think: make 10, doubles, or count on/back.", `${a} ${op} ${b} equals what?`);
-
-    const choices = shuffle([ans, ans + randInt(1,3), Math.max(0, ans - randInt(1,3))].map(x=>String(x)));
-    cardChoices(choices, String(ans), "Fast facts! ⭐");
-  }
-
-  // 🧱 Place Value Builder (mostly Grade 2)
-  function roundPlaceValue(){
-    setStageHeader("🧱 Place Value Builder", "Build numbers with tens & ones.");
-    if (grade !== "2"){
-      setPrompt("This game unlocks in Grade 2 😊", "Pick another game from the hub.", "This game is for grade 2.");
-      stageBody.innerHTML = `<div class="game-box"><div class="kid-big">Try ⚡ Speed Facts or 🧺 Word Problems!</div></div>`;
-      return;
-    }
-
-    const tens = randInt(1, 9);
-    const ones = randInt(0, 9);
-    const num = tens*10 + ones;
-
-    setPrompt(`Build the number: ${num}`, "Choose the tens and ones.", `Build the number ${num}.`);
-
-    const box = document.createElement("div");
-    box.className = "game-box";
-    box.innerHTML = `
-      <div class="small">Pick the tens:</div>
-      <div class="quick-strip" id="tensRow" style="justify-content:center; flex-wrap:wrap;"></div>
-      <div class="small" style="margin-top:10px;">Pick the ones:</div>
-      <div class="quick-strip" id="onesRow" style="justify-content:center; flex-wrap:wrap;"></div>
-      <div class="kid-big" id="pvStatus" style="margin-top:10px;">Tens: — | Ones: —</div>
-    `;
-    stageBody.appendChild(box);
-
-    let pickT = null;
-    let pickO = null;
-
-    function update(){
-      const status = document.getElementById("pvStatus");
-      status.textContent = `Tens: ${pickT===null?"—":pickT} | Ones: ${pickO===null?"—":pickO}`;
-      if (pickT !== null && pickO !== null){
-        const built = pickT*10 + pickO;
-        if (built === num){
-          feedbackOk("Built it! ⭐");
-          nextRoundSoon();
-        } else {
-          feedbackNo(`Not quite. You built ${built}. Try again 🙂`);
-        }
-      }
-    }
-
-    const tensRow = box.querySelector("#tensRow");
-    const onesRow = box.querySelector("#onesRow");
-
-    // Keep it small + kid-friendly: offer 3 options each
-    const tensChoices = shuffle([tens, Math.max(1, tens-1), Math.min(9, tens+1)]).slice(0,3);
-    const onesChoices = shuffle([ones, (ones+2)%10, (ones+5)%10]).slice(0,3);
-
-    tensChoices.forEach(t=>{
-      const b = document.createElement("button");
-      b.className = "pill";
-      b.textContent = `${t} tens`;
-      b.onclick = ()=>{ pickT = t; update(); };
-      tensRow.appendChild(b);
-    });
-
-    onesChoices.forEach(o=>{
-      const b = document.createElement("button");
-      b.className = "pill";
-      b.textContent = `${o} ones`;
-      b.onclick = ()=>{ pickO = o; update(); };
-      onesRow.appendChild(b);
-    });
-  }
-
-  // 🧺 Word Problem Picnic
-  function roundWordProblems(){
-    setStageHeader("🧺 Word Problem Picnic", "Solve mini story problems.");
     const bank = {
-      K: [
-        { q:"There are 3 ducks. 2 more join. How many ducks?", a:5, hint:"Add 3 + 2." },
-        { q:"You have 4 apples. You eat 1. How many left?", a:3, hint:"Take away 1." }
+      "K": [
+        {q:"3 + 2 = ?", correct:"5", choices:["4","5","6"]},
+        {q:"How many? ⭐⭐⭐⭐", correct:"4", choices:["3","4","5"]},
+        {q:"5 − 1 = ?", correct:"4", choices:["3","4","5"]}
       ],
-      1: [
-        { q:"Lia has 6 stickers. She gets 5 more. How many?", a:11, hint:"Add 6 + 5." },
-        { q:"Ben has 12 beads. He gives away 4. How many left?", a:8, hint:"12 − 4." }
+      "1": [
+        {q:"9 + 6 = ?", correct:"15", choices:["14","15","16"]},
+        {q:"14 − 7 = ?", correct:"7", choices:["6","7","8"]},
+        {q:"Which is bigger?", correct:"18", choices:["18","12","15"]}
       ],
-      2: [
-        { q:"A shelf has 14 books. 6 are checked out. How many left?", a:8, hint:"14 − 6." },
-        { q:"There are 9 red balloons and 8 blue balloons. How many total?", a:17, hint:"9 + 8." }
+      "2": [
+        {q:"42 + 9 = ?", correct:"51", choices:["49","51","52"]},
+        {q:"60 − 30 = ?", correct:"30", choices:["20","30","40"]},
+        {q:"34 + 20 = ?", correct:"54", choices:["44","54","64"]}
       ]
     };
 
-    const it = pick(bank[grade] || bank.K);
-    setPrompt(it.q, it.hint, it.q);
+    const it = bank[grade][gIndex % bank[grade].length];
+    lastText = it.q;
 
-    const ans = it.a;
-    const choices = shuffle([ans, ans + randInt(1,3), Math.max(0, ans - randInt(1,3))].map(x=>String(x)));
-    cardChoices(choices, String(ans), "Solved it! ⭐");
+    prompt.textContent = it.q;
+    support.textContent = "Pick the right answer.";
+
+    stage.innerHTML="";
+    stage.appendChild(choiceCards(it.choices, (pick)=>{
+      if (pick === it.correct){
+        result.textContent = "Correct! ⭐";
+        addStar();
+      } else {
+        result.textContent = "Try again 🙂";
+      }
+    }));
   }
 
-  // 🔷 Shape Safari
-  function roundShapes(){
-    setStageHeader("🔷 Shape Safari", "Pick the shape and its features.");
-    const shapesK = [
-      { q:"Which is a circle?", a:"⚪", c:["⚪","🔺","⬛"], hint:"Circle is round." },
-      { q:"Which is a square?", a:"⬛", c:["⬛","⚪","🔺"], hint:"Square has 4 equal sides." },
-      { q:"Which is a triangle?", a:"🔺", c:["🔺","⚪","⬛"], hint:"Triangle has 3 sides." }
-    ];
-    const shapes1 = [
-      { q:"How many sides does a triangle have?", a:"3", c:["3","4","5"], hint:"Triangle = 3 sides." },
-      { q:"How many corners does a square have?", a:"4", c:["3","4","5"], hint:"Square = 4 corners." },
-      { q:"Which shape has 0 corners?", a:"Circle", c:["Square","Triangle","Circle"], hint:"Circle is round." }
-    ];
-    const shapes2 = [
-      { q:"A rectangle has…", a:"4 sides", c:["3 sides","4 sides","5 sides"], hint:"Rectangle has 4 sides." },
-      { q:"Which has 4 corners?", a:"Square", c:["Circle","Square","Triangle"], hint:"Corners = vertices." },
-      { q:"A triangle has…", a:"3 sides", c:["2 sides","3 sides","4 sides"], hint:"Triangle = 3." }
-    ];
+  function renderCompareMonster(){
+    gameTitle.textContent = "👾 Compare Monster";
+    gameMeta.textContent = "Choose >, <, or =";
+    result.textContent="";
 
-    const it = pick(grade==="K" ? shapesK : grade==="1" ? shapes1 : shapes2);
-    setPrompt(it.q, it.hint, it.q);
+    const bank = [
+      {a:7,b:9,correct:"<"},
+      {a:12,b:12,correct:"="},
+      {a:18,b:15,correct:">"},
+      {a:27,b:30,correct:"<"}
+    ];
+    const it = bank[gIndex % bank.length];
+    lastText = `${it.a} compared to ${it.b}`;
 
-    const choices = shuffle(it.c.slice());
-    cardChoices(choices, it.a, "Shape expert! ⭐");
+    prompt.textContent = `${it.a}  ?  ${it.b}`;
+    support.textContent = "Help the monster choose the right sign!";
+
+    stage.innerHTML="";
+    stage.appendChild(choiceCards([">","=","<"], (pick)=>{
+      if (pick === it.correct){
+        result.textContent = "Correct! ⭐";
+        addStar();
+      } else {
+        result.textContent = "Try again 🙂";
+      }
+    }));
   }
 
-  // -----------------------------
-  // Hub + Stage handlers
-  // -----------------------------
-  document.querySelectorAll(".card.pick").forEach(card=>{
-    card.style.cursor = "pointer";
-    card.addEventListener("click", ()=> openStage(card.dataset.game));
-  });
+  function renderTenFrame(){
+    gameTitle.textContent = "🟩 Ten-Frame Builder";
+    gameMeta.textContent = "Tap squares to build the number.";
+    result.textContent="";
 
-  backToHubBtn.addEventListener("click", openHub);
-  newRoundBtn.addEventListener("click", ()=>{ round++; runRound(); });
-  speakBtn.addEventListener("click", ()=> speak(lastSpeakText || promptText.textContent));
+    const targets = grade==="K" ? [3,5,7,9] : [6,8,10];
+    const target = targets[gIndex % targets.length];
+    lastText = `Make ${target}`;
 
-  // -----------------------------
-  // Diagnostic events
-  // -----------------------------
-  startDiagBtn.addEventListener("click", ()=>{
-    diagQs = getTenDiagQuestions(grade);
-    diagIndex = 0;
-    diagCorrect = 0;
-    diagAnswered = false;
-    diagMiss = { count:0, compare:0, shapes:0, facts:0, word:0, place:0 };
-    showOnly(diagPanel);
-    renderDiagQuestion();
-  });
+    prompt.textContent = `Make ${target}`;
+    support.textContent = "Tap squares. Count as you go!";
 
-  diagNextBtn.addEventListener("click", ()=>{
-    if (!diagAnswered) return;
-    diagIndex++;
-    if (diagIndex >= 10) finishDiagnostic();
-    else renderDiagQuestion();
-  });
+    stage.innerHTML="";
+    const frame = document.createElement("div");
+    frame.className="game-box";
+    frame.style.display="grid";
+    frame.style.gridTemplateColumns="repeat(5, 1fr)";
+    frame.style.gap="10px";
+    frame.style.maxWidth="520px";
+    frame.style.margin="0 auto";
 
-  diagRestartBtn.addEventListener("click", ()=>{
-    diagQs = getTenDiagQuestions(grade);
-    diagIndex = 0;
-    diagCorrect = 0;
-    diagAnswered = false;
-    diagMiss = { count:0, compare:0, shapes:0, facts:0, word:0, place:0 };
-    renderDiagQuestion();
-  });
-
-  diagSpeakBtn.addEventListener("click", ()=> speak(lastDiagSpeakText || diagQuestion.textContent));
-
-  retakeBtn.addEventListener("click", ()=>{
-    localStorage.removeItem(MATH_DIAG_KEY);
-    hydrateButtons();
-    diagQs = getTenDiagQuestions(grade);
-    diagIndex = 0;
-    diagCorrect = 0;
-    diagAnswered = false;
-    diagMiss = { count:0, compare:0, shapes:0, facts:0, word:0, place:0 };
-    showOnly(diagPanel);
-    renderDiagQuestion();
-  });
-
-  chooseGameBtn.addEventListener("click", openHub);
-  goChooseGameBtn.addEventListener("click", openHub);
-
-  function startRecommended(){
-    const saved = readSavedDiag();
-    const key = saved?.recommended || recommendGameKey(saved);
-    openStage(key);
-  }
-  recommendedBtn.addEventListener("click", startRecommended);
-  goRecommendedBtn.addEventListener("click", startRecommended);
-
-  // -----------------------------
-  // Save/read diag + tags + buttons
-  // -----------------------------
-  function saveDiag(result){ save(MATH_DIAG_KEY, result); }
-  function readSavedDiag(){ return load(MATH_DIAG_KEY, null); }
-
-  function renderGameTags(saved){
-    const s = saved || readSavedDiag();
-    const miss = s?.misses || {};
-
-    function mkTag(keys){
-      const n = keys.reduce((sum,k)=> sum + (miss[k] || 0), 0);
-      return n ? `Recommended ⭐ (missed ${n})` : `Ready ✅`;
+    let on=0;
+    const cells=[];
+    for (let i=0;i<10;i++){
+      const cell = document.createElement("div");
+      cell.className="card";
+      cell.style.height="70px";
+      cell.style.display="flex";
+      cell.style.alignItems="center";
+      cell.style.justifyContent="center";
+      cell.style.fontWeight="900";
+      cell.style.cursor="pointer";
+      cell.textContent="";
+      cell.onclick = ()=>{
+        if (cell.dataset.on === "1"){
+          cell.dataset.on="0";
+          cell.textContent="";
+          on--;
+        } else {
+          cell.dataset.on="1";
+          cell.textContent="🟩";
+          on++;
+        }
+      };
+      cell.dataset.on="0";
+      cells.push(cell);
+      frame.appendChild(cell);
     }
 
-    tagCount.textContent  = mkTag(["count","compare"]);
-    tagLine.textContent   = (grade === "K") ? "Fun practice 🎉" : "Strategy booster ✅";
-    tagFacts.textContent  = mkTag(["facts"]);
-    tagPV.textContent     = (grade === "2") ? mkTag(["place"]) : "Unlock in Grade 2 ✅";
-    tagWP.textContent     = mkTag(["word"]);
-    tagShapes.textContent = mkTag(["shapes"]);
+    const row = document.createElement("div");
+    row.className="quick-strip";
+    row.style.justifyContent="center";
+    row.style.marginTop="12px";
+
+    const check = document.createElement("button");
+    check.className="btn";
+    check.textContent="Check";
+    check.onclick = ()=>{
+      if (on === target){
+        result.textContent = "Correct! ⭐";
+        addStar();
+      } else {
+        result.textContent = `You made ${on}. Try again 🙂`;
+      }
+    };
+
+    const clear = document.createElement("button");
+    clear.className="btn secondary";
+    clear.textContent="Clear";
+    clear.onclick = ()=>{
+      on=0; result.textContent="";
+      cells.forEach(c=>{ c.dataset.on="0"; c.textContent=""; });
+    };
+
+    row.appendChild(check);
+    row.appendChild(clear);
+
+    stage.appendChild(frame);
+    stage.appendChild(row);
   }
 
-  function hydrateButtons(){
-    const saved = readSavedDiag();
-    const ok = saved && saved.grade === grade && saved.total === 10;
-    chooseGameBtn.disabled = !ok;
-    chooseGameBtn.style.opacity = ok ? "1" : ".6";
-    recommendedBtn.disabled = !ok;
-    recommendedBtn.style.opacity = ok ? "1" : ".6";
+  function renderPlaceValue(){
+    gameTitle.textContent = "🧱 Place Value Blocks";
+    gameMeta.textContent = "Tens + Ones";
+    result.textContent="";
+
+    const items = [
+      {n:34, tens:3, ones:4},
+      {n:58, tens:5, ones:8},
+      {n:41, tens:4, ones:1}
+    ];
+    const it = items[gIndex % items.length];
+    lastText = `How many tens and ones in ${it.n}`;
+
+    prompt.textContent = `How many tens and ones in ${it.n}?`;
+    support.textContent = "Choose the best match.";
+
+    const choices = [
+      `${it.tens} tens and ${it.ones} ones`,
+      `${it.ones} tens and ${it.tens} ones`,
+      `${it.tens+1} tens and ${it.ones-1} ones`
+    ];
+
+    stage.innerHTML="";
+    stage.appendChild(choiceCards(shuffle(choices), (pick)=>{
+      if (pick === `${it.tens} tens and ${it.ones} ones`){
+        result.textContent = "Correct! ⭐";
+        addStar();
+      } else {
+        result.textContent = "Try again 🙂";
+      }
+    }));
   }
 
-  // -----------------------------
-  // Init
-  // -----------------------------
-  function hydrate(){
-    hydrateButtons();
-    const saved = readSavedDiag();
-    if (saved && saved.grade === grade) renderGameTags(saved);
-    else renderGameTags({ grade, misses:{} });
+  function renderNumberLine(){
+    gameTitle.textContent = "🦘 Number Line Hop";
+    gameMeta.textContent = "Hop to the answer";
+    result.textContent="";
+
+    const bank = {
+      "K": [{start:2, hop:3, ans:5},{start:5, hop:2, ans:7}],
+      "1": [{start:8, hop:6, ans:14},{start:10, hop:5, ans:15}],
+      "2": [{start:20, hop:15, ans:35},{start:30, hop:12, ans:42}]
+    };
+    const it = bank[grade][gIndex % bank[grade].length];
+    lastText = `Start at ${it.start}. Hop ${it.hop}. Where do you land?`;
+
+    prompt.textContent = `Start at ${it.start}. Hop +${it.hop}. Where do you land?`;
+    support.textContent = "Pick the landing number.";
+
+    const choices = shuffle([String(it.ans), String(it.ans-1), String(it.ans+2)]);
+    stage.innerHTML="";
+    stage.appendChild(choiceCards(choices, (pick)=>{
+      if (pick === String(it.ans)){
+        result.textContent = "Correct! ⭐";
+        addStar();
+      } else {
+        result.textContent = "Try again 🙂";
+      }
+    }));
   }
-  hydrate();
-  setGameLen(gameLen);
+
+  function renderGame(){
+    result.textContent="";
+    if (activeGame==="quickSolve") return renderQuickSolve();
+    if (activeGame==="compareMonster") return renderCompareMonster();
+    if (activeGame==="tenFrame") return renderTenFrame();
+    if (activeGame==="placeValue") return renderPlaceValue();
+    if (activeGame==="numberLine") return renderNumberLine();
+  }
+
+  // -------- Controls --------
+  document.getElementById("startDiagBtn").onclick = startDiag;
+  document.getElementById("diagNextBtn").onclick = ()=> diagNext(false);
+  document.getElementById("diagSkipBtn").onclick = ()=> diagNext(true);
+  document.getElementById("diagSoundBtn").onclick = ()=> { if (lastDiag) speak(lastDiag.q); };
+
+  document.getElementById("openGamesBtn").onclick = openHub;
+  document.getElementById("goGamesBtn").onclick = openHub;
+
+  document.getElementById("retakeBtn").onclick = ()=>{
+    const saved = load(MATH_DIAG_KEY, null);
+    if (saved && saved.grade===grade) localStorage.removeItem(MATH_DIAG_KEY);
+    afterWrap.style.display="none";
+    hub.style.display="none";
+    playWrap.style.display="none";
+    diagWrap.style.display="none";
+    refreshGoGames();
+    alert("Diagnostic cleared. Press Start Diagnostic to begin again!");
+  };
+
+  document.getElementById("nextBtn").onclick = ()=>{ gIndex++; renderGame(); };
+  document.getElementById("backBtn").onclick = openHub;
+  document.getElementById("soundBtn").onclick = ()=> { if (lastText) speak(lastText); };
+
+  refreshGoGames();
+  refreshHub();
 </script>
 
 </body>
