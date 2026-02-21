@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Phonics | BloomELearning ✨</title>
+  <title>Reading | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
@@ -53,8 +53,8 @@
 
 <section class="hero">
   <div class="container">
-    <h1>Phonics 🔤</h1>
-    <p>Pick your grade, take a 10-question diagnostic, then choose a game to practice!</p>
+    <h1>Reading 📖</h1>
+    <p>Pick your grade, take a quick reading diagnostic, then play reading games and try decodable texts.</p>
   </div>
 </section>
 
@@ -64,7 +64,7 @@
 
     <div class="game-box wide">
 
-      <!-- Grade row (same size as button row) -->
+      <!-- Grade row -->
       <div class="kid-big" style="text-align:center;">Choose Grade 🌟</div>
       <div class="quick-strip" style="justify-content:center; margin-top:12px;">
         <button class="btn secondary grade-btn active" data-grade="K" type="button">Kindergarten</button>
@@ -75,29 +75,35 @@
       <!-- Actions row -->
       <div class="quick-strip" style="justify-content:center; margin-top:12px;">
         <button class="btn" id="startDiagBtn" type="button">Start Diagnostic</button>
+        <button class="btn secondary" id="recommendedBtn" type="button" disabled>Recommended Path</button>
         <button class="btn secondary" id="chooseGameBtn" type="button" disabled>Choose a Game</button>
         <a class="btn secondary" href="progress.html">My Progress</a>
       </div>
 
-      <div class="hero-note" style="text-align:center;">
-        Tip: Do the diagnostic first so games match your needs.
+      <div class="hero-note" style="text-align:center; margin-top:10px;">
+        Tip: Do the diagnostic first so games match your reading needs.
       </div>
 
       <!-- Diagnostic Panel -->
       <div id="diagPanel" class="game-box" style="margin-top:16px; display:none;">
-        <div class="kid-big">Diagnostic ✅</div>
-        <p class="small" id="diagSub">
-          Answer 10 questions. We’ll recommend what to practice next.
-        </p>
+        <div class="kid-big">Reading Diagnostic ✅</div>
+        <p class="small">Answer 10 questions. We’ll recommend what to practice next.</p>
 
         <div class="game-box" style="margin-top:12px;">
-          <div style="display:flex; gap:10px; align-items:flex-start; justify-content:space-between;">
-            <div style="flex:1;">
-              <div class="small" id="diagProgressText">Question 1 of 10</div>
-              <div class="kid-big" id="diagQuestion" style="margin-top:6px;">Press “Start Diagnostic”.</div>
-              <div class="small" id="diagHint" style="margin-top:6px;"></div>
-            </div>
+          <div class="small" id="diagProgressText">Question 1 of 10</div>
+
+          <!-- Passage -->
+          <div class="game-box" style="margin-top:10px;">
+            <div class="small" style="margin-bottom:6px;">Read this:</div>
+            <div class="kid-big" id="diagPassage" style="line-height:1.6;">Press “Start Diagnostic”.</div>
           </div>
+
+          <!-- Question + Read Aloud -->
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-top:10px;">
+            <div class="kid-big" id="diagQuestion" style="margin:0; flex:1;">Question appears here…</div>
+            <button class="btn secondary" id="diagSpeakBtn" type="button" title="Read aloud">🔊</button>
+          </div>
+          <div class="small" id="diagHint" style="margin-top:6px;"></div>
 
           <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
 
@@ -125,44 +131,109 @@
             <div class="small" id="needsBox">—</div>
           </div>
           <div class="card" style="text-align:center;">
-            <h3 style="font-size:22px; margin-bottom:6px;">Ready For</h3>
+            <h3 style="font-size:22px; margin-bottom:6px;">Recommended Next</h3>
             <div class="small" id="readyBox">—</div>
           </div>
         </div>
 
+        <!-- Game length appears AFTER diagnostic -->
+        <div class="game-box" style="margin-top:14px;">
+          <div class="small" style="text-align:center; margin-bottom:10px;">Choose Game Length</div>
+          <div class="quick-strip" style="justify-content:center;">
+            <button class="btn secondary len-btn active" data-len="5" type="button">5 Rounds</button>
+            <button class="btn secondary len-btn" data-len="10" type="button">10 Rounds</button>
+            <button class="btn secondary len-btn" data-len="endless" type="button">Endless</button>
+          </div>
+        </div>
+
         <div class="quick-strip" style="justify-content:center; margin-top:14px;">
-          <button class="btn" id="goChooseGameBtn" type="button">Choose a Game</button>
+          <button class="btn" id="goRecommendedBtn" type="button">Start Recommended Path</button>
+          <button class="btn secondary" id="goChooseGameBtn" type="button">Choose a Game</button>
           <button class="btn secondary" id="retakeBtn" type="button">Retake Diagnostic</button>
         </div>
       </div>
 
-      <!-- Game Picker Panel (unlocked after diagnostic) -->
-      <div id="gamePicker" class="game-box" style="margin-top:16px; display:none;">
-        <div class="kid-big">Pick a Game 🎮</div>
-        <p class="small">Choose what you want to practice next.</p>
+      <!-- Game Hub -->
+      <div id="gameHub" class="game-box" style="margin-top:16px; display:none;">
+        <div class="kid-big">Pick a Reading Game 🎮</div>
+        <p class="small">Choose what you want to practice next. (Games change by grade!)</p>
+
+        <!-- Game length also shown here -->
+        <div class="game-box" style="margin-top:12px;">
+          <div class="small" style="text-align:center; margin-bottom:10px;">Game Length</div>
+          <div class="quick-strip" style="justify-content:center;">
+            <button class="btn secondary len-btn" data-len="5" type="button">5 Rounds</button>
+            <button class="btn secondary len-btn" data-len="10" type="button">10 Rounds</button>
+            <button class="btn secondary len-btn" data-len="endless" type="button">Endless</button>
+          </div>
+        </div>
 
         <div class="grid-3" style="margin-top:12px;">
-          <div class="card" id="gameLetterNames" style="cursor:pointer;">
-            <h3>🔠 Letter Names</h3>
-            <p class="small">Tap the correct letter name.</p>
-            <div class="small" id="tagNames"></div>
+          <div class="card pick" data-game="comprehension">
+            <h3>🧠 Comprehension Check</h3>
+            <p class="small">Read a short passage and answer.</p>
+            <div class="small tag" id="tagComp"></div>
           </div>
 
-          <div class="card" id="gameLetterSounds" style="cursor:pointer;">
-            <h3>🔊 Letter Sounds</h3>
-            <p class="small">Pick the letter that matches the sound.</p>
-            <div class="small" id="tagSounds"></div>
+          <div class="card pick" data-game="sequencing">
+            <h3>🔢 Story Sequencing</h3>
+            <p class="small">Put events in order.</p>
+            <div class="small tag" id="tagSeq"></div>
           </div>
 
-          <div class="card" id="gameVowels" style="cursor:pointer;">
-            <h3>🍃 Vowels</h3>
-            <p class="small">Short vs long vowels (K–2).</p>
-            <div class="small" id="tagVowels"></div>
+          <div class="card pick" data-game="vocab">
+            <h3>🧩 Vocabulary Match</h3>
+            <p class="small">Match a word to its meaning.</p>
+            <div class="small tag" id="tagVocab"></div>
+          </div>
+
+          <div class="card pick" data-game="sight">
+            <h3>👀 Sight Word Pop</h3>
+            <p class="small">Tap the target word fast!</p>
+            <div class="small tag" id="tagSight"></div>
+          </div>
+
+          <div class="card pick" data-game="label">
+            <h3>🏠 Label the Scene</h3>
+            <p class="small">Label everyday objects in a picture scene.</p>
+            <div class="small tag" id="tagLabel"></div>
+          </div>
+
+          <div class="card pick" data-game="decodable">
+            <h3>📚 Decodable Text</h3>
+            <p class="small">Read a decodable story using phonics skills.</p>
+            <div class="small tag" id="tagDecodable"></div>
           </div>
         </div>
 
         <div class="hero-note" style="text-align:center; margin-top:12px;">
-          (Next step: we’ll plug the games in right inside this page.)
+          Earn ⭐ for correct answers. Stars save on this device.
+        </div>
+      </div>
+
+      <!-- Game Stage -->
+      <div id="gameStage" class="game-box" style="margin-top:16px; display:none;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div>
+            <div class="kid-big" id="gameTitle">Game</div>
+            <div class="small" id="gameDesc"></div>
+          </div>
+          <div class="quick-strip" style="justify-content:flex-end;">
+            <button class="btn secondary" id="backToHubBtn" type="button">← Back</button>
+            <button class="btn secondary" id="newRoundBtn" type="button">New Round</button>
+            <button class="btn secondary" id="speakBtn" type="button" title="Read aloud">🔊</button>
+          </div>
+        </div>
+
+        <div class="game-box" style="margin-top:12px;">
+          <div class="small" id="roundText">Round 1</div>
+          <div class="kid-big" id="promptText" style="margin-top:6px;">Prompt</div>
+          <div class="small" id="promptHint" style="margin-top:6px;"></div>
+
+          <div id="stageBody" style="margin-top:14px;"></div>
+
+          <div class="kid-big" id="stageFeedback" style="margin-top:12px;"></div>
+          <div class="small" id="starsText" style="margin-top:6px;"></div>
         </div>
       </div>
 
@@ -174,88 +245,22 @@
 
 <script src="./nav.js"></script>
 <script>
-  // ---------------------------------------
-  // Keys
-  // ---------------------------------------
-  const PHONICS_DIAG_KEY = "bloom_phonics_diag_v2"; // store latest result
+  // -----------------------------
+  // Storage Keys
+  // -----------------------------
   const PREF_GRADE_KEY = "bloom_pref_grade";
+  const PREF_LEN_KEY   = "bloom_pref_read_len";
+  const READ_DIAG_KEY  = "bloom_reading_diag_v1";
+  const PROG_KEY       = "bloom_progress";
 
-  // ---------------------------------------
-  // Grade UI
-  // ---------------------------------------
-  let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
-  const gradeBtns = Array.from(document.querySelectorAll(".grade-btn"));
-
-  function setGrade(g){
-    grade = g;
-    localStorage.setItem(PREF_GRADE_KEY, g);
-    gradeBtns.forEach(b => b.classList.toggle("active", b.dataset.grade === grade));
-    hydrateChooseGameEnabled();
+  // -----------------------------
+  // Helpers
+  // -----------------------------
+  function load(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
   }
-
-  gradeBtns.forEach(btn=>{
-    btn.addEventListener("click", ()=> setGrade(btn.dataset.grade));
-  });
-
-  // ---------------------------------------
-  // Question banks (K–2)
-  // Each question: {skill, q, choices[], correctIndex, hint}
-  // skill: "names" | "sounds" | "vowels" | "cvc" (future)
-  // ---------------------------------------
-  const banks = {
-    K: [
-      { skill:"names",  q:"Which letter is: A?", choices:["A","B","D"], correctIndex:0, hint:"Look for the first letter in the alphabet." },
-      { skill:"names",  q:"Which letter is: M?", choices:["N","M","W"], correctIndex:1, hint:"M has two mountains." },
-      { skill:"names",  q:"Which letter is: S?", choices:["S","C","G"], correctIndex:0, hint:"S looks like a curvy snake." },
-
-      { skill:"sounds", q:"Which letter makes the /m/ sound?", choices:["M","S","T"], correctIndex:0, hint:"/m/ like moon." },
-      { skill:"sounds", q:"Which letter makes the /s/ sound?", choices:["B","S","D"], correctIndex:1, hint:"/s/ like sun." },
-      { skill:"sounds", q:"Which letter makes the /t/ sound?", choices:["T","A","P"], correctIndex:0, hint:"/t/ like top." },
-
-      { skill:"vowels", q:"Which one is a vowel?", choices:["A","T","M"], correctIndex:0, hint:"Vowels: A E I O U." },
-      { skill:"vowels", q:"Which one is a vowel?", choices:["E","S","R"], correctIndex:0, hint:"Vowels: A E I O U." },
-      { skill:"vowels", q:"Which one is a vowel?", choices:["I","B","D"], correctIndex:0, hint:"Vowels: A E I O U." },
-
-      { skill:"sounds", q:"Which letter makes the /p/ sound?", choices:["P","V","B"], correctIndex:0, hint:"/p/ like pop!" },
-      { skill:"sounds", q:"Which letter makes the /g/ sound?", choices:["G","J","Q"], correctIndex:0, hint:"/g/ like go." }
-    ],
-
-    1: [
-      { skill:"names",  q:"Which letter is: B?", choices:["B","D","P"], correctIndex:0, hint:"B has two bumps." },
-      { skill:"names",  q:"Which letter is: R?", choices:["R","K","H"], correctIndex:0, hint:"R has a leg." },
-      { skill:"names",  q:"Which letter is: T?", choices:["T","F","E"], correctIndex:0, hint:"T has a top line." },
-
-      { skill:"sounds", q:"Which letter makes the /b/ sound?", choices:["D","B","P"], correctIndex:1, hint:"/b/ like ball." },
-      { skill:"sounds", q:"Which letter makes the /r/ sound?", choices:["R","L","H"], correctIndex:0, hint:"/r/ like rabbit." },
-
-      { skill:"vowels", q:"Which is a SHORT vowel sound in “cat”?", choices:["ă","ā","ē"], correctIndex:0, hint:"cat has short a." },
-      { skill:"vowels", q:"Which is a SHORT vowel sound in “pin”?", choices:["ī","ĭ","ō"], correctIndex:1, hint:"pin has short i." },
-      { skill:"vowels", q:"Which is a SHORT vowel sound in “hot”?", choices:["ŏ","ū","ē"], correctIndex:0, hint:"hot has short o." },
-
-      { skill:"sounds", q:"Which one starts with /sh/?", choices:["ship","cat","top"], correctIndex:0, hint:"/sh/ is quiet." },
-      { skill:"sounds", q:"Which one starts with /ch/?", choices:["rain","chop","sun"], correctIndex:1, hint:"/ch/ like choo-choo." },
-      { skill:"sounds", q:"Which one starts with /th/?", choices:["this","ship","chip"], correctIndex:0, hint:"/th/ like this." }
-    ],
-
-    2: [
-      { skill:"names",  q:"Which letter is: V?", choices:["V","W","Y"], correctIndex:0, hint:"V is pointy." },
-      { skill:"names",  q:"Which letter is: P?", choices:["P","R","B"], correctIndex:0, hint:"P has one bump." },
-      { skill:"names",  q:"Which letter is: G?", choices:["G","J","Q"], correctIndex:0, hint:"G is like C with a hook." },
-
-      { skill:"vowels", q:"Which word has a LONG A sound?", choices:["rain","cat","hat"], correctIndex:0, hint:"ai can make long a." },
-      { skill:"vowels", q:"Which word has a LONG E sound?", choices:["feet","pet","pen"], correctIndex:0, hint:"ee can make long e." },
-      { skill:"vowels", q:"Which word has a LONG O sound?", choices:["boat","hot","hop"], correctIndex:0, hint:"oa can make long o." },
-
-      { skill:"sounds", q:"Which team can make LONG A?", choices:["ai","oo","ee"], correctIndex:0, hint:"ai like rain." },
-      { skill:"sounds", q:"Which team can make LONG E?", choices:["ee","ai","oa"], correctIndex:0, hint:"ee like feet." },
-      { skill:"sounds", q:"Which team can make LONG O?", choices:["oa","ee","ai"], correctIndex:0, hint:"oa like boat." },
-
-      { skill:"sounds", q:"Which starts with /v/?", choices:["van","sun","map"], correctIndex:0, hint:"/v/ like van." },
-      { skill:"vowels", q:"Pick the word with a vowel team:", choices:["ship","rain","cat"], correctIndex:1, hint:"rain has ai." }
-    ]
-  };
-
-  // Make exactly 10 questions (shuffle + slice)
+  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
   function shuffle(arr){
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -264,22 +269,45 @@
     }
     return a;
   }
+  function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
-  function getTenQuestions(g){
-    const pool = banks[g] ? banks[g].slice() : banks.K.slice();
-    return shuffle(pool).slice(0, 10);
+  function speak(text){
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1;
+    u.pitch = 1.05;
+    speechSynthesis.speak(u);
   }
 
-  // ---------------------------------------
-  // Panels / UI refs
-  // ---------------------------------------
+  function addReadingStar(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    p.readingStars = (p.readingStars || 0) + 1;
+    save(PROG_KEY, p);
+    return p.readingStars;
+  }
+  function getReadingStars(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    return (p.readingStars || 0);
+  }
+
+  // -----------------------------
+  // UI refs
+  // -----------------------------
   const startDiagBtn = document.getElementById("startDiagBtn");
   const chooseGameBtn = document.getElementById("chooseGameBtn");
+  const recommendedBtn = document.getElementById("recommendedBtn");
 
   const diagPanel = document.getElementById("diagPanel");
   const resultsPanel = document.getElementById("resultsPanel");
-  const gamePicker = document.getElementById("gamePicker");
+  const gameHub = document.getElementById("gameHub");
+  const gameStage = document.getElementById("gameStage");
 
+  const diagPassage = document.getElementById("diagPassage");
   const diagQuestion = document.getElementById("diagQuestion");
   const diagHint = document.getElementById("diagHint");
   const diagChoices = document.getElementById("diagChoices");
@@ -287,59 +315,364 @@
   const diagNextBtn = document.getElementById("diagNextBtn");
   const diagRestartBtn = document.getElementById("diagRestartBtn");
   const diagFeedback = document.getElementById("diagFeedback");
+  const diagSpeakBtn = document.getElementById("diagSpeakBtn");
 
   const scoreBox = document.getElementById("scoreBox");
   const needsBox = document.getElementById("needsBox");
   const readyBox = document.getElementById("readyBox");
   const resultsSummary = document.getElementById("resultsSummary");
   const goChooseGameBtn = document.getElementById("goChooseGameBtn");
+  const goRecommendedBtn = document.getElementById("goRecommendedBtn");
   const retakeBtn = document.getElementById("retakeBtn");
 
-  const tagNames = document.getElementById("tagNames");
-  const tagSounds = document.getElementById("tagSounds");
-  const tagVowels = document.getElementById("tagVowels");
+  const tagComp = document.getElementById("tagComp");
+  const tagSeq = document.getElementById("tagSeq");
+  const tagVocab = document.getElementById("tagVocab");
+  const tagSight = document.getElementById("tagSight");
+  const tagLabel = document.getElementById("tagLabel");
+  const tagDecodable = document.getElementById("tagDecodable");
 
-  // ---------------------------------------
-  // Diagnostic state
-  // ---------------------------------------
-  let questions = [];
-  let qIndex = 0;
-  let correctCount = 0;
-  let answered = false;
-  let lastSkillMisses = { names:0, sounds:0, vowels:0 };
+  const gameTitle = document.getElementById("gameTitle");
+  const gameDesc = document.getElementById("gameDesc");
+  const roundText = document.getElementById("roundText");
+  const promptText = document.getElementById("promptText");
+  const promptHint = document.getElementById("promptHint");
+  const stageBody = document.getElementById("stageBody");
+  const stageFeedback = document.getElementById("stageFeedback");
+  const starsText = document.getElementById("starsText");
+
+  const backToHubBtn = document.getElementById("backToHubBtn");
+  const newRoundBtn = document.getElementById("newRoundBtn");
+  const speakBtn = document.getElementById("speakBtn");
 
   function showOnly(panel){
     diagPanel.style.display = "none";
     resultsPanel.style.display = "none";
-    gamePicker.style.display = "none";
+    gameHub.style.display = "none";
+    gameStage.style.display = "none";
     panel.style.display = "block";
   }
 
-  function hydrateChooseGameEnabled(){
-    const saved = readSavedDiag();
-    const ok = saved && saved.grade === grade && saved.total === 10;
-    chooseGameBtn.disabled = !ok;
-    chooseGameBtn.style.opacity = ok ? "1" : ".6";
+  // -----------------------------
+  // Grade selection
+  // -----------------------------
+  let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
+  const gradeBtns = Array.from(document.querySelectorAll(".grade-btn"));
+  function setGrade(g){
+    grade = g;
+    localStorage.setItem(PREF_GRADE_KEY, g);
+    gradeBtns.forEach(b => b.classList.toggle("active", b.dataset.grade === grade));
+    hydrateButtons();
+    if (gameHub.style.display !== "none") renderGameTags(readSavedDiag());
+  }
+  gradeBtns.forEach(btn=> btn.addEventListener("click", ()=> setGrade(btn.dataset.grade)));
+  setGrade(grade);
+
+  // -----------------------------
+  // Game length
+  // -----------------------------
+  let gameLen = localStorage.getItem(PREF_LEN_KEY) || "5";
+  function setGameLen(v){
+    gameLen = v;
+    localStorage.setItem(PREF_LEN_KEY, v);
+    document.querySelectorAll(".len-btn").forEach(b=>{
+      b.classList.toggle("active", b.dataset.len === gameLen);
+    });
+  }
+  document.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".len-btn");
+    if (!btn) return;
+    setGameLen(btn.dataset.len);
+  });
+  setGameLen(gameLen);
+
+  function calcRoundsTarget(){
+    if (gameLen === "endless") return Infinity;
+    const n = parseInt(gameLen, 10);
+    return Number.isFinite(n) ? n : 5;
   }
 
-  function readSavedDiag(){
-    try { return JSON.parse(localStorage.getItem(PHONICS_DIAG_KEY) || "null"); }
-    catch { return null; }
+  // -----------------------------
+  // Diagnostic Banks (K–2)
+  // skills: comp, vocab, sequence, sight
+  // -----------------------------
+  const diagBanks = {
+    K: [
+      {
+        skill:"comp",
+        passage:"Sam has a cap. Sam can tap. Sam is glad.",
+        q:"What does Sam have?",
+        choices:["A cap","A dog","A kite"],
+        correctIndex:0,
+        hint:"Look for a word in the story."
+      },
+      {
+        skill:"comp",
+        passage:"Mia is sad. A pal hugs Mia. Mia feels glad.",
+        q:"How does Mia feel at the end?",
+        choices:["Glad","Mad","Sleepy"],
+        correctIndex:0,
+        hint:"Read the last sentence."
+      },
+      {
+        skill:"sequence",
+        passage:"Ben got a jug. Ben sat. Ben sipped.",
+        q:"What happened last?",
+        choices:["Ben got a jug","Ben sat","Ben sipped"],
+        correctIndex:2,
+        hint:"Last = at the end."
+      },
+      {
+        skill:"vocab",
+        passage:"The pup ran. The pup is fast.",
+        q:"fast means…",
+        choices:["quick","sad","small"],
+        correctIndex:0,
+        hint:"Fast is quick."
+      },
+      {
+        skill:"sight",
+        passage:"I see the cat. I see the hat.",
+        q:"Tap the word: see",
+        choices:["see","cat","hat"],
+        correctIndex:0,
+        hint:"Find the target word."
+      },
+      {
+        skill:"sight",
+        passage:"We can hop. We can run.",
+        q:"Tap the word: can",
+        choices:["hop","can","run"],
+        correctIndex:1,
+        hint:"Find the target word."
+      },
+      {
+        skill:"comp",
+        passage:"The sun is up. It is hot. Kim drinks.",
+        q:"Why does Kim drink?",
+        choices:["It is hot","It is cold","It is night"],
+        correctIndex:0,
+        hint:"Think: hot → drink."
+      },
+      {
+        skill:"sequence",
+        passage:"Pam got a map. Pam ran. Pam sat.",
+        q:"What happened first?",
+        choices:["Pam sat","Pam ran","Pam got a map"],
+        correctIndex:2,
+        hint:"First = at the beginning."
+      },
+      {
+        skill:"vocab",
+        passage:"The cat is big.",
+        q:"big means…",
+        choices:["large","tiny","slow"],
+        correctIndex:0,
+        hint:"Big = large."
+      },
+      {
+        skill:"comp",
+        passage:"A bug is on a log. The bug is on top.",
+        q:"Where is the bug?",
+        choices:["On a log","In a bag","Under a rug"],
+        correctIndex:0,
+        hint:"Look for “on a log”."
+      },
+    ],
+    1: [
+      {
+        skill:"comp",
+        passage:"Chip is a small dog. Chip can hop on the rug.",
+        q:"What can Chip do?",
+        choices:["Hop on the rug","Swim in a pond","Fly in the sky"],
+        correctIndex:0,
+        hint:"Find the action."
+      },
+      {
+        skill:"sequence",
+        passage:"First, Jen packs. Next, Jen runs. Last, Jen rests.",
+        q:"What happens next?",
+        choices:["Jen rests","Jen runs","Jen sleeps"],
+        correctIndex:1,
+        hint:"Next = middle."
+      },
+      {
+        skill:"vocab",
+        passage:"The wind is strong.",
+        q:"strong means…",
+        choices:["powerful","quiet","soft"],
+        correctIndex:0,
+        hint:"Strong = powerful."
+      },
+      {
+        skill:"sight",
+        passage:"They went to the park and had fun.",
+        q:"Tap the word: to",
+        choices:["to","park","fun"],
+        correctIndex:0,
+        hint:"Short little word."
+      },
+      {
+        skill:"comp",
+        passage:"Lia has a shell. The shell is pink and shiny.",
+        q:"What color is the shell?",
+        choices:["Pink","Blue","Green"],
+        correctIndex:0,
+        hint:"Look for the color word."
+      },
+      {
+        skill:"sequence",
+        passage:"Max tied his shoes. Max ran outside. Max played.",
+        q:"What did Max do first?",
+        choices:["Played","Tied his shoes","Ran outside"],
+        correctIndex:1,
+        hint:"First = beginning."
+      },
+      {
+        skill:"vocab",
+        passage:"The kitten was tiny.",
+        q:"tiny means…",
+        choices:["very small","very loud","very fast"],
+        correctIndex:0,
+        hint:"Tiny = very small."
+      },
+      {
+        skill:"comp",
+        passage:"It began to rain. Ava took an umbrella.",
+        q:"Why did Ava take an umbrella?",
+        choices:["It began to rain","It was sunny","It was snowing"],
+        correctIndex:0,
+        hint:"Rain → umbrella."
+      },
+      {
+        skill:"sight",
+        passage:"We are going home after lunch.",
+        q:"Tap the word: are",
+        choices:["are","home","lunch"],
+        correctIndex:0,
+        hint:"Tiny helper word."
+      },
+      {
+        skill:"comp",
+        passage:"Sam found a stick. He threw it. His dog ran to get it.",
+        q:"What did Sam throw?",
+        choices:["A stick","A ball","A kite"],
+        correctIndex:0,
+        hint:"Look for “stick”."
+      },
+    ],
+    2: [
+      {
+        skill:"comp",
+        passage:"Jade made a paper boat. She set it in a tub. It floated well.",
+        q:"Where did Jade put the boat?",
+        choices:["In a tub","On a tree","In a box"],
+        correctIndex:0,
+        hint:"Find the place."
+      },
+      {
+        skill:"vocab",
+        passage:"The boy was brave during the storm.",
+        q:"brave means…",
+        choices:["not scared","very tired","very hungry"],
+        correctIndex:0,
+        hint:"Brave = not scared."
+      },
+      {
+        skill:"sequence",
+        passage:"First, Lee read a page. Next, he made a note. Last, he checked his work.",
+        q:"What happened last?",
+        choices:["He checked his work","He read a page","He made a note"],
+        correctIndex:0,
+        hint:"Last = end."
+      },
+      {
+        skill:"comp",
+        passage:"Rain fell all day. The ground got muddy, so the game was canceled.",
+        q:"Why was the game canceled?",
+        choices:["The ground got muddy","The sun was bright","It was too cold"],
+        correctIndex:0,
+        hint:"Cause → effect."
+      },
+      {
+        skill:"vocab",
+        passage:"The puppy dashed to the door.",
+        q:"dashed means…",
+        choices:["ran quickly","slept","whispered"],
+        correctIndex:0,
+        hint:"Dashed = ran fast."
+      },
+      {
+        skill:"comp",
+        passage:"Mina sat in the shade because the day was hot.",
+        q:"Why did Mina sit in the shade?",
+        choices:["The day was hot","It was raining","It was night"],
+        correctIndex:0,
+        hint:"Shade helps when hot."
+      },
+      {
+        skill:"sequence",
+        passage:"Nate mixed batter. Then he baked the cake. After that, he ate a slice.",
+        q:"What did Nate do after he baked the cake?",
+        choices:["He ate a slice","He mixed batter","He bought a kite"],
+        correctIndex:0,
+        hint:"After baking comes eating."
+      },
+      {
+        skill:"sight",
+        passage:"They could see the boat float near the shore.",
+        q:"Tap the word: could",
+        choices:["could","shore","float"],
+        correctIndex:0,
+        hint:"Longer helper word."
+      },
+      {
+        skill:"comp",
+        passage:"The class made posters. When they were done, they hung them in the hall.",
+        q:"Where did they hang the posters?",
+        choices:["In the hall","On the roof","In the sink"],
+        correctIndex:0,
+        hint:"Look for location."
+      },
+      {
+        skill:"comp",
+        passage:"Troy saved coins each week. Soon he had enough to buy a new game.",
+        q:"What helped Troy buy the game?",
+        choices:["Saving coins","Losing coins","Sleeping"],
+        correctIndex:0,
+        hint:"Saving helps you buy."
+      },
+    ]
+  };
+
+  function getTenDiagQuestions(g){
+    const pool = (diagBanks[g] || diagBanks.K).slice();
+    return shuffle(pool).slice(0, 10);
   }
 
-  function saveDiag(result){
-    localStorage.setItem(PHONICS_DIAG_KEY, JSON.stringify(result));
-  }
+  // -----------------------------
+  // Diagnostic state
+  // -----------------------------
+  let diagQs = [];
+  let diagIndex = 0;
+  let diagCorrect = 0;
+  let diagAnswered = false;
+  let diagMiss = { comp:0, vocab:0, sequence:0, sight:0 };
+  let lastDiagSpeakText = "";
 
-  function renderQuestion(){
-    answered = false;
+  function renderDiagQuestion(){
+    diagAnswered = false;
     diagFeedback.textContent = "";
     diagNextBtn.disabled = true;
 
-    const q = questions[qIndex];
-    diagProgressText.textContent = `Question ${qIndex + 1} of 10`;
+    const q = diagQs[diagIndex];
+    diagProgressText.textContent = `Question ${diagIndex + 1} of 10`;
+
+    diagPassage.textContent = q.passage;
     diagQuestion.textContent = q.q;
     diagHint.textContent = q.hint || "";
+
+    lastDiagSpeakText = `${q.passage} Question: ${q.q}`;
 
     diagChoices.innerHTML = "";
     q.choices.forEach((c, idx)=>{
@@ -347,161 +680,572 @@
       card.className = "card";
       card.style.textAlign = "center";
       card.style.cursor = "pointer";
-      card.innerHTML = `<h3 style="font-size:24px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.addEventListener("click", ()=> selectAnswer(idx));
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.addEventListener("click", ()=> pickDiagAnswer(idx));
       diagChoices.appendChild(card);
     });
   }
 
-  function selectAnswer(choiceIndex){
-    if (answered) return;
-    answered = true;
+  function pickDiagAnswer(choiceIndex){
+    if (diagAnswered) return;
+    diagAnswered = true;
 
-    const q = questions[qIndex];
+    const q = diagQs[diagIndex];
     const correct = (choiceIndex === q.correctIndex);
 
     if (correct){
-      correctCount++;
+      diagCorrect++;
       diagFeedback.textContent = "Correct! ⭐";
+      speak("Correct!");
     } else {
       diagFeedback.textContent = `Good try! ✅ Answer: ${q.choices[q.correctIndex]}`;
-      if (q.skill in lastSkillMisses) lastSkillMisses[q.skill] += 1;
+      if (q.skill in diagMiss) diagMiss[q.skill] += 1;
+      speak("Try again.");
     }
 
-    // simple visual highlight
     Array.from(diagChoices.children).forEach((card, idx)=>{
-      card.style.opacity = "0.8";
+      card.style.opacity = "0.92";
       if (idx === q.correctIndex) card.style.outline = "3px solid rgba(46, 125, 80, .35)";
-      if (idx === choiceIndex && idx !== q.correctIndex) card.style.outline = "3px solid rgba(180, 60, 60, .25)";
+      if (idx === choiceIndex && idx !== q.correctIndex) card.style.outline = "3px solid rgba(180, 60, 60, .22)";
     });
 
     diagNextBtn.disabled = false;
   }
 
+  function saveDiag(result){ save(READ_DIAG_KEY, result); }
+  function readSavedDiag(){ return load(READ_DIAG_KEY, null); }
+
+  function recommendGameKey(saved){
+    const miss = saved?.misses || { comp:0, vocab:0, sequence:0, sight:0 };
+    const max = Math.max(miss.comp||0, miss.vocab||0, miss.sequence||0, miss.sight||0);
+    if (max === 0) return "decodable";
+    if (miss.comp === max) return "comprehension";
+    if (miss.sequence === max) return "sequencing";
+    if (miss.vocab === max) return "vocab";
+    return "sight";
+  }
+
+  function humanGameName(key){
+    const map = {
+      comprehension: "Comprehension Check",
+      sequencing: "Story Sequencing",
+      vocab: "Vocabulary Match",
+      sight: "Sight Word Pop",
+      label: "Label the Scene",
+      decodable: "Decodable Text"
+    };
+    return map[key] || "Decodable Text";
+  }
+
   function finishDiagnostic(){
-    const score = correctCount;
+    const score = diagCorrect;
     const total = 10;
 
-    // Determine top needs
     const misses = [
-      { skill:"Letter Names", key:"names", n:lastSkillMisses.names },
-      { skill:"Letter Sounds", key:"sounds", n:lastSkillMisses.sounds },
-      { skill:"Vowels", key:"vowels", n:lastSkillMisses.vowels }
+      { label:"Comprehension", key:"comp", n:diagMiss.comp },
+      { label:"Sequencing", key:"sequence", n:diagMiss.sequence },
+      { label:"Vocabulary", key:"vocab", n:diagMiss.vocab },
+      { label:"Sight Words", key:"sight", n:diagMiss.sight }
     ].sort((a,b)=> b.n - a.n);
 
-    const needs = misses[0].n === 0 ? "Nothing big — you’re doing great!" : misses.filter(x=>x.n>0).map(x=>x.skill).slice(0,2).join(", ");
-    const ready = (score >= 8) ? "Try harder games + vowel teams" : (score >= 5 ? "Practice + play games daily" : "Start with basics + repeat the diagnostic");
+    const needs = misses[0].n === 0 ? "Nothing big — you’re doing great!" : misses.filter(x=>x.n>0).map(x=>x.label).slice(0,2).join(", ");
+    const next = recommendGameKey({ misses: diagMiss, grade });
 
-    // Save
-    const result = {
-      date: Date.now(),
-      grade,
-      score,
-      total,
-      misses: { ...lastSkillMisses }
-    };
+    const result = { date: Date.now(), grade, score, total, misses: { ...diagMiss }, recommended: next };
     saveDiag(result);
 
-    // Render results
     scoreBox.textContent = `${score} / ${total}`;
     needsBox.textContent = needs;
-    readyBox.textContent = ready;
+    readyBox.textContent = humanGameName(next);
+    resultsSummary.textContent = `You scored ${Math.round((score/total)*100)}% for Grade ${grade === "K" ? "K" : grade}!`;
 
-    const pct = Math.round((score/total)*100);
-    resultsSummary.textContent = `You scored ${pct}% for Grade ${grade === "K" ? "K" : grade}!`;
-
-    // Update game tags + enable choose game
     renderGameTags(result);
-    hydrateChooseGameEnabled();
+    hydrateButtons();
 
     showOnly(resultsPanel);
   }
 
-  function renderGameTags(result){
-    // friendly labels based on misses
-    const m = result.misses || {names:0,sounds:0,vowels:0};
+  // -----------------------------
+  // Tags
+  // -----------------------------
+  function renderGameTags(saved){
+    const s = saved || readSavedDiag();
+    const miss = s?.misses || { comp:0, vocab:0, sequence:0, sight:0 };
 
-    tagNames.textContent  = m.names  ? `Recommended ⭐ (missed ${m.names})` : `Ready ✅`;
-    tagSounds.textContent = m.sounds ? `Recommended ⭐ (missed ${m.sounds})` : `Ready ✅`;
-    tagVowels.textContent = m.vowels ? `Recommended ⭐ (missed ${m.vowels})` : `Ready ✅`;
+    function tagFor(key){
+      const n = miss[key] || 0;
+      return n ? `Recommended ⭐ (missed ${n})` : `Ready ✅`;
+    }
+
+    tagComp.textContent = tagFor("comp");
+    tagSeq.textContent = tagFor("sequence");
+    tagVocab.textContent = tagFor("vocab");
+    tagSight.textContent = tagFor("sight");
+    tagLabel.textContent = "Fun practice 🎉";
+    tagDecodable.textContent = (grade === "2") ? "Long vowel practice ✅" : "Phonics practice ✅";
   }
 
-  // ---------------------------------------
-  // Button wiring
-  // ---------------------------------------
+  // -----------------------------
+  // Enable/disable action buttons
+  // -----------------------------
+  function hydrateButtons(){
+    const saved = readSavedDiag();
+    const ok = saved && saved.grade === grade && saved.total === 10;
+    chooseGameBtn.disabled = !ok;
+    chooseGameBtn.style.opacity = ok ? "1" : ".6";
+    recommendedBtn.disabled = !ok;
+    recommendedBtn.style.opacity = ok ? "1" : ".6";
+  }
+
+  // -----------------------------
+  // Game Engine
+  // -----------------------------
+  let activeGame = null;
+  let round = 1;
+  let roundsTarget = 5;
+  let lastSpeakText = "";
+
+  function setStageHeader(title, desc){
+    gameTitle.textContent = title;
+    gameDesc.textContent = desc;
+    stageFeedback.textContent = "";
+    starsText.textContent = `Reading ⭐: ${getReadingStars()}`;
+  }
+
+  function setPrompt(text, hint, speakText){
+    promptText.textContent = text;
+    promptHint.textContent = hint || "";
+    stageFeedback.textContent = "";
+    const maxText = (roundsTarget === Infinity) ? "Endless" : roundsTarget;
+    roundText.textContent = `Round ${round} of ${maxText}`;
+    stageBody.innerHTML = "";
+    lastSpeakText = speakText || text;
+  }
+
+  function feedbackOk(msg){
+    stageFeedback.textContent = msg || "Correct! ⭐";
+    addReadingStar();
+    starsText.textContent = `Reading ⭐: ${getReadingStars()}`;
+  }
+  function feedbackNo(msg){ stageFeedback.textContent = msg || "Try again 🙂"; }
+
+  function openHub(){
+    renderGameTags(readSavedDiag());
+    setGameLen(gameLen);
+    showOnly(gameHub);
+  }
+
+  function openStage(gameKey){
+    activeGame = gameKey;
+    round = 1;
+    roundsTarget = calcRoundsTarget();
+    showOnly(gameStage);
+    runRound();
+  }
+
+  function maybeFinish(){
+    if (roundsTarget !== Infinity && round > roundsTarget){
+      stageFeedback.textContent = "🎉 Great job! You finished your game!";
+      promptText.textContent = "Want to play another game?";
+      promptHint.textContent = "Tap ← Back to pick a new one, or press New Round.";
+      stageBody.innerHTML = "";
+      lastSpeakText = "Great job! You finished your game!";
+      return true;
+    }
+    return false;
+  }
+
+  function nextRoundSoon(){
+    setTimeout(()=>{
+      round++;
+      if (maybeFinish()) return;
+      runRound();
+    }, 650);
+  }
+
+  function runRound(){
+    stageFeedback.textContent = "";
+    starsText.textContent = `Reading ⭐: ${getReadingStars()}`;
+    if (maybeFinish()) return;
+
+    if (activeGame === "comprehension") return roundComprehension();
+    if (activeGame === "sequencing") return roundSequencing();
+    if (activeGame === "vocab") return roundVocab();
+    if (activeGame === "sight") return roundSight();
+    if (activeGame === "label") return roundLabelScene();
+    if (activeGame === "decodable") return roundDecodable();
+  }
+
+  function cardChoices(choices, correct, onCorrectMsg){
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+    choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> {
+        if (c === correct){
+          feedbackOk(onCorrectMsg || "Correct! ⭐");
+          nextRoundSoon();
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Game Content
+  // -----------------------------
+  const compBank = {
+    K: [
+      { t:"Sam can sit. Sam has a cap.", q:"What does Sam have?", a:"A cap", c:["A cap","A fish","A kite"] },
+      { t:"The cat is on the mat.", q:"Where is the cat?", a:"On the mat", c:["On the mat","In the hat","On the bus"] },
+      { t:"Mia is sad. A hug helps Mia.", q:"How does Mia feel first?", a:"Sad", c:["Sad","Glad","Sleepy"] }
+    ],
+    1: [
+      { t:"Ava took a coat because it was cold.", q:"Why did Ava take a coat?", a:"It was cold", c:["It was cold","It was hot","It was night"] },
+      { t:"Ben made a snack. Then he shared it.", q:"What did Ben do after he made a snack?", a:"He shared it", c:["He slept","He shared it","He hid it"] },
+      { t:"The dog barked when the bell rang.", q:"What made the dog bark?", a:"The bell", c:["The bell","A book","A spoon"] }
+    ],
+    2: [
+      { t:"Lia built a sand castle. A big wave knocked it down.", q:"What happened to the castle?", a:"A wave knocked it down", c:["A wave knocked it down","It grew taller","It turned to ice"] },
+      { t:"Troy saved money each week so he could buy a game.", q:"Why did Troy save money?", a:"To buy a game", c:["To buy a game","To buy milk","To buy a kite"] },
+      { t:"The room was quiet because the class was taking a test.", q:"Why was the room quiet?", a:"They were taking a test", c:["They were singing","They were taking a test","They were at lunch"] }
+    ]
+  };
+
+  const seqBank = {
+    K: [
+      { t:"Ben got a jug. Ben sat. Ben sipped.", correct:"Ben sipped", options:["Ben sipped","Ben got a jug","Ben sat"], hint:"Pick what happened last." }
+    ],
+    1: [
+      { t:"First, Jen packs. Next, Jen runs. Last, Jen rests.", correct:"Jen runs", options:["Jen rests","Jen runs","Jen sleeps"], hint:"Next = middle." }
+    ],
+    2: [
+      { t:"First, Lee read a page. Next, he made a note. Last, he checked his work.", correct:"He checked his work", options:["He checked his work","He read a page","He made a note"], hint:"Last = end." }
+    ]
+  };
+
+  const vocabBank = {
+    K: [
+      { w:"fast", q:"fast means…", a:"quick", c:["quick","sad","tiny"] },
+      { w:"big", q:"big means…", a:"large", c:["large","slow","wet"] }
+    ],
+    1: [
+      { w:"tiny", q:"tiny means…", a:"very small", c:["very small","very loud","very fast"] },
+      { w:"strong", q:"strong means…", a:"powerful", c:["powerful","quiet","soft"] }
+    ],
+    2: [
+      { w:"brave", q:"brave means…", a:"not scared", c:["not scared","hungry","tired"] },
+      { w:"dash", q:"dashed means…", a:"ran quickly", c:["ran quickly","slept","whispered"] }
+    ]
+  };
+
+  const sightBank = {
+    K: { targets:["the","see","can","I","a"], distract:["cat","hat","run","sun","top"] },
+    1: { targets:["to","are","and","we","go"], distract:["ship","rain","play","park","jump"] },
+    2: { targets:["could","because","before","after","their"], distract:["castle","storm","train","float","shore"] }
+  };
+
+  const labelScenes = {
+    K: [
+      { scene:"🛁 Bathroom", items:[{icon:"🪥", word:"toothbrush"},{icon:"🧼", word:"soap"},{icon:"🛁", word:"tub"}], choices:["soap","tub","toothbrush"] }
+    ],
+    1: [
+      { scene:"🍽️ Kitchen", items:[{icon:"🥛", word:"milk"},{icon:"🍎", word:"apple"},{icon:"🍽️", word:"plate"}], choices:["milk","plate","apple"] }
+    ],
+    2: [
+      { scene:"🏫 Classroom", items:[{icon:"📚", word:"books"},{icon:"✏️", word:"pencil"},{icon:"🪑", word:"chair"}], choices:["pencil","chair","books"] }
+    ]
+  };
+
+  const decodables = {
+    K: [
+      {
+        title:"Sam and the Cat",
+        skill:"CVC + short a",
+        text:"Sam has a cat. The cat sat. Sam pats the cat. The cat is glad.",
+        q:"Who has a cat?",
+        choices:["Sam","Mia","Ben"],
+        correct:"Sam"
+      },
+      {
+        title:"The Sun",
+        skill:"CVC + short u",
+        text:"The sun is up. Gus runs. Gus has fun in the sun.",
+        q:"Where does Gus have fun?",
+        choices:["In the sun","In the mud","In the box"],
+        correct:"In the sun"
+      }
+    ],
+    1: [
+      {
+        title:"Ship on the Sand",
+        skill:"digraphs (sh/ch/th)",
+        text:"A ship is on the sand. Chip can push the ship. The ship will not go. Chip shrugs.",
+        q:"What is on the sand?",
+        choices:["A ship","A fish","A tree"],
+        correct:"A ship"
+      },
+      {
+        title:"This Chat",
+        skill:"th + short a",
+        text:"This is a chat. The chat is fun. They talk and laugh.",
+        q:"How is the chat?",
+        choices:["Fun","Sad","Sleepy"],
+        correct:"Fun"
+      }
+    ],
+    2: [
+      {
+        title:"Rain Train",
+        skill:"long a (ai/ay)",
+        text:"It will rain today. May and Jay wait. The train will stay. They play a game and say, “Hooray!”",
+        q:"What will it do today?",
+        choices:["Rain","Snow","Freeze"],
+        correct:"Rain"
+      },
+      {
+        title:"Boat on the Sea",
+        skill:"long o (oa/ow)",
+        text:"A boat floats on the sea. The foam rolls. Jo rows slow. The boat goes home.",
+        q:"What floats on the sea?",
+        choices:["A boat","A goat","A coat"],
+        correct:"A boat"
+      }
+    ]
+  };
+
+  // -----------------------------
+  // Game Rounds
+  // -----------------------------
+  function roundComprehension(){
+    setStageHeader("🧠 Comprehension Check", "Read a short passage and answer.");
+    const it = pick(compBank[grade] || compBank.K);
+    setPrompt("Read the passage, then answer:", "Tap 🔊 if you want it read aloud.", `${it.t} Question: ${it.q}`);
+
+    const box = document.createElement("div");
+    box.className = "game-box";
+    box.innerHTML = `
+      <div class="small" style="margin-bottom:6px;">Passage:</div>
+      <div class="kid-big" style="line-height:1.6;">${it.t}</div>
+      <div class="small" style="margin-top:10px;">Question:</div>
+      <div class="kid-big" style="margin-top:4px;">${it.q}</div>
+    `;
+    stageBody.appendChild(box);
+
+    const choices = shuffle(it.c.slice());
+    cardChoices(choices, it.a, "Correct! ⭐");
+  }
+
+  function roundSequencing(){
+    setStageHeader("🔢 Story Sequencing", "Pick what happens (first/next/last).");
+    const it = pick((seqBank[grade] || seqBank.K));
+    setPrompt("Read the mini story:", it.hint, `${it.t} Question: ${it.hint}`);
+
+    const box = document.createElement("div");
+    box.className = "game-box";
+    box.innerHTML = `
+      <div class="kid-big" style="line-height:1.6;">${it.t}</div>
+      <div class="small" style="margin-top:10px;">${it.hint}</div>
+    `;
+    stageBody.appendChild(box);
+
+    const opts = shuffle(it.options.slice());
+    cardChoices(opts, it.correct, "Nice sequencing! ⭐");
+  }
+
+  function roundVocab(){
+    setStageHeader("🧩 Vocabulary Match", "Match a word to its meaning.");
+    const it = pick(vocabBank[grade] || vocabBank.K);
+    setPrompt(it.q, "Think about what the word means.", `Word: ${it.w}. ${it.q}`);
+
+    const box = document.createElement("div");
+    box.className = "game-box";
+    box.innerHTML = `<div class="small">Word:</div><div class="kid-big">${it.w}</div>`;
+    stageBody.appendChild(box);
+
+    const choices = shuffle(it.c.slice());
+    cardChoices(choices, it.a, "Correct meaning! ⭐");
+  }
+
+  function roundSight(){
+    setStageHeader("👀 Sight Word Pop", "Tap the target word fast!");
+    const bank = sightBank[grade] || sightBank.K;
+    const target = pick(bank.targets);
+    const words = shuffle([target, pick(bank.distract), pick(bank.distract)]).slice(0,3);
+
+    setPrompt(`Tap: ${target}`, "Find the target word.", `Tap the word: ${target}`);
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+    words.forEach(w=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${w}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> {
+        if (w === target){
+          feedbackOk("Pop! ⭐");
+          nextRoundSoon();
+        } else feedbackNo("Try again 🙂");
+      };
+      grid.appendChild(card);
+    });
+    stageBody.appendChild(grid);
+  }
+
+  function roundLabelScene(){
+    setStageHeader("🏠 Label the Scene", "Match the object to the word.");
+    const it = pick(labelScenes[grade] || labelScenes.K);
+    const item = pick(it.items);
+    const choices = shuffle(it.choices.slice());
+    setPrompt(`${it.scene}: What is this? ${item.icon}`, "Tap the matching word.", `In the ${it.scene}. What is this?`);
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+    choices.forEach(w=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${w}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> {
+        if (w === item.word){
+          feedbackOk("Labeled! ⭐");
+          nextRoundSoon();
+        } else feedbackNo("Try again 🙂");
+      };
+      grid.appendChild(card);
+    });
+    stageBody.appendChild(grid);
+  }
+
+  function roundDecodable(){
+    setStageHeader("📚 Decodable Text", "Read a decodable story using phonics skills.");
+    const it = pick(decodables[grade] || decodables.K);
+
+    setPrompt(it.title, `Skill: ${it.skill} (Tap 🔊 for read aloud)`, `${it.title}. ${it.text} Question: ${it.q}`);
+
+    const box = document.createElement("div");
+    box.className = "game-box";
+    box.innerHTML = `
+      <div class="small">Skill focus:</div>
+      <div class="kid-big" style="margin-top:4px;">${it.skill}</div>
+      <div class="small" style="margin-top:10px;">Story:</div>
+      <div class="kid-big" style="line-height:1.6; margin-top:4px;">${it.text}</div>
+      <div class="small" style="margin-top:12px;">Question:</div>
+      <div class="kid-big" style="margin-top:4px;">${it.q}</div>
+    `;
+    stageBody.appendChild(box);
+
+    const choices = shuffle(it.choices.slice());
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+    grid.style.marginTop = "14px";
+
+    choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:22px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> {
+        if (c === it.correct){
+          feedbackOk("Great reading! ⭐");
+          nextRoundSoon();
+        } else feedbackNo("Try again 🙂");
+      };
+      grid.appendChild(card);
+    });
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Hub + Stage handlers
+  // -----------------------------
+  document.querySelectorAll(".card.pick").forEach(card=>{
+    card.style.cursor = "pointer";
+    card.addEventListener("click", ()=> openStage(card.dataset.game));
+  });
+
+  backToHubBtn.addEventListener("click", openHub);
+  newRoundBtn.addEventListener("click", ()=>{ round++; runRound(); });
+  speakBtn.addEventListener("click", ()=> speak(lastSpeakText || promptText.textContent));
+
+  // -----------------------------
+  // Diagnostic events
+  // -----------------------------
   startDiagBtn.addEventListener("click", ()=>{
-    questions = getTenQuestions(grade);
-    qIndex = 0;
-    correctCount = 0;
-    lastSkillMisses = { names:0, sounds:0, vowels:0 };
+    diagQs = getTenDiagQuestions(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagAnswered = false;
+    diagMiss = { comp:0, vocab:0, sequence:0, sight:0 };
     showOnly(diagPanel);
-    renderQuestion();
+    renderDiagQuestion();
   });
 
   diagNextBtn.addEventListener("click", ()=>{
-    if (!answered) return;
-
-    qIndex++;
-    if (qIndex >= 10){
-      finishDiagnostic();
-    } else {
-      renderQuestion();
-    }
+    if (!diagAnswered) return;
+    diagIndex++;
+    if (diagIndex >= 10) finishDiagnostic();
+    else renderDiagQuestion();
   });
 
   diagRestartBtn.addEventListener("click", ()=>{
-    questions = getTenQuestions(grade);
-    qIndex = 0;
-    correctCount = 0;
-    lastSkillMisses = { names:0, sounds:0, vowels:0 };
-    renderQuestion();
+    diagQs = getTenDiagQuestions(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagAnswered = false;
+    diagMiss = { comp:0, vocab:0, sequence:0, sight:0 };
+    renderDiagQuestion();
   });
+
+  diagSpeakBtn.addEventListener("click", ()=> speak(lastDiagSpeakText || `${diagPassage.textContent} ${diagQuestion.textContent}`));
 
   retakeBtn.addEventListener("click", ()=>{
-    // clear stored diag for this flow, keep grade preference
-    localStorage.removeItem(PHONICS_DIAG_KEY);
-    hydrateChooseGameEnabled();
+    localStorage.removeItem(READ_DIAG_KEY);
+    hydrateButtons();
+    diagQs = getTenDiagQuestions(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagAnswered = false;
+    diagMiss = { comp:0, vocab:0, sequence:0, sight:0 };
     showOnly(diagPanel);
-
-    questions = getTenQuestions(grade);
-    qIndex = 0;
-    correctCount = 0;
-    lastSkillMisses = { names:0, sounds:0, vowels:0 };
-    renderQuestion();
+    renderDiagQuestion();
   });
 
-  function openGamePicker(){
+  chooseGameBtn.addEventListener("click", openHub);
+  goChooseGameBtn.addEventListener("click", openHub);
+
+  function startRecommended(){
+    const saved = readSavedDiag();
+    const key = saved?.recommended || recommendGameKey(saved);
+    openStage(key);
+  }
+  recommendedBtn.addEventListener("click", startRecommended);
+  goRecommendedBtn.addEventListener("click", startRecommended);
+
+  // -----------------------------
+  // Init
+  // -----------------------------
+  function hydrate(){
+    hydrateButtons();
     const saved = readSavedDiag();
     if (saved && saved.grade === grade) renderGameTags(saved);
-    showOnly(gamePicker);
+    else renderGameTags({ grade, misses:{comp:0, vocab:0, sequence:0, sight:0} });
   }
+  hydrate();
 
-  chooseGameBtn.addEventListener("click", openGamePicker);
-  goChooseGameBtn.addEventListener("click", openGamePicker);
-
-  // Placeholder clicks (we’ll build these games next)
-  document.getElementById("gameLetterNames").addEventListener("click", ()=>{
-    alert("Next step: we’ll build the Letter Names game right here.");
-  });
-  document.getElementById("gameLetterSounds").addEventListener("click", ()=>{
-    alert("Next step: we’ll build the Letter Sounds game right here.");
-  });
-  document.getElementById("gameVowels").addEventListener("click", ()=>{
-    alert("Next step: we’ll build the Vowels game right here.");
-  });
-
-  // ---------------------------------------
-  // Init: apply grade + enable choose game if saved
-  // ---------------------------------------
-  setGrade(grade);
-  hydrateChooseGameEnabled();
-
-  // If user arrives with ?grade= in URL, honor it
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const g = params.get("grade");
-    if (g === "K" || g === "1" || g === "2") setGrade(g);
-  } catch {}
+  // keep length synced
+  setGameLen(gameLen);
 </script>
 
 </body>
