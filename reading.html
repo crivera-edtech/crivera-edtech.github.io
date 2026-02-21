@@ -1,53 +1,508 @@
----
-layout: default
-title: Reading
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Phonics | BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
 <section class="hero">
   <div class="container">
-    <h1>Reading 📖</h1>
-    <p>Read the short passage and answer the question.</p>
+    <h1>Phonics 🔤</h1>
+    <p>Pick your grade, take a 10-question diagnostic, then choose a game to practice!</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-
-    <h2 class="section-title">Mini Reading Check 🌟</h2>
+    <h2 class="section-title">Start Here 🌟</h2>
 
     <div class="game-box wide">
-      <div class="card">
-        <p class="kid-big">
-          The cat sat on the mat. The mat was red.
+
+      <!-- Grade row (same size as button row) -->
+      <div class="kid-big" style="text-align:center;">Choose Grade 🌟</div>
+      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
+        <button class="btn secondary grade-btn active" data-grade="K" type="button">Kindergarten</button>
+        <button class="btn secondary grade-btn" data-grade="1" type="button">Grade 1</button>
+        <button class="btn secondary grade-btn" data-grade="2" type="button">Grade 2</button>
+      </div>
+
+      <!-- Actions row -->
+      <div class="quick-strip" style="justify-content:center; margin-top:12px;">
+        <button class="btn" id="startDiagBtn" type="button">Start Diagnostic</button>
+        <button class="btn secondary" id="chooseGameBtn" type="button" disabled>Choose a Game</button>
+        <a class="btn secondary" href="progress.html">My Progress</a>
+      </div>
+
+      <div class="hero-note" style="text-align:center;">
+        Tip: Do the diagnostic first so games match your needs.
+      </div>
+
+      <!-- Diagnostic Panel -->
+      <div id="diagPanel" class="game-box" style="margin-top:16px; display:none;">
+        <div class="kid-big">Diagnostic ✅</div>
+        <p class="small" id="diagSub">
+          Answer 10 questions. We’ll recommend what to practice next.
         </p>
 
-        <p style="margin-top:16px;"><strong>Question:</strong> What color was the mat?</p>
+        <div class="game-box" style="margin-top:12px;">
+          <div style="display:flex; gap:10px; align-items:flex-start; justify-content:space-between;">
+            <div style="flex:1;">
+              <div class="small" id="diagProgressText">Question 1 of 10</div>
+              <div class="kid-big" id="diagQuestion" style="margin-top:6px;">Press “Start Diagnostic”.</div>
+              <div class="small" id="diagHint" style="margin-top:6px;"></div>
+            </div>
+          </div>
 
-        <div class="grid-3" style="margin-top:14px;">
-          <div class="card answer">Red</div>
-          <div class="card answer">Blue</div>
-          <div class="card answer">Green</div>
+          <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
+
+          <div class="quick-strip" style="justify-content:center; margin-top:12px;">
+            <button class="btn secondary" id="diagNextBtn" type="button" disabled>Next</button>
+            <button class="btn secondary" id="diagRestartBtn" type="button">Restart</button>
+          </div>
+
+          <div class="kid-big" id="diagFeedback" style="margin-top:12px;"></div>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <div id="resultsPanel" class="game-box" style="margin-top:16px; display:none;">
+        <div class="kid-big">Results 🌿</div>
+        <p class="small" id="resultsSummary">Nice work!</p>
+
+        <div class="grid-3" style="margin-top:12px;">
+          <div class="card" style="text-align:center;">
+            <h3 style="font-size:22px; margin-bottom:6px;">Score</h3>
+            <div class="kid-big" id="scoreBox">0 / 10</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <h3 style="font-size:22px; margin-bottom:6px;">Needs Practice</h3>
+            <div class="small" id="needsBox">—</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <h3 style="font-size:22px; margin-bottom:6px;">Ready For</h3>
+            <div class="small" id="readyBox">—</div>
+          </div>
         </div>
 
-        <p id="readingResult" class="kid-big" style="margin-top:16px;"></p>
+        <div class="quick-strip" style="justify-content:center; margin-top:14px;">
+          <button class="btn" id="goChooseGameBtn" type="button">Choose a Game</button>
+          <button class="btn secondary" id="retakeBtn" type="button">Retake Diagnostic</button>
+        </div>
       </div>
-    </div>
 
+      <!-- Game Picker Panel (unlocked after diagnostic) -->
+      <div id="gamePicker" class="game-box" style="margin-top:16px; display:none;">
+        <div class="kid-big">Pick a Game 🎮</div>
+        <p class="small">Choose what you want to practice next.</p>
+
+        <div class="grid-3" style="margin-top:12px;">
+          <div class="card" id="gameLetterNames" style="cursor:pointer;">
+            <h3>🔠 Letter Names</h3>
+            <p class="small">Tap the correct letter name.</p>
+            <div class="small" id="tagNames"></div>
+          </div>
+
+          <div class="card" id="gameLetterSounds" style="cursor:pointer;">
+            <h3>🔊 Letter Sounds</h3>
+            <p class="small">Pick the letter that matches the sound.</p>
+            <div class="small" id="tagSounds"></div>
+          </div>
+
+          <div class="card" id="gameVowels" style="cursor:pointer;">
+            <h3>🍃 Vowels</h3>
+            <p class="small">Short vs long vowels (K–2).</p>
+            <div class="small" id="tagVowels"></div>
+          </div>
+        </div>
+
+        <div class="hero-note" style="text-align:center; margin-top:12px;">
+          (Next step: we’ll plug the games in right inside this page.)
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
-<script>
-  const answers = document.querySelectorAll(".answer");
-  const result = document.getElementById("readingResult");
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
-  answers.forEach(a=>{
-    a.style.cursor = "pointer";
-    a.onclick = ()=>{
-      if(a.textContent === "Red"){
-        result.textContent = "Correct! ⭐";
-      } else {
-        result.textContent = "Try again 🙂";
-      }
-    };
+<script src="./nav.js"></script>
+<script>
+  // ---------------------------------------
+  // Keys
+  // ---------------------------------------
+  const PHONICS_DIAG_KEY = "bloom_phonics_diag_v2"; // store latest result
+  const PREF_GRADE_KEY = "bloom_pref_grade";
+
+  // ---------------------------------------
+  // Grade UI
+  // ---------------------------------------
+  let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
+  const gradeBtns = Array.from(document.querySelectorAll(".grade-btn"));
+
+  function setGrade(g){
+    grade = g;
+    localStorage.setItem(PREF_GRADE_KEY, g);
+    gradeBtns.forEach(b => b.classList.toggle("active", b.dataset.grade === grade));
+    hydrateChooseGameEnabled();
+  }
+
+  gradeBtns.forEach(btn=>{
+    btn.addEventListener("click", ()=> setGrade(btn.dataset.grade));
   });
+
+  // ---------------------------------------
+  // Question banks (K–2)
+  // Each question: {skill, q, choices[], correctIndex, hint}
+  // skill: "names" | "sounds" | "vowels" | "cvc" (future)
+  // ---------------------------------------
+  const banks = {
+    K: [
+      { skill:"names",  q:"Which letter is: A?", choices:["A","B","D"], correctIndex:0, hint:"Look for the first letter in the alphabet." },
+      { skill:"names",  q:"Which letter is: M?", choices:["N","M","W"], correctIndex:1, hint:"M has two mountains." },
+      { skill:"names",  q:"Which letter is: S?", choices:["S","C","G"], correctIndex:0, hint:"S looks like a curvy snake." },
+
+      { skill:"sounds", q:"Which letter makes the /m/ sound?", choices:["M","S","T"], correctIndex:0, hint:"/m/ like moon." },
+      { skill:"sounds", q:"Which letter makes the /s/ sound?", choices:["B","S","D"], correctIndex:1, hint:"/s/ like sun." },
+      { skill:"sounds", q:"Which letter makes the /t/ sound?", choices:["T","A","P"], correctIndex:0, hint:"/t/ like top." },
+
+      { skill:"vowels", q:"Which one is a vowel?", choices:["A","T","M"], correctIndex:0, hint:"Vowels: A E I O U." },
+      { skill:"vowels", q:"Which one is a vowel?", choices:["E","S","R"], correctIndex:0, hint:"Vowels: A E I O U." },
+      { skill:"vowels", q:"Which one is a vowel?", choices:["I","B","D"], correctIndex:0, hint:"Vowels: A E I O U." },
+
+      { skill:"sounds", q:"Which letter makes the /p/ sound?", choices:["P","V","B"], correctIndex:0, hint:"/p/ like pop!" },
+      { skill:"sounds", q:"Which letter makes the /g/ sound?", choices:["G","J","Q"], correctIndex:0, hint:"/g/ like go." }
+    ],
+
+    1: [
+      { skill:"names",  q:"Which letter is: B?", choices:["B","D","P"], correctIndex:0, hint:"B has two bumps." },
+      { skill:"names",  q:"Which letter is: R?", choices:["R","K","H"], correctIndex:0, hint:"R has a leg." },
+      { skill:"names",  q:"Which letter is: T?", choices:["T","F","E"], correctIndex:0, hint:"T has a top line." },
+
+      { skill:"sounds", q:"Which letter makes the /b/ sound?", choices:["D","B","P"], correctIndex:1, hint:"/b/ like ball." },
+      { skill:"sounds", q:"Which letter makes the /r/ sound?", choices:["R","L","H"], correctIndex:0, hint:"/r/ like rabbit." },
+
+      { skill:"vowels", q:"Which is a SHORT vowel sound in “cat”?", choices:["ă","ā","ē"], correctIndex:0, hint:"cat has short a." },
+      { skill:"vowels", q:"Which is a SHORT vowel sound in “pin”?", choices:["ī","ĭ","ō"], correctIndex:1, hint:"pin has short i." },
+      { skill:"vowels", q:"Which is a SHORT vowel sound in “hot”?", choices:["ŏ","ū","ē"], correctIndex:0, hint:"hot has short o." },
+
+      { skill:"sounds", q:"Which one starts with /sh/?", choices:["ship","cat","top"], correctIndex:0, hint:"/sh/ is quiet." },
+      { skill:"sounds", q:"Which one starts with /ch/?", choices:["rain","chop","sun"], correctIndex:1, hint:"/ch/ like choo-choo." },
+      { skill:"sounds", q:"Which one starts with /th/?", choices:["this","ship","chip"], correctIndex:0, hint:"/th/ like this." }
+    ],
+
+    2: [
+      { skill:"names",  q:"Which letter is: V?", choices:["V","W","Y"], correctIndex:0, hint:"V is pointy." },
+      { skill:"names",  q:"Which letter is: P?", choices:["P","R","B"], correctIndex:0, hint:"P has one bump." },
+      { skill:"names",  q:"Which letter is: G?", choices:["G","J","Q"], correctIndex:0, hint:"G is like C with a hook." },
+
+      { skill:"vowels", q:"Which word has a LONG A sound?", choices:["rain","cat","hat"], correctIndex:0, hint:"ai can make long a." },
+      { skill:"vowels", q:"Which word has a LONG E sound?", choices:["feet","pet","pen"], correctIndex:0, hint:"ee can make long e." },
+      { skill:"vowels", q:"Which word has a LONG O sound?", choices:["boat","hot","hop"], correctIndex:0, hint:"oa can make long o." },
+
+      { skill:"sounds", q:"Which team can make LONG A?", choices:["ai","oo","ee"], correctIndex:0, hint:"ai like rain." },
+      { skill:"sounds", q:"Which team can make LONG E?", choices:["ee","ai","oa"], correctIndex:0, hint:"ee like feet." },
+      { skill:"sounds", q:"Which team can make LONG O?", choices:["oa","ee","ai"], correctIndex:0, hint:"oa like boat." },
+
+      { skill:"sounds", q:"Which starts with /v/?", choices:["van","sun","map"], correctIndex:0, hint:"/v/ like van." },
+      { skill:"vowels", q:"Pick the word with a vowel team:", choices:["ship","rain","cat"], correctIndex:1, hint:"rain has ai." }
+    ]
+  };
+
+  // Make exactly 10 questions (shuffle + slice)
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function getTenQuestions(g){
+    const pool = banks[g] ? banks[g].slice() : banks.K.slice();
+    return shuffle(pool).slice(0, 10);
+  }
+
+  // ---------------------------------------
+  // Panels / UI refs
+  // ---------------------------------------
+  const startDiagBtn = document.getElementById("startDiagBtn");
+  const chooseGameBtn = document.getElementById("chooseGameBtn");
+
+  const diagPanel = document.getElementById("diagPanel");
+  const resultsPanel = document.getElementById("resultsPanel");
+  const gamePicker = document.getElementById("gamePicker");
+
+  const diagQuestion = document.getElementById("diagQuestion");
+  const diagHint = document.getElementById("diagHint");
+  const diagChoices = document.getElementById("diagChoices");
+  const diagProgressText = document.getElementById("diagProgressText");
+  const diagNextBtn = document.getElementById("diagNextBtn");
+  const diagRestartBtn = document.getElementById("diagRestartBtn");
+  const diagFeedback = document.getElementById("diagFeedback");
+
+  const scoreBox = document.getElementById("scoreBox");
+  const needsBox = document.getElementById("needsBox");
+  const readyBox = document.getElementById("readyBox");
+  const resultsSummary = document.getElementById("resultsSummary");
+  const goChooseGameBtn = document.getElementById("goChooseGameBtn");
+  const retakeBtn = document.getElementById("retakeBtn");
+
+  const tagNames = document.getElementById("tagNames");
+  const tagSounds = document.getElementById("tagSounds");
+  const tagVowels = document.getElementById("tagVowels");
+
+  // ---------------------------------------
+  // Diagnostic state
+  // ---------------------------------------
+  let questions = [];
+  let qIndex = 0;
+  let correctCount = 0;
+  let answered = false;
+  let lastSkillMisses = { names:0, sounds:0, vowels:0 };
+
+  function showOnly(panel){
+    diagPanel.style.display = "none";
+    resultsPanel.style.display = "none";
+    gamePicker.style.display = "none";
+    panel.style.display = "block";
+  }
+
+  function hydrateChooseGameEnabled(){
+    const saved = readSavedDiag();
+    const ok = saved && saved.grade === grade && saved.total === 10;
+    chooseGameBtn.disabled = !ok;
+    chooseGameBtn.style.opacity = ok ? "1" : ".6";
+  }
+
+  function readSavedDiag(){
+    try { return JSON.parse(localStorage.getItem(PHONICS_DIAG_KEY) || "null"); }
+    catch { return null; }
+  }
+
+  function saveDiag(result){
+    localStorage.setItem(PHONICS_DIAG_KEY, JSON.stringify(result));
+  }
+
+  function renderQuestion(){
+    answered = false;
+    diagFeedback.textContent = "";
+    diagNextBtn.disabled = true;
+
+    const q = questions[qIndex];
+    diagProgressText.textContent = `Question ${qIndex + 1} of 10`;
+    diagQuestion.textContent = q.q;
+    diagHint.textContent = q.hint || "";
+
+    diagChoices.innerHTML = "";
+    q.choices.forEach((c, idx)=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:24px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.addEventListener("click", ()=> selectAnswer(idx));
+      diagChoices.appendChild(card);
+    });
+  }
+
+  function selectAnswer(choiceIndex){
+    if (answered) return;
+    answered = true;
+
+    const q = questions[qIndex];
+    const correct = (choiceIndex === q.correctIndex);
+
+    if (correct){
+      correctCount++;
+      diagFeedback.textContent = "Correct! ⭐";
+    } else {
+      diagFeedback.textContent = `Good try! ✅ Answer: ${q.choices[q.correctIndex]}`;
+      if (q.skill in lastSkillMisses) lastSkillMisses[q.skill] += 1;
+    }
+
+    // simple visual highlight
+    Array.from(diagChoices.children).forEach((card, idx)=>{
+      card.style.opacity = "0.8";
+      if (idx === q.correctIndex) card.style.outline = "3px solid rgba(46, 125, 80, .35)";
+      if (idx === choiceIndex && idx !== q.correctIndex) card.style.outline = "3px solid rgba(180, 60, 60, .25)";
+    });
+
+    diagNextBtn.disabled = false;
+  }
+
+  function finishDiagnostic(){
+    const score = correctCount;
+    const total = 10;
+
+    // Determine top needs
+    const misses = [
+      { skill:"Letter Names", key:"names", n:lastSkillMisses.names },
+      { skill:"Letter Sounds", key:"sounds", n:lastSkillMisses.sounds },
+      { skill:"Vowels", key:"vowels", n:lastSkillMisses.vowels }
+    ].sort((a,b)=> b.n - a.n);
+
+    const needs = misses[0].n === 0 ? "Nothing big — you’re doing great!" : misses.filter(x=>x.n>0).map(x=>x.skill).slice(0,2).join(", ");
+    const ready = (score >= 8) ? "Try harder games + vowel teams" : (score >= 5 ? "Practice + play games daily" : "Start with basics + repeat the diagnostic");
+
+    // Save
+    const result = {
+      date: Date.now(),
+      grade,
+      score,
+      total,
+      misses: { ...lastSkillMisses }
+    };
+    saveDiag(result);
+
+    // Render results
+    scoreBox.textContent = `${score} / ${total}`;
+    needsBox.textContent = needs;
+    readyBox.textContent = ready;
+
+    const pct = Math.round((score/total)*100);
+    resultsSummary.textContent = `You scored ${pct}% for Grade ${grade === "K" ? "K" : grade}!`;
+
+    // Update game tags + enable choose game
+    renderGameTags(result);
+    hydrateChooseGameEnabled();
+
+    showOnly(resultsPanel);
+  }
+
+  function renderGameTags(result){
+    // friendly labels based on misses
+    const m = result.misses || {names:0,sounds:0,vowels:0};
+
+    tagNames.textContent  = m.names  ? `Recommended ⭐ (missed ${m.names})` : `Ready ✅`;
+    tagSounds.textContent = m.sounds ? `Recommended ⭐ (missed ${m.sounds})` : `Ready ✅`;
+    tagVowels.textContent = m.vowels ? `Recommended ⭐ (missed ${m.vowels})` : `Ready ✅`;
+  }
+
+  // ---------------------------------------
+  // Button wiring
+  // ---------------------------------------
+  startDiagBtn.addEventListener("click", ()=>{
+    questions = getTenQuestions(grade);
+    qIndex = 0;
+    correctCount = 0;
+    lastSkillMisses = { names:0, sounds:0, vowels:0 };
+    showOnly(diagPanel);
+    renderQuestion();
+  });
+
+  diagNextBtn.addEventListener("click", ()=>{
+    if (!answered) return;
+
+    qIndex++;
+    if (qIndex >= 10){
+      finishDiagnostic();
+    } else {
+      renderQuestion();
+    }
+  });
+
+  diagRestartBtn.addEventListener("click", ()=>{
+    questions = getTenQuestions(grade);
+    qIndex = 0;
+    correctCount = 0;
+    lastSkillMisses = { names:0, sounds:0, vowels:0 };
+    renderQuestion();
+  });
+
+  retakeBtn.addEventListener("click", ()=>{
+    // clear stored diag for this flow, keep grade preference
+    localStorage.removeItem(PHONICS_DIAG_KEY);
+    hydrateChooseGameEnabled();
+    showOnly(diagPanel);
+
+    questions = getTenQuestions(grade);
+    qIndex = 0;
+    correctCount = 0;
+    lastSkillMisses = { names:0, sounds:0, vowels:0 };
+    renderQuestion();
+  });
+
+  function openGamePicker(){
+    const saved = readSavedDiag();
+    if (saved && saved.grade === grade) renderGameTags(saved);
+    showOnly(gamePicker);
+  }
+
+  chooseGameBtn.addEventListener("click", openGamePicker);
+  goChooseGameBtn.addEventListener("click", openGamePicker);
+
+  // Placeholder clicks (we’ll build these games next)
+  document.getElementById("gameLetterNames").addEventListener("click", ()=>{
+    alert("Next step: we’ll build the Letter Names game right here.");
+  });
+  document.getElementById("gameLetterSounds").addEventListener("click", ()=>{
+    alert("Next step: we’ll build the Letter Sounds game right here.");
+  });
+  document.getElementById("gameVowels").addEventListener("click", ()=>{
+    alert("Next step: we’ll build the Vowels game right here.");
+  });
+
+  // ---------------------------------------
+  // Init: apply grade + enable choose game if saved
+  // ---------------------------------------
+  setGrade(grade);
+  hydrateChooseGameEnabled();
+
+  // If user arrives with ?grade= in URL, honor it
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const g = params.get("grade");
+    if (g === "K" || g === "1" || g === "2") setGrade(g);
+  } catch {}
 </script>
+
+</body>
+</html>
