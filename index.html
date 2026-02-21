@@ -1,12 +1,60 @@
----
-layout: default
-title: Home
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BloomELearning ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">BloomELearning ✨</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+            <a href="letter-formation.html">✍️ Letter Tracing</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html">🎥 Kids Resources</a>
+            <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
+            <a href="standards.html">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
+          <div class="dropdown-menu">
+            <a href="student-login.html">🧒 Student Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
+
+        <li><a href="games.html">🎮 Games</a></li>
+        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
 <section class="hero">
   <div class="container">
     <h1>Learn & Play 🌿✨</h1>
-    <p>Pick a bubble to start fast — phonics, reading, math, tracing, and fun rewards!</p>
+    <p>Pick a grade and start fast — phonics, reading, math, tracing, and fun rewards!</p>
 
     <div class="game-box wide" style="margin-top:16px;">
       <div class="kid-big">Start Here (Pick a Grade)</div>
@@ -27,18 +75,7 @@ title: Home
       <div class="hero-note">Tip: Your grade choice is saved on this device.</div>
     </div>
 
-    <div class="bubbles">
-      <a class="bubble" href="phonics.html"><span class="emoji">🔤</span><span class="text">Phonics</span></a>
-      <a class="bubble" href="reading.html"><span class="emoji">📖</span><span class="text">Reading</span></a>
-      <a class="bubble" href="math.html"><span class="emoji">➕</span><span class="text">Math</span></a>
-      <a class="bubble" href="resources.html#tracing"><span class="emoji">✍️</span><span class="text">Letter Tracing</span></a>
-
-      <a class="bubble" href="resources.html"><span class="emoji">🎥</span><span class="text">Kids Resources</span></a>
-      <a class="bubble" href="progress.html"><span class="emoji">📊</span><span class="text">My Progress</span></a>
-      <a class="bubble" href="sticker-book.html"><span class="emoji">📖</span><span class="text">Sticker Book</span></a>
-      <a class="bubble" href="diagnostic.html"><span class="emoji">🧠</span><span class="text">Diagnostic</span></a>
-    </div>
-
+    <!-- ✅ REMOVED THE BIG BUTTONS / BUBBLES SECTION -->
   </div>
 </section>
 
@@ -48,30 +85,31 @@ title: Home
 
     <div class="mission game-box wide">
       <div>
-        <div class="kid-big">Mini Goals</div>
-        <div class="small">Complete these to finish today’s mission.</div>
-
-        <div class="mission-list">
-          <div class="mission-item">
+        <div class="mission-item">
+          <div class="left">
             <div class="chk" id="m1chk">✓</div>
-            <div class="label">Answer 2 phonics questions</div>
-            <div class="small" id="m1txt">0 / 2</div>
+            <div>Answer 2 phonics questions</div>
           </div>
-
-          <div class="mission-item">
-            <div class="chk" id="m2chk">✓</div>
-            <div class="label">Read 1 passage</div>
-            <div class="small" id="m2txt">0 / 1</div>
-          </div>
-
-          <div class="mission-item">
-            <div class="chk" id="m3chk">✓</div>
-            <div class="label">Solve 2 math questions</div>
-            <div class="small" id="m3txt">0 / 2</div>
-          </div>
+          <div class="small" id="m1txt">0 / 2</div>
         </div>
 
-        <div class="small" style="margin-top:12px;">Mission Progress</div>
+        <div class="mission-item">
+          <div class="left">
+            <div class="chk" id="m2chk">✓</div>
+            <div>Read 1 passage</div>
+          </div>
+          <div class="small" id="m2txt">0 / 1</div>
+        </div>
+
+        <div class="mission-item">
+          <div class="left">
+            <div class="chk" id="m3chk">✓</div>
+            <div>Solve 2 math questions</div>
+          </div>
+          <div class="small" id="m3txt">0 / 2</div>
+        </div>
+
+        <div class="small" style="margin-top:10px;">Mission Progress</div>
         <div class="progressbar"><div id="missionBar"></div></div>
         <div class="small" id="missionPct" style="margin-top:6px;">0% complete</div>
       </div>
@@ -81,7 +119,7 @@ title: Home
           <div class="face" id="helperFace">🦄</div>
           <div>
             <div class="title" id="helperTitle">Unicorn Coach</div>
-            <div class="msg" id="helperMsg">Pick a bubble, earn stars, and unlock stickers!</div>
+            <div class="msg" id="helperMsg">Pick a game, earn stars, and unlock stickers!</div>
           </div>
         </div>
 
@@ -126,18 +164,23 @@ title: Home
   </div>
 </section>
 
+<footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
 <script>
+  // -----------------------------
+  // Grade preference
+  // -----------------------------
   const PREF_GRADE_KEY = "bloom_pref_grade";
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
 
   function setGrade(g){
     grade = g;
     localStorage.setItem(PREF_GRADE_KEY, g);
-
     document.querySelectorAll(".pill[data-grade]").forEach(b=>{
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
+    // Pass grade in URL (optional use on other pages)
     document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
@@ -147,13 +190,20 @@ title: Home
     btn.onclick = ()=> setGrade(btn.dataset.grade);
   });
 
+  // -----------------------------
+  // Missions (Daily)
+  // -----------------------------
   const MISSION_KEY = "bloom_daily_mission";
   const PROG_KEY = "bloom_progress";
 
   function todayKey(){
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
   }
+
   function load(key, fallback){
     try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch { return fallback; }
@@ -172,6 +222,7 @@ title: Home
 
   function renderMission(){
     const ms = ensureMission();
+
     const g1 = 2, g2 = 1, g3 = 2;
 
     document.getElementById("m1txt").textContent = `${Math.min(ms.phonics,g1)} / ${g1}`;
@@ -190,6 +241,7 @@ title: Home
     document.getElementById("missionBar").style.width = pct + "%";
     document.getElementById("missionPct").textContent = `${pct}% complete`;
 
+    // Helper reacts
     const face = document.getElementById("helperFace");
     const title = document.getElementById("helperTitle");
     const msg = document.getElementById("helperMsg");
@@ -209,6 +261,9 @@ title: Home
     }
   }
 
+  // -----------------------------
+  // Badge preview (unlocks)
+  // -----------------------------
   function getProgress(){
     return load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
@@ -240,7 +295,12 @@ title: Home
       phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
   }
 
+  // Init
   setGrade(grade);
   renderMission();
   renderBadges();
 </script>
+
+<script src="./nav.js"></script>
+</body>
+</html>
