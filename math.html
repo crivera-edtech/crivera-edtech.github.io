@@ -50,24 +50,572 @@
 <section class="hero">
   <div class="container">
     <h1>Math ➕</h1>
-    <p>Take the math diagnostic, then pick fun games that match your level.</p>
+    <p>Take a quick diagnostic, then play fun math games for your grade.</p>
+    <div class="quick-strip">
+      <button class="btn secondary" id="soundBtn">🔊 Read</button>
+      <a class="btn secondary" href="progress.html">My Progress</a>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Math Practice</h2>
 
-    <!-- Keep your existing math diagnostic + games content here -->
     <div class="game-box wide">
-      <div class="kid-big">Your math diagnostic + games live here ✅</div>
-      <p class="small">No changes to your activities—only the top nav changed.</p>
+      <div class="kid-big" style="text-align:center;">Choose Grade 🌟</div>
+      <div class="badge-row" style="justify-content:center;">
+        <button class="pill active pill-lg" data-grade="K">Kindergarten</button>
+        <button class="pill pill-lg" data-grade="1">Grade 1</button>
+        <button class="pill pill-lg" data-grade="2">Grade 2</button>
+      </div>
+
+      <div class="quick-strip" style="justify-content:center; margin-top:14px;">
+        <button class="btn btn-lg" id="startDiagBtn">Start Diagnostic (10)</button>
+        <button class="btn secondary btn-lg" id="showGamesBtn" disabled style="opacity:.6;">Choose a Game</button>
+        <button class="btn secondary btn-lg" id="resetBtn">Reset</button>
+      </div>
     </div>
+
+    <div class="game-box wide" id="diagPanel" style="margin-top:16px;">
+      <div class="kid-big">Diagnostic ✅</div>
+      <p class="small">10 quick math questions. You’ll get a recommended game path.</p>
+
+      <div class="game-box" style="margin-top:12px;">
+        <div class="small" id="meta">Press “Start Diagnostic” to begin.</div>
+        <div class="kid-big" id="q" style="margin-top:6px;">—</div>
+
+        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+        <div class="kid-big" id="result" style="margin-top:12px;"></div>
+
+        <div class="quick-strip" style="margin-top:12px;">
+          <button class="btn" id="nextBtn" disabled>Next</button>
+          <button class="btn secondary" id="skipBtn" disabled>Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-box wide" id="resultsPanel" style="margin-top:16px; display:none;">
+      <div class="kid-big">Your Results 🌿</div>
+      <div class="game-box" style="margin-top:12px;">
+        <div class="kid-big" id="scoreLine">Score: —</div>
+        <p class="small" id="recLine">Recommended path: —</p>
+
+        <div class="grid-3" id="lengthGrid" style="margin-top:12px;"></div>
+
+        <div class="quick-strip" style="margin-top:12px;">
+          <button class="btn" id="openGames">Choose a Game</button>
+          <a class="btn secondary" href="progress.html">View Progress</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-box wide" id="gamesPanel" style="margin-top:16px; display:none;">
+      <div class="kid-big">Choose a Game 🎮</div>
+      <div class="grid-3" id="gameCards" style="margin-top:12px;"></div>
+
+      <div class="game-box" id="gameStage" style="margin-top:16px; display:none;">
+        <div class="small" id="gameMeta">—</div>
+        <div class="kid-big" id="gameQ" style="margin-top:6px;">—</div>
+
+        <div id="gameUI" style="margin-top:14px;"></div>
+
+        <div class="kid-big" id="gameResult" style="margin-top:12px;"></div>
+
+        <div class="quick-strip" style="margin-top:12px;">
+          <button class="btn" id="gameNextBtn">Next</button>
+          <button class="btn secondary" id="backBtn">Back</button>
+          <button class="btn secondary" id="resetStarsBtn">Reset Math ⭐</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script src="./nav.js"></script>
+<script>
+const PROG_KEY="bloom_progress";
+const MATH_STATE_KEY="bloom_math_state";
+
+function load(key,f){ try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(f));}catch{return f;} }
+function save(key,v){ localStorage.setItem(key,JSON.stringify(v)); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+function speak(t){ if(!("speechSynthesis"in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.rate=1; speechSynthesis.speak(u); }
+function addMathStar(){
+  const p=load(PROG_KEY,{phonicsStars:0,readingStars:0,mathStars:0});
+  p.mathStars=(p.mathStars||0)+1; save(PROG_KEY,p);
+  const ms=load("bloom_daily_mission",null);
+  if(ms && typeof ms.math==="number"){ ms.math+=1; save("bloom_daily_mission",ms); }
+}
+
+let grade="K";
+document.querySelectorAll(".pill[data-grade]").forEach(b=>{
+  b.onclick=()=>{
+    grade=b.dataset.grade;
+    document.querySelectorAll(".pill[data-grade]").forEach(x=>x.classList.toggle("active",x.dataset.grade===grade));
+    resetUI();
+    const st=load(MATH_STATE_KEY,null);
+    setGamesEnabled(!!(st && st.grade===grade && st.finished));
+  };
+});
+
+const diagBank={
+  K: ()=> {
+    const a=Math.floor(Math.random()*6)+1;
+    const b=Math.floor(Math.random()*6)+1;
+    const sum=a+b;
+    return { q:`${a} + ${b} = ?`, a:sum, c:shuffle([sum, sum+1, Math.max(0,sum-1)]), tag:"add" };
+  },
+  1: ()=> {
+    const a=Math.floor(Math.random()*11)+5;
+    const b=Math.floor(Math.random()*6)+1;
+    const sub=a-b;
+    return { q:`${a} − ${b} = ?`, a:sub, c:shuffle([sub, sub+2, sub-1]), tag:"sub" };
+  },
+  2: ()=> {
+    const a=Math.floor(Math.random()*40)+20;
+    const b=Math.floor(Math.random()*20)+5;
+    const sum=a+b;
+    return { q:`${a} + ${b} = ?`, a:sum, c:shuffle([sum, sum+10, sum-1]), tag:"add2" };
+  }
+};
+
+function buildDiag10(){
+  let qs=[];
+  for(let i=0;i<10;i++){
+    qs.push(diagBank[grade]());
+  }
+  // add 2 place value for grade 2
+  if(grade==="2"){
+    qs[8]={ q:"Which number has 3 tens and 4 ones?", a:34, c:shuffle([34,43,30]), tag:"place" };
+    qs[9]={ q:"What is 52 rounded to the nearest ten?", a:50, c:shuffle([50,60,52]), tag:"place" };
+  }
+  // add 1 counting K / 1
+  if(grade==="K"){
+    qs[9]={ q:"How many? 🍎🍎🍎🍎", a:4, c:shuffle([3,4,5]), tag:"count" };
+  }
+  if(grade==="1"){
+    qs[9]={ q:"What is 10 + 5 ?", a:15, c:shuffle([14,15,16]), tag:"add" };
+  }
+  return qs;
+}
+
+/* UI refs */
+const startDiagBtn=document.getElementById("startDiagBtn");
+const showGamesBtn=document.getElementById("showGamesBtn");
+const resetBtn=document.getElementById("resetBtn");
+const diagPanel=document.getElementById("diagPanel");
+const resultsPanel=document.getElementById("resultsPanel");
+const gamesPanel=document.getElementById("gamesPanel");
+
+const meta=document.getElementById("meta");
+const qEl=document.getElementById("q");
+const choices=document.getElementById("choices");
+const result=document.getElementById("result");
+const nextBtn=document.getElementById("nextBtn");
+const skipBtn=document.getElementById("skipBtn");
+
+document.getElementById("soundBtn").onclick=()=> speak(qEl.textContent);
+
+let qs=[], idx=0, correct=0, answered=false;
+let missedTags=new Set();
+
+function setPanels(d,r,g){
+  diagPanel.style.display=d?"block":"none";
+  resultsPanel.style.display=r?"block":"none";
+  gamesPanel.style.display=g?"block":"none";
+}
+function setGamesEnabled(on){
+  showGamesBtn.disabled=!on;
+  showGamesBtn.style.opacity=on?"1":".6";
+}
+function resetUI(){
+  setPanels(true,false,false);
+  meta.textContent="Press “Start Diagnostic” to begin.";
+  qEl.textContent="—";
+  choices.innerHTML="";
+  result.textContent="";
+  nextBtn.disabled=true;
+  skipBtn.disabled=true;
+  answered=false;
+}
+
+function renderQ(){
+  const it=qs[idx];
+  meta.textContent=`Question ${idx+1} of ${qs.length}`;
+  qEl.textContent=it.q;
+  result.textContent="";
+  answered=false;
+  nextBtn.disabled=true;
+  skipBtn.disabled=false;
+
+  choices.innerHTML="";
+  it.c.forEach(ch=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.textAlign="center";
+    card.innerHTML=`<h3 style="font-size:34px; margin-bottom:6px;">${ch}</h3><p class="small">Tap!</p>`;
+    card.onclick=()=> choose(ch);
+    choices.appendChild(card);
+  });
+}
+function choose(ch){
+  if(answered) return;
+  answered=true;
+  nextBtn.disabled=false;
+  const it=qs[idx];
+  if(ch===it.a){
+    correct++;
+    result.textContent="Correct! ⭐";
+  } else {
+    result.textContent=`Good try! Answer: ${it.a}`;
+    missedTags.add(it.tag);
+  }
+}
+nextBtn.onclick=()=>{
+  if(!answered){ missedTags.add(qs[idx].tag); }
+  idx++;
+  if(idx>=qs.length) finish();
+  else renderQ();
+};
+skipBtn.onclick=()=>{
+  missedTags.add(qs[idx].tag);
+  idx++;
+  if(idx>=qs.length) finish();
+  else renderQ();
+};
+
+startDiagBtn.onclick=()=>{
+  qs=buildDiag10();
+  idx=0; correct=0; missedTags=new Set();
+  setPanels(true,false,false);
+  nextBtn.disabled=true;
+  skipBtn.disabled=false;
+  renderQ();
+};
+
+resetBtn.onclick=()=>{
+  save(MATH_STATE_KEY,null);
+  resetUI();
+  setGamesEnabled(false);
+};
+
+function finish(){
+  const scorePct=Math.round((correct/qs.length)*100);
+  const weaknesses=Array.from(missedTags);
+  const state={grade,finished:true,scorePct,weaknesses,timestamp:Date.now()};
+  save(MATH_STATE_KEY,state);
+  buildResults(state);
+  setPanels(false,true,false);
+  setGamesEnabled(true);
+}
+
+/* results */
+const scoreLine=document.getElementById("scoreLine");
+const recLine=document.getElementById("recLine");
+const lengthGrid=document.getElementById("lengthGrid");
+
+function buildResults(st){
+  scoreLine.textContent=`Score: ${st.scorePct}% (Grade ${st.grade})`;
+  const w=new Set(st.weaknesses||[]);
+  let path=[];
+  if(!w.size){
+    path=["Fact Sprint","Number Line Hop","Word Problem Wheel"];
+  } else {
+    if(w.has("count")) path.push("Counting Pop");
+    if(w.has("add")||w.has("add2")) path.push("Fact Sprint");
+    if(w.has("sub")) path.push("Subtract Safari");
+    if(w.has("place")) path.push("Place Value Builder");
+    path.push("Number Line Hop");
+  }
+  recLine.textContent=`Recommended path: ${path.join(" → ")}`;
+
+  const cards=[
+    {t:"Number Line Hop", len:"4–6 min"},
+    {t:"Fact Sprint", len:"3–5 min"},
+    {t:"Ten-Frame Builder", len: grade==="2" ? "Optional" : "4–6 min"},
+    {t:"Place Value Builder", len: grade==="2" ? "5–8 min" : "Optional"},
+    {t:"Word Problem Wheel", len:"4–7 min"},
+    {t:"Typing Challenge", len:"3–5 min"}
+  ].filter(x=>x.len!=="Optional" || grade==="2");
+
+  lengthGrid.innerHTML=cards.slice(0,6).map(c=>`
+    <div class="card">
+      <h3 style="margin-bottom:6px;">${c.t}</h3>
+      <p class="small"><strong>Game length:</strong> ${c.len}</p>
+    </div>
+  `).join("");
+}
+
+/* games */
+document.getElementById("openGames").onclick=()=>{ setPanels(false,false,true); renderGameCards(); document.getElementById("gameStage").style.display="none"; };
+showGamesBtn.onclick=()=>{ setPanels(false,false,true); renderGameCards(); document.getElementById("gameStage").style.display="none"; };
+
+const gameCards=document.getElementById("gameCards");
+const gameStage=document.getElementById("gameStage");
+const gameMeta=document.getElementById("gameMeta");
+const gameQ=document.getElementById("gameQ");
+const gameUI=document.getElementById("gameUI");
+const gameResult=document.getElementById("gameResult");
+const gameNextBtn=document.getElementById("gameNextBtn");
+
+document.getElementById("backBtn").onclick=()=> gameStage.style.display="none";
+document.getElementById("resetStarsBtn").onclick=()=>{
+  const p=load(PROG_KEY,{phonicsStars:0,readingStars:0,mathStars:0});
+  p.mathStars=0; save(PROG_KEY,p);
+  alert("Math stars reset!");
+};
+
+let currentGame=null;
+
+function renderGameCards(){
+  const st=load(MATH_STATE_KEY,null)||{grade,weaknesses:[]};
+  const w=new Set(st.weaknesses||[]);
+  const games=[
+    {id:"lineHop", t:"🦘 Number Line Hop", len:"4–6 min", rec:true},
+    {id:"factSprint", t:"⚡ Fact Sprint", len:"3–5 min", rec:w.has("add")||w.has("add2")},
+    ...(grade!=="2" ? [{id:"tenFrame", t:"🟩 Ten-Frame Builder", len:"4–6 min", rec:true}] : []),
+    ...(grade==="2" ? [{id:"placeValue", t:"🧱 Place Value Builder", len:"5–8 min", rec:w.has("place")}] : []),
+    {id:"wordWheel", t:"🎡 Word Problem Wheel", len:"4–7 min", rec:true},
+    {id:"typing", t:"⌨️ Typing Challenge", len:"3–5 min", rec: grade!=="K"}
+  ];
+
+  gameCards.innerHTML=games.map(g=>`
+    <div class="card">
+      <h3 style="margin-bottom:6px;">${g.t}</h3>
+      <p class="small"><strong>Length:</strong> ${g.len}</p>
+      <p class="small">${g.rec?"✅ Recommended":"Optional"}</p>
+      <div class="quick-strip" style="justify-content:flex-start; margin-top:10px;">
+        <button class="btn" data-play="${g.id}">Play</button>
+      </div>
+    </div>
+  `).join("");
+
+  gameCards.querySelectorAll("[data-play]").forEach(b=>{
+    b.onclick=()=> startGame(b.dataset.play);
+  });
+}
+
+function startGame(id){
+  currentGame=id;
+  gameStage.style.display="block";
+  gameResult.textContent="";
+  playNext(true);
+}
+gameNextBtn.onclick=()=> playNext();
+
+function gradeAnswer(ok){
+  if(ok){
+    gameResult.textContent="Correct! ⭐";
+    addMathStar();
+    speak("Correct!");
+  } else {
+    gameResult.textContent="Try again 🙂";
+    speak("Try again.");
+  }
+}
+
+function playNext(){
+  gameResult.textContent="";
+  if(currentGame==="lineHop") return gLineHop();
+  if(currentGame==="factSprint") return gFactSprint();
+  if(currentGame==="tenFrame") return gTenFrame();
+  if(currentGame==="placeValue") return gPlaceValue();
+  if(currentGame==="wordWheel") return gWordWheel();
+  if(currentGame==="typing") return gTyping();
+}
+
+/* game implementations */
+function gLineHop(){
+  const start = grade==="K" ? 0 : grade==="1" ? 0 : 10;
+  const end = grade==="K" ? 10 : grade==="1" ? 20 : 50;
+  const a = Math.floor(Math.random()*(end-start-5))+start;
+  const step = grade==="K" ? Math.floor(Math.random()*3)+1 : Math.floor(Math.random()*6)+1;
+  const ans = a + step;
+
+  gameMeta.textContent="Game: Number Line Hop";
+  gameQ.textContent=`Start at ${a}. Hop forward ${step}. Where do you land?`;
+  gameUI.innerHTML="";
+
+  const choices = shuffle([ans, ans+1, ans-1]);
+  const grid=document.createElement("div");
+  grid.className="grid-3";
+  choices.forEach(c=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.textAlign="center";
+    card.innerHTML=`<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+    card.onclick=()=> gradeAnswer(c===ans);
+    grid.appendChild(card);
+  });
+  gameUI.appendChild(grid);
+}
+
+function gFactSprint(){
+  const a = grade==="K" ? Math.floor(Math.random()*6)+1 : Math.floor(Math.random()*10)+1;
+  const b = grade==="K" ? Math.floor(Math.random()*6)+1 : Math.floor(Math.random()*10)+1;
+  const ans = (grade==="1"||grade==="2") ? (Math.random()<0.5 ? a+b : a-b>=0 ? a-b : a+b) : a+b;
+  const q = (ans===a+b) ? `${a} + ${b} = ?` : `${a} − ${b} = ?`;
+
+  gameMeta.textContent="Game: Fact Sprint";
+  gameQ.textContent=q;
+  gameUI.innerHTML="";
+
+  const choices = shuffle([ans, ans+2, ans+1]);
+  const grid=document.createElement("div");
+  grid.className="grid-3";
+  choices.forEach(c=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.textAlign="center";
+    card.innerHTML=`<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+    card.onclick=()=> gradeAnswer(c===ans);
+    grid.appendChild(card);
+  });
+  gameUI.appendChild(grid);
+}
+
+function gTenFrame(){
+  const target = Math.floor(Math.random()*10)+1;
+  gameMeta.textContent="Game: Ten-Frame Builder";
+  gameQ.textContent=`Make ${target} dots (tap to fill)!`;
+  gameUI.innerHTML="";
+
+  const box=document.createElement("div");
+  box.className="game-box";
+  box.innerHTML=`<div id="tf" style="display:grid; grid-template-columns:repeat(5,48px); gap:10px; justify-content:flex-start;"></div>
+                 <div class="small" id="tfCount" style="margin-top:10px;">0 / ${target}</div>
+                 <div class="quick-strip" style="justify-content:flex-start; margin-top:10px;">
+                   <button class="btn" id="tfCheck">Check</button>
+                   <button class="btn secondary" id="tfClear">Clear</button>
+                 </div>`;
+  gameUI.appendChild(box);
+
+  const tf=box.querySelector("#tf");
+  let filled=0;
+  for(let i=0;i<10;i++){
+    const cell=document.createElement("button");
+    cell.className="pill";
+    cell.style.width="48px";
+    cell.style.height="48px";
+    cell.textContent="○";
+    cell.onclick=()=>{
+      if(cell.textContent==="○"){ cell.textContent="●"; filled++; }
+      else { cell.textContent="○"; filled--; }
+      box.querySelector("#tfCount").textContent=`${filled} / ${target}`;
+    };
+    tf.appendChild(cell);
+  }
+
+  box.querySelector("#tfClear").onclick=()=> gTenFrame();
+  box.querySelector("#tfCheck").onclick=()=> gradeAnswer(filled===target);
+}
+
+function gPlaceValue(){
+  const tens = Math.floor(Math.random()*7)+2;
+  const ones = Math.floor(Math.random()*9);
+  const ans = tens*10 + ones;
+
+  gameMeta.textContent="Game: Place Value Builder";
+  gameQ.textContent=`Build: ${tens} tens and ${ones} ones. What number is that?`;
+  gameUI.innerHTML="";
+
+  const choices = shuffle([ans, ones*10+tens, ans+10]);
+  const grid=document.createElement("div");
+  grid.className="grid-3";
+  choices.forEach(c=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.textAlign="center";
+    card.innerHTML=`<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+    card.onclick=()=> gradeAnswer(c===ans);
+    grid.appendChild(card);
+  });
+  gameUI.appendChild(grid);
+}
+
+function gWordWheel(){
+  gameMeta.textContent="Game: Word Problem Wheel";
+  gameQ.textContent="Solve the story!";
+  gameUI.innerHTML="";
+
+  const probs = grade==="K"
+    ? [
+        {q:"You have 3 apples. You get 2 more. How many now?", a:5},
+        {q:"You have 6 cookies. You eat 1. How many left?", a:5}
+      ]
+    : grade==="1"
+      ? [
+        {q:"There are 8 birds. 3 fly away. How many left?", a:5},
+        {q:"You have 7 stickers. You get 6 more. How many?", a:13}
+      ]
+    : [
+        {q:"You have 24 books. You get 15 more. How many?", a:39},
+        {q:"There are 46 balloons. 18 pop. How many left?", a:28}
+      ];
+
+  const it = shuffle(probs)[0];
+  const choices = shuffle([it.a, it.a+2, it.a-1]);
+
+  const card=document.createElement("div");
+  card.className="game-box";
+  card.innerHTML=`<p class="kid-big" style="margin-bottom:10px;">${it.q}</p>
+                  <div class="grid-3" id="ww"></div>`;
+  gameUI.appendChild(card);
+
+  const ww=card.querySelector("#ww");
+  choices.forEach(c=>{
+    const x=document.createElement("div");
+    x.className="card";
+    x.style.textAlign="center";
+    x.innerHTML=`<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+    x.onclick=()=> gradeAnswer(c===it.a);
+    ww.appendChild(x);
+  });
+
+  speak(it.q);
+}
+
+function gTyping(){
+  const a = grade==="1" ? Math.floor(Math.random()*10)+1 : Math.floor(Math.random()*20)+10;
+  const b = Math.floor(Math.random()*10)+1;
+  const op = Math.random()<0.5 ? "+" : "−";
+  const ans = op==="+" ? a+b : a-b;
+  gameMeta.textContent="Game: Typing Challenge";
+  gameQ.textContent=`Type the answer: ${a} ${op} ${b}`;
+  gameUI.innerHTML="";
+
+  const box=document.createElement("div");
+  box.className="game-box";
+  box.innerHTML=`
+    <input id="type" placeholder="Type here..." style="width:min(420px,100%); padding:14px 16px; border-radius:999px; border:2px solid rgba(0,0,0,0.12); font-family:inherit; font-size:18px;">
+    <div class="quick-strip" style="justify-content:flex-start; margin-top:12px;">
+      <button class="btn" id="check">Check</button>
+    </div>
+  `;
+  gameUI.appendChild(box);
+
+  box.querySelector("#check").onclick=()=>{
+    const v=parseInt(box.querySelector("#type").value,10);
+    gradeAnswer(v===ans);
+  };
+}
+
+/* init */
+(function init(){
+  resetUI();
+  const st=load(MATH_STATE_KEY,null);
+  if(st && st.grade===grade && st.finished){
+    setGamesEnabled(true);
+    buildResults(st);
+    setPanels(false,true,false);
+  } else {
+    setGamesEnabled(false);
+  }
+})();
+</script>
+
 </body>
 </html>
