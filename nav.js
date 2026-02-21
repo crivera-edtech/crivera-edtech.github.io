@@ -1,52 +1,51 @@
-/* nav.js - BloomELearning dropdown behavior (mobile + desktop friendly)
-   - Removes "Letter Tracing" from Subjects menu
-*/
+// nav.js — BloomELearning navigation behavior (dropdowns + outside click + ESC)
+// Keeps layout/theme; just fixes dropdown behavior and removes Games/Diagnostic from top nav.
 
 (function () {
-  // Close all open dropdown menus
-  function closeAll() {
-    document.querySelectorAll(".dropdown").forEach((dd) => {
+  // Toggle dropdown open/close
+  function closeAllDropdowns() {
+    document.querySelectorAll(".dropdown").forEach(dd => {
       dd.classList.remove("open");
-      const toggle = dd.querySelector(".dropdown-toggle");
-      if (toggle) toggle.setAttribute("aria-expanded", "false");
+      const t = dd.querySelector(".dropdown-toggle");
+      if (t) t.setAttribute("aria-expanded", "false");
     });
   }
 
-  // Toggle a single dropdown
   function toggleDropdown(dd) {
     const isOpen = dd.classList.contains("open");
-    closeAll();
+    closeAllDropdowns();
     if (!isOpen) {
       dd.classList.add("open");
-      const toggle = dd.querySelector(".dropdown-toggle");
-      if (toggle) toggle.setAttribute("aria-expanded", "true");
+      const t = dd.querySelector(".dropdown-toggle");
+      if (t) t.setAttribute("aria-expanded", "true");
     }
   }
 
-  document.addEventListener("click", (e) => {
-    const toggle = e.target.closest(".dropdown-toggle");
-    const insideMenu = e.target.closest(".dropdown-menu");
-    const dropdown = e.target.closest(".dropdown");
+  // Attach handlers
+  document.querySelectorAll(".dropdown").forEach(dd => {
+    const toggle = dd.querySelector(".dropdown-toggle");
+    const menu = dd.querySelector(".dropdown-menu");
 
-    // Click on a dropdown toggle
-    if (toggle && dropdown) {
+    if (!toggle || !menu) return;
+
+    // Click toggle
+    toggle.addEventListener("click", (e) => {
       e.preventDefault();
-      toggleDropdown(dropdown);
-      return;
-    }
+      e.stopPropagation();
+      toggleDropdown(dd);
+    });
 
-    // Click inside dropdown menu (let links work)
-    if (insideMenu) return;
-
-    // Click anywhere else closes dropdowns
-    closeAll();
+    // Prevent clicks inside menu from closing immediately
+    menu.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
   });
 
-  // Escape closes menus
+  // Click outside closes
+  document.addEventListener("click", () => closeAllDropdowns());
+
+  // ESC closes
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeAll();
+    if (e.key === "Escape") closeAllDropdowns();
   });
-
-  // Optional: close on scroll (feels cleaner)
-  window.addEventListener("scroll", closeAll, { passive: true });
 })();
