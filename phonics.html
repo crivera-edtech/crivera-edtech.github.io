@@ -91,13 +91,9 @@
         </p>
 
         <div class="game-box" style="margin-top:12px;">
-          <div style="display:flex; gap:10px; align-items:flex-start; justify-content:space-between;">
-            <div style="flex:1;">
-              <div class="small" id="diagProgressText">Question 1 of 10</div>
-              <div class="kid-big" id="diagQuestion" style="margin-top:6px;">Press “Start Diagnostic”.</div>
-              <div class="small" id="diagHint" style="margin-top:6px;"></div>
-            </div>
-          </div>
+          <div class="small" id="diagProgressText">Question 1 of 10</div>
+          <div class="kid-big" id="diagQuestion" style="margin-top:6px;">Press “Start Diagnostic”.</div>
+          <div class="small" id="diagHint" style="margin-top:6px;"></div>
 
           <div class="grid-3" id="diagChoices" style="margin-top:14px;"></div>
 
@@ -125,7 +121,7 @@
             <div class="small" id="needsBox">—</div>
           </div>
           <div class="card" style="text-align:center;">
-            <h3 style="font-size:22px; margin-bottom:6px;">Ready For</h3>
+            <h3 style="font-size:22px; margin-bottom:6px;">Recommended Next</h3>
             <div class="small" id="readyBox">—</div>
           </div>
         </div>
@@ -136,33 +132,82 @@
         </div>
       </div>
 
-      <!-- Game Picker Panel (unlocked after diagnostic) -->
-      <div id="gamePicker" class="game-box" style="margin-top:16px; display:none;">
+      <!-- Game Hub -->
+      <div id="gameHub" class="game-box" style="margin-top:16px; display:none;">
         <div class="kid-big">Pick a Game 🎮</div>
-        <p class="small">Choose what you want to practice next.</p>
+        <p class="small">Choose what you want to practice next. (Games change by grade!)</p>
 
         <div class="grid-3" style="margin-top:12px;">
-          <div class="card" id="gameLetterNames" style="cursor:pointer;">
+          <div class="card pick" data-game="names">
             <h3>🔠 Letter Names</h3>
             <p class="small">Tap the correct letter name.</p>
-            <div class="small" id="tagNames"></div>
+            <div class="small tag" id="tagNames"></div>
           </div>
 
-          <div class="card" id="gameLetterSounds" style="cursor:pointer;">
+          <div class="card pick" data-game="sounds">
             <h3>🔊 Letter Sounds</h3>
-            <p class="small">Pick the letter that matches the sound.</p>
-            <div class="small" id="tagSounds"></div>
+            <p class="small">Pick the letter/letters that match the sound.</p>
+            <div class="small tag" id="tagSounds"></div>
           </div>
 
-          <div class="card" id="gameVowels" style="cursor:pointer;">
-            <h3>🍃 Vowels</h3>
-            <p class="small">Short vs long vowels (K–2).</p>
-            <div class="small" id="tagVowels"></div>
+          <div class="card pick" data-game="pictures">
+            <h3>🖼️ Picture Labeling</h3>
+            <p class="small">Pick the word that matches the picture + sound.</p>
+            <div class="small tag" id="tagPictures"></div>
+          </div>
+
+          <div class="card pick" data-game="build">
+            <h3>🧱 Word Builder</h3>
+            <p class="small">Drag letters into boxes to build the word.</p>
+            <div class="small tag" id="tagBuild"></div>
+          </div>
+
+          <div class="card pick" data-game="families">
+            <h3>🚂 Word Family Train</h3>
+            <p class="small">Sort words into the right word family.</p>
+            <div class="small tag" id="tagFamilies"></div>
+          </div>
+
+          <div class="card pick" data-game="treasure">
+            <h3>🗺️ Vowel Team Treasure</h3>
+            <p class="small">Choose the vowel team to open the treasure!</p>
+            <div class="small tag" id="tagTreasure"></div>
+          </div>
+
+          <div class="card pick" data-game="mystery">
+            <h3>🕵️ Mystery Picture Reveal</h3>
+            <p class="small">Correct answers reveal a mystery picture!</p>
+            <div class="small tag" id="tagMystery"></div>
           </div>
         </div>
 
         <div class="hero-note" style="text-align:center; margin-top:12px;">
-          (Next step: we’ll plug the games in right inside this page.)
+          Earn ⭐ for each correct answer. Your stars save on this device.
+        </div>
+      </div>
+
+      <!-- Game Stage -->
+      <div id="gameStage" class="game-box" style="margin-top:16px; display:none;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div>
+            <div class="kid-big" id="gameTitle">Game</div>
+            <div class="small" id="gameDesc"></div>
+          </div>
+          <div class="quick-strip" style="justify-content:flex-end;">
+            <button class="btn secondary" id="backToHubBtn" type="button">← Back to Games</button>
+            <button class="btn secondary" id="newRoundBtn" type="button">New Round</button>
+          </div>
+        </div>
+
+        <div class="game-box" style="margin-top:12px;">
+          <div class="small" id="roundText">Round 1</div>
+          <div class="kid-big" id="promptText" style="margin-top:6px;">Prompt</div>
+          <div class="small" id="promptHint" style="margin-top:6px;"></div>
+
+          <div id="stageBody" style="margin-top:14px;"></div>
+
+          <div class="kid-big" id="stageFeedback" style="margin-top:12px;"></div>
+          <div class="small" id="starsText" style="margin-top:6px;"></div>
         </div>
       </div>
 
@@ -175,13 +220,50 @@
 <script src="./nav.js"></script>
 <script>
   // ---------------------------------------
-  // Keys
+  // Storage Keys
   // ---------------------------------------
-  const PHONICS_DIAG_KEY = "bloom_phonics_diag_v2"; // store latest result
   const PREF_GRADE_KEY = "bloom_pref_grade";
+  const PHONICS_DIAG_KEY = "bloom_phonics_diag_v3";
+  const PROG_KEY = "bloom_progress";
 
   // ---------------------------------------
-  // Grade UI
+  // Helpers
+  // ---------------------------------------
+  function load(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
+  }
+  function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+  // Adds a phonics star (uses your existing progress object)
+  function addPhonicsStar(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    p.phonicsStars = (p.phonicsStars || 0) + 1;
+    save(PROG_KEY, p);
+    return p.phonicsStars;
+  }
+
+  function getPhonicsStars(){
+    const p = load(PROG_KEY, {
+      phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
+    });
+    return (p.phonicsStars || 0);
+  }
+
+  // ---------------------------------------
+  // Grade Selection
   // ---------------------------------------
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
   const gradeBtns = Array.from(document.querySelectorAll(".grade-btn"));
@@ -191,56 +273,62 @@
     localStorage.setItem(PREF_GRADE_KEY, g);
     gradeBtns.forEach(b => b.classList.toggle("active", b.dataset.grade === grade));
     hydrateChooseGameEnabled();
+    // If on hub, refresh tags
+    if (gameHub.style.display !== "none") renderGameTags(readSavedDiag());
   }
 
   gradeBtns.forEach(btn=>{
     btn.addEventListener("click", ()=> setGrade(btn.dataset.grade));
   });
 
+  // honor ?grade= param
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const g = params.get("grade");
+    if (g === "K" || g === "1" || g === "2") grade = g;
+  } catch {}
+
   // ---------------------------------------
-  // Question banks (K–2)
-  // Each question: {skill, q, choices[], correctIndex, hint}
-  // skill: "names" | "sounds" | "vowels" | "cvc" (future)
+  // Diagnostic Banks (10 Q from pool)
+  // skills: names / sounds / vowels
   // ---------------------------------------
-  const banks = {
+  const diagBanks = {
     K: [
       { skill:"names",  q:"Which letter is: A?", choices:["A","B","D"], correctIndex:0, hint:"Look for the first letter in the alphabet." },
       { skill:"names",  q:"Which letter is: M?", choices:["N","M","W"], correctIndex:1, hint:"M has two mountains." },
       { skill:"names",  q:"Which letter is: S?", choices:["S","C","G"], correctIndex:0, hint:"S looks like a curvy snake." },
+      { skill:"names",  q:"Which letter is: T?", choices:["T","F","E"], correctIndex:0, hint:"T has a top line." },
 
       { skill:"sounds", q:"Which letter makes the /m/ sound?", choices:["M","S","T"], correctIndex:0, hint:"/m/ like moon." },
       { skill:"sounds", q:"Which letter makes the /s/ sound?", choices:["B","S","D"], correctIndex:1, hint:"/s/ like sun." },
       { skill:"sounds", q:"Which letter makes the /t/ sound?", choices:["T","A","P"], correctIndex:0, hint:"/t/ like top." },
+      { skill:"sounds", q:"Which letter makes the /p/ sound?", choices:["P","V","B"], correctIndex:0, hint:"/p/ like pop!" },
 
       { skill:"vowels", q:"Which one is a vowel?", choices:["A","T","M"], correctIndex:0, hint:"Vowels: A E I O U." },
       { skill:"vowels", q:"Which one is a vowel?", choices:["E","S","R"], correctIndex:0, hint:"Vowels: A E I O U." },
       { skill:"vowels", q:"Which one is a vowel?", choices:["I","B","D"], correctIndex:0, hint:"Vowels: A E I O U." },
-
-      { skill:"sounds", q:"Which letter makes the /p/ sound?", choices:["P","V","B"], correctIndex:0, hint:"/p/ like pop!" },
       { skill:"sounds", q:"Which letter makes the /g/ sound?", choices:["G","J","Q"], correctIndex:0, hint:"/g/ like go." }
     ],
-
     1: [
       { skill:"names",  q:"Which letter is: B?", choices:["B","D","P"], correctIndex:0, hint:"B has two bumps." },
       { skill:"names",  q:"Which letter is: R?", choices:["R","K","H"], correctIndex:0, hint:"R has a leg." },
-      { skill:"names",  q:"Which letter is: T?", choices:["T","F","E"], correctIndex:0, hint:"T has a top line." },
+      { skill:"names",  q:"Which letter is: V?", choices:["V","W","Y"], correctIndex:0, hint:"V is pointy." },
+      { skill:"names",  q:"Which letter is: G?", choices:["G","J","Q"], correctIndex:0, hint:"G is like C with a hook." },
 
       { skill:"sounds", q:"Which letter makes the /b/ sound?", choices:["D","B","P"], correctIndex:1, hint:"/b/ like ball." },
       { skill:"sounds", q:"Which letter makes the /r/ sound?", choices:["R","L","H"], correctIndex:0, hint:"/r/ like rabbit." },
+      { skill:"sounds", q:"Which starts with /sh/?", choices:["ship","cat","top"], correctIndex:0, hint:"/sh/ is quiet." },
+      { skill:"sounds", q:"Which starts with /ch/?", choices:["rain","chop","sun"], correctIndex:1, hint:"/ch/ like choo-choo." },
+      { skill:"sounds", q:"Which starts with /th/?", choices:["this","ship","chip"], correctIndex:0, hint:"/th/ like this." },
 
-      { skill:"vowels", q:"Which is a SHORT vowel sound in “cat”?", choices:["ă","ā","ē"], correctIndex:0, hint:"cat has short a." },
-      { skill:"vowels", q:"Which is a SHORT vowel sound in “pin”?", choices:["ī","ĭ","ō"], correctIndex:1, hint:"pin has short i." },
-      { skill:"vowels", q:"Which is a SHORT vowel sound in “hot”?", choices:["ŏ","ū","ē"], correctIndex:0, hint:"hot has short o." },
-
-      { skill:"sounds", q:"Which one starts with /sh/?", choices:["ship","cat","top"], correctIndex:0, hint:"/sh/ is quiet." },
-      { skill:"sounds", q:"Which one starts with /ch/?", choices:["rain","chop","sun"], correctIndex:1, hint:"/ch/ like choo-choo." },
-      { skill:"sounds", q:"Which one starts with /th/?", choices:["this","ship","chip"], correctIndex:0, hint:"/th/ like this." }
+      { skill:"vowels", q:"Which is the SHORT vowel sound in “cat”?", choices:["ă","ā","ē"], correctIndex:0, hint:"cat has short a." },
+      { skill:"vowels", q:"Which is the SHORT vowel sound in “pin”?", choices:["ī","ĭ","ō"], correctIndex:1, hint:"pin has short i." },
+      { skill:"vowels", q:"Which is the SHORT vowel sound in “hot”?", choices:["ŏ","ū","ē"], correctIndex:0, hint:"hot has short o." }
     ],
-
     2: [
-      { skill:"names",  q:"Which letter is: V?", choices:["V","W","Y"], correctIndex:0, hint:"V is pointy." },
       { skill:"names",  q:"Which letter is: P?", choices:["P","R","B"], correctIndex:0, hint:"P has one bump." },
-      { skill:"names",  q:"Which letter is: G?", choices:["G","J","Q"], correctIndex:0, hint:"G is like C with a hook." },
+      { skill:"names",  q:"Which letter is: J?", choices:["J","I","L"], correctIndex:0, hint:"J has a hook." },
+      { skill:"names",  q:"Which letter is: Q?", choices:["Q","O","G"], correctIndex:0, hint:"Q has a tail." },
 
       { skill:"vowels", q:"Which word has a LONG A sound?", choices:["rain","cat","hat"], correctIndex:0, hint:"ai can make long a." },
       { skill:"vowels", q:"Which word has a LONG E sound?", choices:["feet","pet","pen"], correctIndex:0, hint:"ee can make long e." },
@@ -251,22 +339,13 @@
       { skill:"sounds", q:"Which team can make LONG O?", choices:["oa","ee","ai"], correctIndex:0, hint:"oa like boat." },
 
       { skill:"sounds", q:"Which starts with /v/?", choices:["van","sun","map"], correctIndex:0, hint:"/v/ like van." },
-      { skill:"vowels", q:"Pick the word with a vowel team:", choices:["ship","rain","cat"], correctIndex:1, hint:"rain has ai." }
+      { skill:"vowels", q:"Pick the word with a vowel team:", choices:["ship","rain","cat"], correctIndex:1, hint:"rain has ai." },
+      { skill:"sounds", q:"Which ends with /-ck/?", choices:["duck","dune","duty"], correctIndex:0, hint:"duck ends with -ck." }
     ]
   };
 
-  // Make exactly 10 questions (shuffle + slice)
-  function shuffle(arr){
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  function getTenQuestions(g){
-    const pool = banks[g] ? banks[g].slice() : banks.K.slice();
+  function getTenDiagQuestions(g){
+    const pool = (diagBanks[g] || diagBanks.K).slice();
     return shuffle(pool).slice(0, 10);
   }
 
@@ -278,7 +357,8 @@
 
   const diagPanel = document.getElementById("diagPanel");
   const resultsPanel = document.getElementById("resultsPanel");
-  const gamePicker = document.getElementById("gamePicker");
+  const gameHub = document.getElementById("gameHub");
+  const gameStage = document.getElementById("gameStage");
 
   const diagQuestion = document.getElementById("diagQuestion");
   const diagHint = document.getElementById("diagHint");
@@ -297,22 +377,38 @@
 
   const tagNames = document.getElementById("tagNames");
   const tagSounds = document.getElementById("tagSounds");
-  const tagVowels = document.getElementById("tagVowels");
+  const tagPictures = document.getElementById("tagPictures");
+  const tagBuild = document.getElementById("tagBuild");
+  const tagFamilies = document.getElementById("tagFamilies");
+  const tagTreasure = document.getElementById("tagTreasure");
+  const tagMystery = document.getElementById("tagMystery");
 
-  // ---------------------------------------
-  // Diagnostic state
-  // ---------------------------------------
-  let questions = [];
-  let qIndex = 0;
-  let correctCount = 0;
-  let answered = false;
-  let lastSkillMisses = { names:0, sounds:0, vowels:0 };
+  const gameTitle = document.getElementById("gameTitle");
+  const gameDesc = document.getElementById("gameDesc");
+  const roundText = document.getElementById("roundText");
+  const promptText = document.getElementById("promptText");
+  const promptHint = document.getElementById("promptHint");
+  const stageBody = document.getElementById("stageBody");
+  const stageFeedback = document.getElementById("stageFeedback");
+  const starsText = document.getElementById("starsText");
+
+  const backToHubBtn = document.getElementById("backToHubBtn");
+  const newRoundBtn = document.getElementById("newRoundBtn");
 
   function showOnly(panel){
     diagPanel.style.display = "none";
     resultsPanel.style.display = "none";
-    gamePicker.style.display = "none";
+    gameHub.style.display = "none";
+    gameStage.style.display = "none";
     panel.style.display = "block";
+  }
+
+  function readSavedDiag(){
+    return load(PHONICS_DIAG_KEY, null);
+  }
+
+  function saveDiag(result){
+    save(PHONICS_DIAG_KEY, result);
   }
 
   function hydrateChooseGameEnabled(){
@@ -322,22 +418,22 @@
     chooseGameBtn.style.opacity = ok ? "1" : ".6";
   }
 
-  function readSavedDiag(){
-    try { return JSON.parse(localStorage.getItem(PHONICS_DIAG_KEY) || "null"); }
-    catch { return null; }
-  }
+  // ---------------------------------------
+  // Diagnostic state
+  // ---------------------------------------
+  let diagQs = [];
+  let diagIndex = 0;
+  let diagCorrect = 0;
+  let diagAnswered = false;
+  let diagMiss = { names:0, sounds:0, vowels:0 };
 
-  function saveDiag(result){
-    localStorage.setItem(PHONICS_DIAG_KEY, JSON.stringify(result));
-  }
-
-  function renderQuestion(){
-    answered = false;
+  function renderDiagQuestion(){
+    diagAnswered = false;
     diagFeedback.textContent = "";
     diagNextBtn.disabled = true;
 
-    const q = questions[qIndex];
-    diagProgressText.textContent = `Question ${qIndex + 1} of 10`;
+    const q = diagQs[diagIndex];
+    diagProgressText.textContent = `Question ${diagIndex + 1} of 10`;
     diagQuestion.textContent = q.q;
     diagHint.textContent = q.hint || "";
 
@@ -348,29 +444,28 @@
       card.style.textAlign = "center";
       card.style.cursor = "pointer";
       card.innerHTML = `<h3 style="font-size:24px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.addEventListener("click", ()=> selectAnswer(idx));
+      card.addEventListener("click", ()=> pickDiagAnswer(idx));
       diagChoices.appendChild(card);
     });
   }
 
-  function selectAnswer(choiceIndex){
-    if (answered) return;
-    answered = true;
+  function pickDiagAnswer(choiceIndex){
+    if (diagAnswered) return;
+    diagAnswered = true;
 
-    const q = questions[qIndex];
+    const q = diagQs[diagIndex];
     const correct = (choiceIndex === q.correctIndex);
 
     if (correct){
-      correctCount++;
+      diagCorrect++;
       diagFeedback.textContent = "Correct! ⭐";
     } else {
       diagFeedback.textContent = `Good try! ✅ Answer: ${q.choices[q.correctIndex]}`;
-      if (q.skill in lastSkillMisses) lastSkillMisses[q.skill] += 1;
+      if (q.skill in diagMiss) diagMiss[q.skill] += 1;
     }
 
-    // simple visual highlight
     Array.from(diagChoices.children).forEach((card, idx)=>{
-      card.style.opacity = "0.8";
+      card.style.opacity = "0.85";
       if (idx === q.correctIndex) card.style.outline = "3px solid rgba(46, 125, 80, .35)";
       if (idx === choiceIndex && idx !== q.correctIndex) card.style.outline = "3px solid rgba(180, 60, 60, .25)";
     });
@@ -379,129 +474,731 @@
   }
 
   function finishDiagnostic(){
-    const score = correctCount;
+    const score = diagCorrect;
     const total = 10;
 
-    // Determine top needs
     const misses = [
-      { skill:"Letter Names", key:"names", n:lastSkillMisses.names },
-      { skill:"Letter Sounds", key:"sounds", n:lastSkillMisses.sounds },
-      { skill:"Vowels", key:"vowels", n:lastSkillMisses.vowels }
+      { label:"Letter Names", key:"names", n:diagMiss.names },
+      { label:"Letter Sounds", key:"sounds", n:diagMiss.sounds },
+      { label:"Vowels", key:"vowels", n:diagMiss.vowels }
     ].sort((a,b)=> b.n - a.n);
 
-    const needs = misses[0].n === 0 ? "Nothing big — you’re doing great!" : misses.filter(x=>x.n>0).map(x=>x.skill).slice(0,2).join(", ");
-    const ready = (score >= 8) ? "Try harder games + vowel teams" : (score >= 5 ? "Practice + play games daily" : "Start with basics + repeat the diagnostic");
+    const needs = misses[0].n === 0 ? "Nothing big — you’re doing great!" : misses.filter(x=>x.n>0).map(x=>x.label).slice(0,2).join(", ");
+    const next = (score >= 8) ? "Try Word Builder + Mystery Reveal" : (score >= 5 ? "Try Letter Sounds + Pictures" : "Start with Letter Names + Sounds");
 
-    // Save
-    const result = {
-      date: Date.now(),
-      grade,
-      score,
-      total,
-      misses: { ...lastSkillMisses }
-    };
+    const result = { date: Date.now(), grade, score, total, misses: { ...diagMiss } };
     saveDiag(result);
 
-    // Render results
     scoreBox.textContent = `${score} / ${total}`;
     needsBox.textContent = needs;
-    readyBox.textContent = ready;
+    readyBox.textContent = next;
+    resultsSummary.textContent = `You scored ${Math.round((score/total)*100)}% for Grade ${grade === "K" ? "K" : grade}!`;
 
-    const pct = Math.round((score/total)*100);
-    resultsSummary.textContent = `You scored ${pct}% for Grade ${grade === "K" ? "K" : grade}!`;
-
-    // Update game tags + enable choose game
     renderGameTags(result);
     hydrateChooseGameEnabled();
-
     showOnly(resultsPanel);
   }
 
-  function renderGameTags(result){
-    // friendly labels based on misses
-    const m = result.misses || {names:0,sounds:0,vowels:0};
+  // ---------------------------------------
+  // Game tags (recommended)
+  // ---------------------------------------
+  function renderGameTags(saved){
+    const s = saved || readSavedDiag();
+    const miss = s?.misses || { names:0, sounds:0, vowels:0 };
 
-    tagNames.textContent  = m.names  ? `Recommended ⭐ (missed ${m.names})` : `Ready ✅`;
-    tagSounds.textContent = m.sounds ? `Recommended ⭐ (missed ${m.sounds})` : `Ready ✅`;
-    tagVowels.textContent = m.vowels ? `Recommended ⭐ (missed ${m.vowels})` : `Ready ✅`;
+    function tagFor(skillKey){
+      const n = miss[skillKey] || 0;
+      return n ? `Recommended ⭐ (missed ${n})` : `Ready ✅`;
+    }
+
+    tagNames.textContent = tagFor("names");
+    tagSounds.textContent = tagFor("sounds");
+    tagTreasure.textContent = tagFor("vowels");
+    tagMystery.textContent = "Fun mix 🎉";
+
+    // Pictures + Builder + Families are always useful
+    tagPictures.textContent = (miss.sounds || miss.names) ? "Recommended ⭐" : "Great practice ✅";
+    tagBuild.textContent = (grade === "2") ? "Spelling boost ✅" : "CVC practice ✅";
+    tagFamilies.textContent = (grade === "2") ? "Harder families ✅" : "Great for K–1 ✅";
   }
 
   // ---------------------------------------
-  // Button wiring
+  // Game Content (grade-based)
+  // ---------------------------------------
+  const lettersK = ["A","M","S","T","P","B","R","G","N","C","D","F"];
+  const letters2 = ["A","E","I","O","U","B","D","P","R","G","J","Q","V","W","Y","T","M","S","N","C"];
+
+  const soundItems = {
+    K: [
+      { prompt:"Which letter makes /m/?", key:"m", choices:["M","S","T"], correct:"M", hint:"/m/ like moon" },
+      { prompt:"Which letter makes /s/?", key:"s", choices:["B","S","D"], correct:"S", hint:"/s/ like sun" },
+      { prompt:"Which letter makes /t/?", key:"t", choices:["T","A","P"], correct:"T", hint:"/t/ like top" },
+      { prompt:"Which letter makes /p/?", key:"p", choices:["P","V","B"], correct:"P", hint:"/p/ like pop" }
+    ],
+    1: [
+      { prompt:"Which begins with /sh/?", key:"sh", choices:["ship","cat","top"], correct:"ship", hint:"/sh/ is quiet" },
+      { prompt:"Which begins with /ch/?", key:"ch", choices:["rain","chop","sun"], correct:"chop", hint:"/ch/ like choo-choo" },
+      { prompt:"Which begins with /th/?", key:"th", choices:["this","ship","chip"], correct:"this", hint:"/th/ like this" },
+      { prompt:"Which letter makes /r/?", key:"r", choices:["R","L","H"], correct:"R", hint:"/r/ like rabbit" }
+    ],
+    2: [
+      { prompt:"Which team can make LONG A?", key:"ai", choices:["ai","ee","oa"], correct:"ai", hint:"ai like rain" },
+      { prompt:"Which team can make LONG E?", key:"ee", choices:["ee","ai","oa"], correct:"ee", hint:"ee like feet" },
+      { prompt:"Which team can make LONG O?", key:"oa", choices:["oa","ee","ai"], correct:"oa", hint:"oa like boat" },
+      { prompt:"Which starts with /v/?", key:"v", choices:["van","sun","map"], correct:"van", hint:"/v/ like van" }
+    ]
+  };
+
+  const pictureItems = {
+    K: [
+      { pic:"🐱", word:"cat", sound:"/c/", choices:["cat","sun","map"], correct:"cat" },
+      { pic:"☀️", word:"sun", sound:"/s/", choices:["top","sun","pig"], correct:"sun" },
+      { pic:"🗺️", word:"map", sound:"/m/", choices:["map","cat","bug"], correct:"map" },
+      { pic:"🎩", word:"hat", sound:"/h/", choices:["hat","bat","cat"], correct:"hat" }
+    ],
+    1: [
+      { pic:"🚢", word:"ship", sound:"/sh/", choices:["ship","chip","shop"], correct:"ship" },
+      { pic:"🍟", word:"chip", sound:"/ch/", choices:["chin","chip","thin"], correct:"chip" },
+      { pic:"👉", word:"this", sound:"/th/", choices:["this","ship","chin"], correct:"this" },
+      { pic:"🐸", word:"frog", sound:"/fr/", choices:["frog","flag","from"], correct:"frog" }
+    ],
+    2: [
+      { pic:"🌧️", word:"rain", sound:"long A (ai)", choices:["rain","ran","run"], correct:"rain" },
+      { pic:"🛶", word:"boat", sound:"long O (oa)", choices:["boat","bot","bat"], correct:"boat" },
+      { pic:"🦶", word:"feet", sound:"long E (ee)", choices:["feet","fit","fat"], correct:"feet" },
+      { pic:"🧁", word:"cake", sound:"CVCe (a_e)", choices:["cake","cak","cack"], correct:"cake" }
+    ]
+  };
+
+  // Word Builder targets
+  const buildTargets = {
+    K: [
+      { pic:"🐶", word:"dog" },
+      { pic:"🐱", word:"cat" },
+      { pic:"🐖", word:"pig" },
+      { pic:"🧢", word:"cap" },
+      { pic:"🚌", word:"bus" }
+    ],
+    1: [
+      { pic:"🐟", word:"fish" },  // simple digraph-ish example, handled in builder as tiles
+      { pic:"🚢", word:"ship" },
+      { pic:"🍟", word:"chip" },
+      { pic:"🌧️", word:"rain" }, // allow teams occasionally
+      { pic:"🧤", word:"mit" }
+    ],
+    2: [
+      { pic:"🛶", word:"boat" },
+      { pic:"🦶", word:"feet" },
+      { pic:"🌧️", word:"rain" },
+      { pic:"🧁", word:"cake" },
+      { pic:"🐸", word:"frog" }
+    ]
+  };
+
+  // Word Family Train
+  const familySets = {
+    K: [
+      { family:"-at", words:["cat","hat","bat","rat"], traps:["sun","map","pig","top"] },
+      { family:"-an", words:["fan","man","pan","can"], traps:["cap","cup","cat","dog"] },
+      { family:"-ig", words:["pig","wig","dig","fig"], traps:["bag","bug","log","tag"] }
+    ],
+    1: [
+      { family:"-op", words:["top","mop","hop","pop"], traps:["map","cap","cat","sun"] },
+      { family:"-et", words:["pet","jet","net","wet"], traps:["pit","pat","pot","put"] },
+      { family:"-uck", words:["duck","luck","tuck","muck"], traps:["dock","deck","dunk","tack"] }
+    ],
+    2: [
+      { family:"-ight", words:["light","night","sight","right"], traps:["late","note","seat","rain"] },
+      { family:"-ake", words:["cake","bake","lake","make"], traps:["back","sock","book","feet"] },
+      { family:"-ain", words:["rain","train","chain","brain"], traps:["ran","ramp","ring","road"] }
+    ]
+  };
+
+  // Treasure (vowel teams)
+  const treasureRounds = {
+    K: [
+      { sound:"short a (ă)", choices:["a","e","i"], correct:"a", hint:"cat" },
+      { sound:"short i (ĭ)", choices:["o","i","u"], correct:"i", hint:"pin" }
+    ],
+    1: [
+      { sound:"short o (ŏ)", choices:["o","a","e"], correct:"o", hint:"hot" },
+      { sound:"short u (ŭ)", choices:["u","o","i"], correct:"u", hint:"sun" }
+    ],
+    2: [
+      { sound:"long A", choices:["ai","ee","oa"], correct:"ai", hint:"rain" },
+      { sound:"long E", choices:["ee","ai","oa"], correct:"ee", hint:"feet" },
+      { sound:"long O", choices:["oa","ee","ai"], correct:"oa", hint:"boat" }
+    ]
+  };
+
+  // Mystery Reveal uses mixed prompts
+  const mysteryPicks = {
+    K: { emoji:"🦄", tiles:9 },
+    1: { emoji:"🦉", tiles:9 },
+    2: { emoji:"🦖", tiles:9 }
+  };
+
+  // ---------------------------------------
+  // Game Engine
+  // ---------------------------------------
+  let activeGame = null;
+  let round = 1;
+
+  function setStageHeader(title, desc){
+    gameTitle.textContent = title;
+    gameDesc.textContent = desc;
+    stageFeedback.textContent = "";
+    starsText.textContent = `Phonics ⭐: ${getPhonicsStars()}`;
+  }
+
+  function setPrompt(text, hint){
+    promptText.textContent = text;
+    promptHint.textContent = hint || "";
+    stageFeedback.textContent = "";
+    roundText.textContent = `Round ${round}`;
+    stageBody.innerHTML = "";
+  }
+
+  function feedbackOk(msg){
+    stageFeedback.textContent = msg || "Correct! ⭐";
+    addPhonicsStar();
+    starsText.textContent = `Phonics ⭐: ${getPhonicsStars()}`;
+  }
+  function feedbackNo(msg){
+    stageFeedback.textContent = msg || "Try again 🙂";
+  }
+
+  function openHub(){
+    renderGameTags(readSavedDiag());
+    showOnly(gameHub);
+  }
+
+  function openStage(gameKey){
+    activeGame = gameKey;
+    round = 1;
+    showOnly(gameStage);
+    runRound();
+  }
+
+  function runRound(){
+    stageFeedback.textContent = "";
+    starsText.textContent = `Phonics ⭐: ${getPhonicsStars()}`;
+    roundText.textContent = `Round ${round}`;
+
+    if (activeGame === "names") return roundLetterNames();
+    if (activeGame === "sounds") return roundLetterSounds();
+    if (activeGame === "pictures") return roundPictures();
+    if (activeGame === "build") return roundBuilder();
+    if (activeGame === "families") return roundFamilies();
+    if (activeGame === "treasure") return roundTreasure();
+    if (activeGame === "mystery") return roundMystery();
+  }
+
+  // -----------------------------
+  // Game: Letter Names
+  // -----------------------------
+  function roundLetterNames(){
+    setStageHeader("🔠 Letter Names", "Tap the correct letter name.");
+
+    const pool = (grade === "2") ? letters2 : lettersK;
+    const answer = pick(pool);
+    const choices = shuffle([answer, pick(pool), pick(pool)]).slice(0,3);
+
+    setPrompt(`Which letter is: ${answer}?`, "Look carefully at the shapes.");
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+
+    choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:34px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (c === answer){
+          feedbackOk("Correct! ⭐");
+          nextRoundSoon();
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Game: Letter Sounds
+  // -----------------------------
+  function roundLetterSounds(){
+    setStageHeader("🔊 Letter Sounds", "Pick the letter/letters that match the sound.");
+
+    const item = pick(soundItems[grade] || soundItems.K);
+    const choices = shuffle(item.choices.slice());
+
+    setPrompt(item.prompt, item.hint);
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+
+    choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (c === item.correct){
+          feedbackOk("Correct! ⭐");
+          nextRoundSoon();
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Game: Picture Labeling
+  // -----------------------------
+  function roundPictures(){
+    setStageHeader("🖼️ Picture Labeling", "Pick the word that matches the picture + sound.");
+
+    const it = pick(pictureItems[grade] || pictureItems.K);
+    const choices = shuffle(it.choices.slice());
+
+    setPrompt(`What is this? ${it.pic}`, `Choose the word. (Hint: ${it.sound})`);
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+
+    choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:24px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (c === it.correct){
+          feedbackOk("Correct! ⭐");
+          nextRoundSoon();
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Game: Word Builder (drag letters)
+  // - K/1: mostly CVC
+  // - 2: CVCe / vowel teams appear
+  // -----------------------------
+  function roundBuilder(){
+    setStageHeader("🧱 Word Builder", "Drag the tiles into the boxes to build the word.");
+
+    const target = pick(buildTargets[grade] || buildTargets.K);
+    const word = target.word.toLowerCase();
+
+    // Build "units": for K keep single letters; for 1/2 allow some digraphs/teams
+    const units = toUnits(word);
+
+    setPrompt(`Build this word: ${target.pic}`, `Drag tiles into the boxes. Then press “Check”.`);
+
+    // Boxes
+    const boxWrap = document.createElement("div");
+    boxWrap.style.display = "flex";
+    boxWrap.style.gap = "10px";
+    boxWrap.style.justifyContent = "center";
+    boxWrap.style.flexWrap = "wrap";
+
+    const slots = [];
+    units.forEach((u, idx)=>{
+      const slot = document.createElement("div");
+      slot.dataset.index = String(idx);
+      slot.dataset.value = "";
+      slot.style.width = "72px";
+      slot.style.height = "72px";
+      slot.style.borderRadius = "18px";
+      slot.style.border = "3px dashed rgba(0,0,0,.12)";
+      slot.style.background = "rgba(255,255,255,.6)";
+      slot.style.display = "flex";
+      slot.style.alignItems = "center";
+      slot.style.justifyContent = "center";
+      slot.style.fontSize = "24px";
+      slot.style.fontWeight = "900";
+      slot.style.userSelect = "none";
+
+      slot.ondragover = (e)=> e.preventDefault();
+      slot.ondrop = (e)=>{
+        e.preventDefault();
+        const data = e.dataTransfer.getData("text/plain");
+        if (!data) return;
+        slot.dataset.value = data;
+        slot.textContent = data.toUpperCase();
+      };
+
+      slots.push(slot);
+      boxWrap.appendChild(slot);
+    });
+
+    // Tiles
+    const tileWrap = document.createElement("div");
+    tileWrap.style.display = "flex";
+    tileWrap.style.gap = "10px";
+    tileWrap.style.justifyContent = "center";
+    tileWrap.style.flexWrap = "wrap";
+    tileWrap.style.marginTop = "14px";
+
+    // Create tiles: correct units + distractors
+    const distractors = getDistractorUnits(units);
+    const tiles = shuffle([...units, ...distractors]).slice(0, units.length + 3);
+
+    tiles.forEach(t=>{
+      const tile = document.createElement("div");
+      tile.className = "card";
+      tile.style.width = "90px";
+      tile.style.padding = "14px";
+      tile.style.textAlign = "center";
+      tile.style.cursor = "grab";
+      tile.draggable = true;
+      tile.ondragstart = (e)=> e.dataTransfer.setData("text/plain", t);
+      tile.innerHTML = `<h3 style="font-size:26px; margin:0;">${t.toUpperCase()}</h3>`;
+      tileWrap.appendChild(tile);
+    });
+
+    // Buttons
+    const actions = document.createElement("div");
+    actions.className = "quick-strip";
+    actions.style.justifyContent = "center";
+    actions.style.marginTop = "14px";
+
+    const checkBtn = document.createElement("button");
+    checkBtn.className = "btn";
+    checkBtn.type = "button";
+    checkBtn.textContent = "Check";
+
+    const clearBtn = document.createElement("button");
+    clearBtn.className = "btn secondary";
+    clearBtn.type = "button";
+    clearBtn.textContent = "Clear";
+
+    clearBtn.onclick = ()=>{
+      slots.forEach(s=>{
+        s.dataset.value = "";
+        s.textContent = "";
+      });
+      stageFeedback.textContent = "";
+    };
+
+    checkBtn.onclick = ()=>{
+      const built = slots.map(s=>s.dataset.value).join("").toLowerCase();
+      if (!built || built.length < 2){
+        feedbackNo("Drag tiles into the boxes first 🙂");
+        return;
+      }
+      if (built === word){
+        feedbackOk("You built it! ⭐");
+        nextRoundSoon();
+      } else {
+        feedbackNo(`Not yet — you made “${built}”. Try again!`);
+      }
+    };
+
+    actions.appendChild(checkBtn);
+    actions.appendChild(clearBtn);
+
+    // render
+    stageBody.appendChild(boxWrap);
+    stageBody.appendChild(tileWrap);
+    stageBody.appendChild(actions);
+  }
+
+  function toUnits(word){
+    // For K keep simple letters
+    if (grade === "K") return word.split("");
+
+    // For 1/2 allow common digraphs/teams as units
+    const combos = ["sh","ch","th","ck","ee","oa","ai"];
+    const units = [];
+    let i = 0;
+    while (i < word.length){
+      const two = word.slice(i, i+2);
+      if (combos.includes(two)){
+        units.push(two);
+        i += 2;
+      } else {
+        units.push(word[i]);
+        i += 1;
+      }
+    }
+    return units;
+  }
+
+  function getDistractorUnits(correctUnits){
+    const pool = (grade === "2") ? ["a","e","i","o","u","ai","ee","oa","sh","ch","th","ck","r","m","s","t","p","b","n","g"] :
+                 (grade === "1") ? ["a","e","i","o","u","sh","ch","th","ck","r","m","s","t","p","b","n","g"] :
+                 ["a","e","i","o","u","r","m","s","t","p","b","n","g","c","d","f"];
+    const d = [];
+    while (d.length < 5){
+      const x = pick(pool);
+      if (!correctUnits.includes(x)) d.push(x);
+    }
+    return d;
+  }
+
+  // -----------------------------
+  // Game: Word Family Train
+  // -----------------------------
+  function roundFamilies(){
+    setStageHeader("🚂 Word Family Train", "Pick the word that belongs in the word family train!");
+
+    const set = pick(familySets[grade] || familySets.K);
+    const correct = pick(set.words);
+    const options = shuffle([correct, pick(set.traps), pick(set.traps)]).slice(0,3);
+
+    setPrompt(`Which word is in the ${set.family} family?`, `Look for the ending “${set.family.replace("-", "")}”.`);
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+
+    options.forEach(w=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${w}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (w === correct){
+          feedbackOk("Train car added! ⭐");
+          nextRoundSoon();
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Game: Vowel Team Treasure
+  // -----------------------------
+  function roundTreasure(){
+    setStageHeader("🗺️ Vowel Team Treasure", "Choose the correct vowel (or vowel team) to unlock treasure!");
+
+    const it = pick(treasureRounds[grade] || treasureRounds.K);
+    const choices = shuffle(it.choices.slice());
+
+    setPrompt(`Open the treasure for: ${it.sound}`, `Hint word: ${it.hint}`);
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+
+    choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:28px; margin-bottom:6px;">${c.toUpperCase()}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (c === it.correct){
+          feedbackOk("Treasure unlocked! ⭐");
+          nextRoundSoon();
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+
+    stageBody.appendChild(grid);
+  }
+
+  // -----------------------------
+  // Game: Mystery Picture Reveal
+  // Each correct answer reveals 1 tile until complete
+  // -----------------------------
+  let mystery = null;
+
+  function roundMystery(){
+    setStageHeader("🕵️ Mystery Picture Reveal", "Answer to reveal tiles! Finish all tiles to see the mystery.");
+
+    if (!mystery || mystery.grade !== grade || mystery.revealed >= mystery.total){
+      const m = mysteryPicks[grade] || mysteryPicks.K;
+      mystery = { grade, emoji: m.emoji, total: m.tiles, revealed: 0 };
+    }
+
+    // Question types rotate
+    const qType = pick(["names","sounds","vowels","pictures"]);
+    let q = null;
+
+    if (qType === "names"){
+      const pool = (grade === "2") ? letters2 : lettersK;
+      const ans = pick(pool);
+      const choices = shuffle([ans, pick(pool), pick(pool)]).slice(0,3);
+      q = { prompt:`Which letter is: ${ans}?`, hint:"Pick the correct letter.", choices, correct: ans };
+    } else if (qType === "sounds"){
+      const it = pick(soundItems[grade] || soundItems.K);
+      q = { prompt: it.prompt, hint: it.hint, choices: shuffle(it.choices.slice()), correct: it.correct };
+    } else if (qType === "vowels"){
+      const it = pick(treasureRounds[grade] || treasureRounds.K);
+      q = { prompt:`Pick: ${it.sound}`, hint:`Hint word: ${it.hint}`, choices: shuffle(it.choices.slice()), correct: it.correct };
+    } else {
+      const it = pick(pictureItems[grade] || pictureItems.K);
+      q = { prompt:`What is this? ${it.pic}`, hint:`Sound clue: ${it.sound}`, choices: shuffle(it.choices.slice()), correct: it.correct };
+    }
+
+    setPrompt(q.prompt, q.hint);
+
+    const wrap = document.createElement("div");
+    wrap.style.display = "grid";
+    wrap.style.gridTemplateColumns = "repeat(3, minmax(0, 1fr))";
+    wrap.style.gap = "10px";
+    wrap.style.marginTop = "12px";
+
+    for (let i=0; i<mystery.total; i++){
+      const tile = document.createElement("div");
+      tile.className = "card";
+      tile.style.textAlign = "center";
+      tile.style.padding = "18px";
+      tile.style.minHeight = "70px";
+      tile.innerHTML = `<div style="font-size:30px;">${i < mystery.revealed ? mystery.emoji : "❓"}</div>`;
+      wrap.appendChild(tile);
+    }
+
+    const grid = document.createElement("div");
+    grid.className = "grid-3";
+    grid.style.marginTop = "14px";
+
+    q.choices.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:24px; margin-bottom:6px;">${String(c).toUpperCase()}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=>{
+        if (String(c) === String(q.correct)){
+          mystery.revealed = clamp(mystery.revealed + 1, 0, mystery.total);
+          feedbackOk(`Tile revealed! (${mystery.revealed}/${mystery.total}) ⭐`);
+          if (mystery.revealed >= mystery.total){
+            setTimeout(()=>{
+              stageFeedback.textContent = "🎉 Mystery complete! You revealed the whole picture!";
+            }, 300);
+          } else {
+            // re-render next question
+            setTimeout(()=>{ round++; runRound(); }, 650);
+          }
+        } else {
+          feedbackNo("Try again 🙂");
+        }
+      };
+      grid.appendChild(card);
+    });
+
+    stageBody.appendChild(wrap);
+    stageBody.appendChild(grid);
+  }
+
+  function nextRoundSoon(){
+    setTimeout(()=>{
+      round++;
+      runRound();
+    }, 650);
+  }
+
+  // ---------------------------------------
+  // Game hub events
+  // ---------------------------------------
+  document.querySelectorAll(".card.pick").forEach(card=>{
+    card.style.cursor = "pointer";
+    card.addEventListener("click", ()=>{
+      const key = card.dataset.game;
+      openStage(key);
+    });
+  });
+
+  backToHubBtn.addEventListener("click", ()=>{
+    openHub();
+  });
+
+  newRoundBtn.addEventListener("click", ()=>{
+    round++;
+    runRound();
+  });
+
+  // ---------------------------------------
+  // Diagnostic events
   // ---------------------------------------
   startDiagBtn.addEventListener("click", ()=>{
-    questions = getTenQuestions(grade);
-    qIndex = 0;
-    correctCount = 0;
-    lastSkillMisses = { names:0, sounds:0, vowels:0 };
+    diagQs = getTenDiagQuestions(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagAnswered = false;
+    diagMiss = { names:0, sounds:0, vowels:0 };
     showOnly(diagPanel);
-    renderQuestion();
+    renderDiagQuestion();
   });
 
   diagNextBtn.addEventListener("click", ()=>{
-    if (!answered) return;
+    if (!diagAnswered) return;
 
-    qIndex++;
-    if (qIndex >= 10){
+    diagIndex++;
+    if (diagIndex >= 10){
       finishDiagnostic();
     } else {
-      renderQuestion();
+      renderDiagQuestion();
     }
   });
 
   diagRestartBtn.addEventListener("click", ()=>{
-    questions = getTenQuestions(grade);
-    qIndex = 0;
-    correctCount = 0;
-    lastSkillMisses = { names:0, sounds:0, vowels:0 };
-    renderQuestion();
+    diagQs = getTenDiagQuestions(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagAnswered = false;
+    diagMiss = { names:0, sounds:0, vowels:0 };
+    renderDiagQuestion();
   });
 
   retakeBtn.addEventListener("click", ()=>{
-    // clear stored diag for this flow, keep grade preference
     localStorage.removeItem(PHONICS_DIAG_KEY);
     hydrateChooseGameEnabled();
-    showOnly(diagPanel);
 
-    questions = getTenQuestions(grade);
-    qIndex = 0;
-    correctCount = 0;
-    lastSkillMisses = { names:0, sounds:0, vowels:0 };
-    renderQuestion();
+    diagQs = getTenDiagQuestions(grade);
+    diagIndex = 0;
+    diagCorrect = 0;
+    diagAnswered = false;
+    diagMiss = { names:0, sounds:0, vowels:0 };
+
+    showOnly(diagPanel);
+    renderDiagQuestion();
   });
 
-  function openGamePicker(){
-    const saved = readSavedDiag();
-    if (saved && saved.grade === grade) renderGameTags(saved);
-    showOnly(gamePicker);
+  function openHubFromButtons(){
+    renderGameTags(readSavedDiag());
+    showOnly(gameHub);
   }
 
-  chooseGameBtn.addEventListener("click", openGamePicker);
-  goChooseGameBtn.addEventListener("click", openGamePicker);
-
-  // Placeholder clicks (we’ll build these games next)
-  document.getElementById("gameLetterNames").addEventListener("click", ()=>{
-    alert("Next step: we’ll build the Letter Names game right here.");
-  });
-  document.getElementById("gameLetterSounds").addEventListener("click", ()=>{
-    alert("Next step: we’ll build the Letter Sounds game right here.");
-  });
-  document.getElementById("gameVowels").addEventListener("click", ()=>{
-    alert("Next step: we’ll build the Vowels game right here.");
-  });
+  chooseGameBtn.addEventListener("click", openHubFromButtons);
+  goChooseGameBtn.addEventListener("click", openHubFromButtons);
 
   // ---------------------------------------
-  // Init: apply grade + enable choose game if saved
+  // Init
   // ---------------------------------------
   setGrade(grade);
   hydrateChooseGameEnabled();
 
-  // If user arrives with ?grade= in URL, honor it
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const g = params.get("grade");
-    if (g === "K" || g === "1" || g === "2") setGrade(g);
-  } catch {}
+  // If there is saved diagnostic for this grade, show hub tag readiness
+  const saved = readSavedDiag();
+  if (saved && saved.grade === grade) renderGameTags(saved);
 </script>
 
 </body>
