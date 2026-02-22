@@ -17,7 +17,7 @@
         <li><a href="index.html">Home</a></li>
 
         <li class="dropdown">
-          <a href="#">Subjects</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
           <div class="dropdown-menu">
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
@@ -27,7 +27,7 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Resources</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
           <div class="dropdown-menu">
             <a href="resources.html">🎥 Kids Resources</a>
             <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
@@ -36,16 +36,13 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Student</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
             <a href="student-login.html">🧒 Student Login</a>
             <a href="progress.html">📊 My Progress</a>
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -55,11 +52,14 @@
   <div class="container">
     <h1>My Progress 📊</h1>
     <p>Stars and daily missions save on this device.</p>
+
+    <!-- Removed: "Go to Phonics" button (per request) -->
     <div class="quick-strip">
-      <a class="btn" href="phonics.html">Go to Phonics</a>
       <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
       <button class="btn secondary" id="resetAllBtn">Reset All</button>
     </div>
+
+    <div class="hero-note">Tip: Try a game in Phonics, Reading, or Math to earn more stars.</div>
   </div>
 </section>
 
@@ -144,7 +144,7 @@
           <div class="game-box" style="margin-top:16px; text-align:center;">
             <p class="kid-big">Sticker Tip 🎁</p>
             <p class="small">When you earn stars, you can “celebrate” in the Sticker Book.</p>
-            <div class="quick-strip">
+            <div class="quick-strip" style="justify-content:center;">
               <a class="btn secondary" href="sticker-book.html">Open Sticker Book</a>
             </div>
           </div>
@@ -158,6 +158,7 @@
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
+<script src="./nav.js"></script>
 <script>
   const PROG_KEY = "bloom_progress";
   const MISSION_KEY = "bloom_daily_mission";
