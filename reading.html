@@ -149,20 +149,67 @@
 
 <script src="./nav.js"></script>
 <script>
+/* ============================
+   Storage + helpers
+============================ */
 const PROG_KEY="bloom_progress";
 const READ_STATE_KEY="bloom_reading_state";
+const LAST_ACTIVITY_KEY="bloom_last_activity";
 
 function load(key,f){ try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(f));}catch{return f;} }
 function save(key,v){ localStorage.setItem(key,JSON.stringify(v)); }
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
 function speak(t){ if(!("speechSynthesis"in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.rate=1; u.pitch=1.05; speechSynthesis.speak(u); }
-function addReadingStar(){
-  const p=load(PROG_KEY,{phonicsStars:0,readingStars:0,mathStars:0});
-  p.readingStars=(p.readingStars||0)+1; save(PROG_KEY,p);
-  const ms=load("bloom_daily_mission",null);
-  if(ms && typeof ms.reading==="number"){ ms.reading+=1; save("bloom_daily_mission",ms); }
+
+/* ============================
+   Progress monitor helpers
+============================ */
+function ensureProgress(){
+  const p = load(PROG_KEY, null);
+  if (p && typeof p === "object") return p;
+
+  const fresh = {
+    phonicsStars:0, readingStars:0, mathStars:0,
+    phonicsPlays:0, phonicsCorrect:0, phonicsAttempts:0,
+    readingPlays:0, readingCorrect:0, readingAttempts:0,
+    mathPlays:0, mathCorrect:0, mathAttempts:0,
+    phonicsLastGame:null, readingLastGame:null, mathLastGame:null,
+    phonicsDiag:null, readingDiag:null, mathDiag:null
+  };
+  save(PROG_KEY, fresh);
+  return fresh;
 }
 
+function logActivity(area, details){
+  save(LAST_ACTIVITY_KEY, { area, details: details || "", time: Date.now() });
+}
+
+function bumpCounter(field, inc=1){
+  const p = ensureProgress();
+  p[field] = (p[field] || 0) + inc;
+  save(PROG_KEY, p);
+}
+
+function setField(field, value){
+  const p = ensureProgress();
+  p[field] = value;
+  save(PROG_KEY, p);
+}
+
+function addReadingStar(){
+  const p=ensureProgress();
+  p.readingStars=(p.readingStars||0)+1;
+  save(PROG_KEY,p);
+
+  const ms=load("bloom_daily_mission",null);
+  if(ms && typeof ms.reading==="number"){ ms.reading+=1; save("bloom_daily_mission",ms); }
+
+  logActivity("Reading","Earned a star ⭐");
+}
+
+/* ============================
+   Grade select
+============================ */
 let grade="K";
 document.querySelectorAll(".pill[data-grade]").forEach(b=>{
   b.onclick=()=>{
@@ -171,9 +218,13 @@ document.querySelectorAll(".pill[data-grade]").forEach(b=>{
     resetUI();
     const st=load(READ_STATE_KEY,null);
     setGamesEnabled(!!(st && st.grade===grade && st.finished));
+    logActivity("Reading","Changed grade to " + (grade==="K" ? "Kindergarten" : "Grade " + grade));
   };
 });
 
+/* ============================
+   Diagnostic question bank
+============================ */
 const diag = {
   K: [
     { passage:"Sam has a cap.", q:"What does Sam have?", a:"A cap", c:["A cap","A map","A cat"], tag:"comprehension" },
@@ -197,12 +248,14 @@ const diag = {
 
 function buildDiag10(){
   const base = diag[grade];
-  // make 10 by repeating varied shuffle
   let pool=[];
   while(pool.length<10){ pool=pool.concat(shuffle(base)); }
   return pool.slice(0,10);
 }
 
+/* ============================
+   Diagnostic UI
+============================ */
 const startDiagBtn=document.getElementById("startDiagBtn");
 const showGamesBtn=document.getElementById("showGamesBtn");
 const resetBtn=document.getElementById("resetBtn");
@@ -271,9 +324,12 @@ function choose(ch){
   nextBtn.disabled=false;
 
   const it=qs[idx];
+  bumpCounter("readingAttempts", 1);
+
   if(ch===it.a){
     correct++;
     result.textContent="Correct! ⭐";
+    bumpCounter("readingCorrect", 1);
   } else {
     result.textContent=`Good try! Answer: ${it.a}`;
     missedTags.add(it.tag);
@@ -303,18 +359,26 @@ skipBtn.onclick=()=>{
 };
 
 startDiagBtn.onclick=()=>{
+  ensureProgress();
   qs=buildDiag10();
   idx=0; correct=0; missedTags=new Set();
   setPanels(true,false,false);
   nextBtn.disabled=true;
   skipBtn.disabled=false;
   renderQ();
+  logActivity("Reading","Started diagnostic (Grade " + (grade==="K" ? "K" : grade) + ")");
 };
 
 resetBtn.onclick=()=>{
   save(READ_STATE_KEY,null);
   resetUI();
   setGamesEnabled(false);
+
+  const p = ensureProgress();
+  p.readingDiag = null;
+  save(PROG_KEY, p);
+
+  logActivity("Reading","Reset diagnostic");
 };
 
 function finish(){
@@ -324,20 +388,30 @@ function finish(){
   const state={grade,finished:true,scorePct,weaknesses,timestamp:Date.now()};
   save(READ_STATE_KEY,state);
 
+  // store diag snapshot in progress
+  setField("readingDiag", { scorePct, grade, time: Date.now() });
+
   buildResults(state);
   setPanels(false,true,false);
   setGamesEnabled(true);
+
+  logActivity("Reading","Finished diagnostic: " + scorePct + "%");
 }
 
+/* ============================
+   Results
+============================ */
 document.getElementById("openGames").onclick=()=>{
   setPanels(false,false,true);
   renderGameCards();
   document.getElementById("gameStage").style.display="none";
+  logActivity("Reading","Opened games after results");
 };
 showGamesBtn.onclick=()=>{
   setPanels(false,false,true);
   renderGameCards();
   document.getElementById("gameStage").style.display="none";
+  logActivity("Reading","Opened games list");
 };
 
 const scoreLine=document.getElementById("scoreLine");
@@ -387,12 +461,16 @@ const gameUI=document.getElementById("gameUI");
 const gameResult=document.getElementById("gameResult");
 const gameSoundBtn=document.getElementById("gameSoundBtn");
 const gameNextBtn=document.getElementById("gameNextBtn");
-document.getElementById("backBtn").onclick=()=> gameStage.style.display="none";
+document.getElementById("backBtn").onclick=()=> {
+  gameStage.style.display="none";
+  logActivity("Reading","Back to games list");
+};
 
 document.getElementById("resetStarsBtn").onclick=()=>{
-  const p=load(PROG_KEY,{phonicsStars:0,readingStars:0,mathStars:0});
+  const p=ensureProgress();
   p.readingStars=0; save(PROG_KEY,p);
   alert("Reading stars reset!");
+  logActivity("Reading","Reset reading stars");
 };
 
 let currentGame=null;
@@ -439,10 +517,16 @@ document.getElementById("readAloudBtn").onclick=speakCurrent;
 gameNextBtn.onclick=()=> playNext();
 
 function startGame(id){
+  ensureProgress();
   currentGame=id;
+  setField("readingLastGame", id);
+  bumpCounter("readingPlays", 1);
+
   gameStage.style.display="block";
   gameResult.textContent="";
   playNext(true);
+
+  logActivity("Reading","Started game: " + id);
 }
 
 function playNext(reset=false){
@@ -456,8 +540,11 @@ function playNext(reset=false){
 }
 
 function gradeAnswer(ok){
+  bumpCounter("readingAttempts", 1);
+
   if(ok){
     gameResult.textContent="Correct! ⭐";
+    bumpCounter("readingCorrect", 1);
     addReadingStar();
     speak("Correct!");
   } else {
@@ -521,7 +608,7 @@ const decodables={
 
 function gDecodable(){
   const txt=shuffle(decodables[grade])[0];
-  current={passage:txt,q:"What happened? (Pick the best answer)", a:0};
+  current={passage:txt,q:"Pick the best summary:", a:0};
 
   gameMeta.textContent="Game: Decodable Story";
   gamePassage.textContent=txt;
@@ -553,13 +640,13 @@ function gScramble(){
   gameQ.textContent="Put the words in order!";
   gameUI.innerHTML="";
 
-  const sentences = grade==="K"
-    ? [["I","see","a","cat"], "I see a cat"]
+  const parts = grade==="K"
+    ? ["I","see","a","cat"]
     : grade==="1"
-      ? [["Chip","can","chop"], "Chip can chop"]
-      : [["We","went","on","a","boat"], "We went on a boat"];
+      ? ["Chip","can","chop"]
+      : ["We","went","on","a","boat"];
 
-  const [parts, correctSentence] = shuffle(sentences)[0] ? sentences : sentences;
+  const correctSentence = grade==="K" ? "I see a cat" : grade==="1" ? "Chip can chop" : "We went on a boat";
 
   let words = shuffle(parts);
   let built = [];
@@ -666,7 +753,6 @@ function gSceneLabel(){
   function check(){
     const built=slots.map(s=>s.querySelector("[data-slot]").textContent);
     if(built.includes("_")) return;
-    // accept any order (kid-friendly)
     const ok = built.slice().sort().join("|") === scenes.targets.slice().sort().join("|");
     gradeAnswer(ok);
   }
@@ -689,12 +775,12 @@ function gSightSprint(){
   const target = shuffle(bank)[0];
   current={q:`Tap: ${target}`, passage:"", a:target};
 
-  const choices=shuffle(bank).slice(0,3);
-  if(!choices.includes(target)) choices[Math.floor(Math.random()*3)]=target;
+  const options = shuffle(bank).slice(0,3);
+  if(!options.includes(target)) options[Math.floor(Math.random()*3)]=target;
 
   const grid=document.createElement("div");
   grid.className="grid-3";
-  choices.forEach(w=>{
+  options.forEach(w=>{
     const card=document.createElement("div");
     card.className="card";
     card.style.textAlign="center";
@@ -742,6 +828,7 @@ function gMainIdea(){
 
 /* init */
 (function init(){
+  ensureProgress();
   resetUI();
   const st=load(READ_STATE_KEY,null);
   if(st && st.grade===grade && st.finished){
