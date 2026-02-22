@@ -17,7 +17,7 @@
         <li><a href="index.html">Home</a></li>
 
         <li class="dropdown">
-          <a href="#">Subjects</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
           <div class="dropdown-menu">
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
@@ -27,7 +27,7 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Resources</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
           <div class="dropdown-menu">
             <a href="resources.html">🎥 Kids Resources</a>
             <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
@@ -36,16 +36,13 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Student</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
             <a href="student-login.html">🧒 Student Login</a>
             <a href="progress.html">📊 My Progress</a>
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -54,91 +51,577 @@
 <section class="hero">
   <div class="container">
     <h1>Standards (K–2) 📘</h1>
-    <p>A friendly checklist of Common Core skills for Kindergarten, 1st, and 2nd grade.</p>
+    <p>A parent-friendly checklist aligned to Common Core (ELA + Math) for Kindergarten, 1st, and 2nd grade.</p>
 
-    <div class="bubbles">
-      <a class="bubble" href="#ela"><span class="emoji">📖</span><span class="text">ELA</span></a>
-      <a class="bubble" href="#math"><span class="emoji">➕</span><span class="text">Math</span></a>
-      <a class="bubble" href="#k"><span class="emoji">🧸</span><span class="text">K</span></a>
-      <a class="bubble" href="#g2"><span class="emoji">🌟</span><span class="text">Grade 2</span></a>
+    <div class="hero-note">
+      Tip: Pick <strong>ELA</strong> or <strong>Math</strong>, then choose a grade to see the skills.
     </div>
 
-    <div class="hero-note">This is a summary (not the full official PDF).</div>
-  </div>
-</section>
-
-<section id="ela" class="section">
-  <div class="container">
-    <h2 class="section-title">ELA (Reading & Writing) 📖</h2>
-
-    <div class="game-box wide">
-      <div class="grid-3">
-        <div class="card" id="k">
-          <h3>🧸 Kindergarten</h3>
-          <p><strong>Phonics:</strong> letter names/sounds, rhyming, syllables.</p>
-          <p><strong>Reading:</strong> retell, characters/settings, ask/answer questions.</p>
-          <p><strong>Writing:</strong> draw/write opinion, informative, narrative (with support).</p>
-        </div>
-
-        <div class="card">
-          <h3>🌱 Grade 1</h3>
-          <p><strong>Phonics:</strong> decode one-syllable words, common spellings.</p>
-          <p><strong>Reading:</strong> main idea/details, compare characters, simple evidence.</p>
-          <p><strong>Writing:</strong> opinion/info/narrative with sentences + details.</p>
-        </div>
-
-        <div class="card" id="g2">
-          <h3>🌟 Grade 2</h3>
-          <p><strong>Fluency:</strong> smoother reading, vowel teams, basic prefixes/suffixes.</p>
-          <p><strong>Reading:</strong> summarize, central message, compare versions of stories.</p>
-          <p><strong>Writing:</strong> paragraphs, add details, revise/edit with support.</p>
-        </div>
-      </div>
-
-      <div class="quick-strip">
-        <a class="btn" href="reading.html">Reading Game</a>
-        <a class="btn secondary" href="phonics.html">Phonics Game</a>
-      </div>
+    <div class="quick-strip" style="justify-content:center; margin-top:14px;">
+      <a class="btn secondary" href="parent-resources.html">Parent Resources</a>
+      <a class="btn secondary" href="progress.html">My Progress</a>
     </div>
   </div>
 </section>
 
-<section id="math" class="section">
+<section class="section">
   <div class="container">
-    <h2 class="section-title">Math ➕</h2>
 
+    <!-- TOP CONTROLS -->
     <div class="game-box wide">
-      <div class="grid-3">
-        <div class="card">
-          <h3>🧸 Kindergarten</h3>
-          <p><strong>Counting:</strong> to 100, count objects, compare numbers.</p>
-          <p><strong>Add/Sub:</strong> within 10 (simple).</p>
-          <p><strong>Shapes:</strong> name shapes, build shapes.</p>
+      <div class="kid-big" style="text-align:center;">Choose Standards</div>
+
+      <!-- Subject pills (top row) -->
+      <div class="badge-row" style="justify-content:center; margin-top:12px;">
+        <button class="pill pill-lg active" data-subject="ela">📖 ELA</button>
+        <button class="pill pill-lg" data-subject="math">➕ Math</button>
+      </div>
+
+      <!-- Grade pills (second row) -->
+      <div class="badge-row" style="justify-content:center; margin-top:12px;">
+        <button class="pill pill-lg active" data-grade="K">🧸 Kindergarten</button>
+        <button class="pill pill-lg" data-grade="1">🌱 Grade 1</button>
+        <button class="pill pill-lg" data-grade="2">🌟 Grade 2</button>
+      </div>
+
+      <!-- Parent helper actions -->
+      <div class="quick-strip" style="justify-content:center; margin-top:14px;">
+        <button class="btn secondary btn-lg" id="expandAllBtn">Expand All</button>
+        <button class="btn secondary btn-lg" id="collapseAllBtn">Collapse All</button>
+        <button class="btn secondary btn-lg" id="copySummaryBtn">Copy Summary</button>
+      </div>
+
+      <p class="small" style="text-align:center; margin-top:10px;">
+        This is a <strong>summary</strong> of key Common Core skills (not the full official PDF). Great for quick check-ins at home.
+      </p>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="game-box wide" style="margin-top:16px;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div>
+          <div class="kid-big" id="panelTitle">ELA • Kindergarten</div>
+          <p class="small" id="panelBlurb" style="margin-top:6px;">Focus: foundational reading skills, simple comprehension, and early writing.</p>
         </div>
 
-        <div class="card">
-          <h3>🌱 Grade 1</h3>
-          <p><strong>Add/Sub:</strong> within 20, equals sign, strategies.</p>
-          <p><strong>Place Value:</strong> tens/ones, compare 2-digit numbers.</p>
-          <p><strong>Measurement:</strong> time, data, length basics.</p>
-        </div>
-
-        <div class="card">
-          <h3>🌟 Grade 2</h3>
-          <p><strong>Add/Sub:</strong> within 100; place value to 1000 foundations.</p>
-          <p><strong>Skip Count:</strong> by 2, 5, 10, 100.</p>
-          <p><strong>Measurement:</strong> rulers, graphs, money basics.</p>
+        <div class="quick-strip" style="justify-content:flex-start;">
+          <a class="btn" id="goPlayBtn" href="reading.html">Go Practice</a>
+          <button class="btn secondary" id="printBtn" title="Print this checklist">Print</button>
         </div>
       </div>
 
-      <div class="quick-strip">
-        <a class="btn" href="math.html">Math Game</a>
-        <a class="btn secondary" href="parent-resources.html">Parent Tips</a>
+      <div id="standardCards" style="margin-top:12px;"></div>
+
+      <div class="game-box" style="margin-top:14px;">
+        <div class="kid-big">Home Tip 🌿</div>
+        <p class="small" id="homeTip" style="margin-top:8px;">
+          Keep practice short (5–10 minutes). Celebrate effort, not perfection.
+        </p>
       </div>
     </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script src="./nav.js"></script>
+<script>
+/* ============================
+   Parent-friendly Standards (K–2)
+   - Subject pills on top
+   - Grade pills below
+   - Expand/Collapse + Copy summary
+============================ */
+
+const state = { subject: "ela", grade: "K" };
+
+const subjectBtns = document.querySelectorAll("[data-subject]");
+const gradeBtns = document.querySelectorAll("[data-grade]");
+const panelTitle = document.getElementById("panelTitle");
+const panelBlurb = document.getElementById("panelBlurb");
+const cardsWrap = document.getElementById("standardCards");
+const homeTip = document.getElementById("homeTip");
+const goPlayBtn = document.getElementById("goPlayBtn");
+
+/* ====== Data: Common Core-aligned skill summaries ======
+   Note: These are parent-friendly "I can" / skill checklists, not full CCSS text.
+*/
+const DATA = {
+  ela: {
+    label: "ELA",
+    playHref: "reading.html",
+    grades: {
+      K: {
+        blurb: "Focus: letter/sound skills, print concepts, basic comprehension, and early writing.",
+        tip: "Read together daily. Point to words as you read. Ask: “Who is it about? What happened?”",
+        groups: [
+          {
+            title: "Foundational Skills (Print + Phonics)",
+            items: [
+              "Recognize and name uppercase and lowercase letters.",
+              "Say the sound for many common consonants and short vowels.",
+              "Blend and segment simple syllables and sounds (phonemes).",
+              "Recognize common sight words (e.g., the, a, I, see).",
+              "Understand print basics (left-to-right, top-to-bottom, spaces between words)."
+            ]
+          },
+          {
+            title: "Reading Literature (Stories)",
+            items: [
+              "Ask and answer questions about key details in a story.",
+              "Retell familiar stories (beginning, middle, end).",
+              "Identify characters, setting, and major events.",
+              "Name the author and illustrator and explain their roles."
+            ]
+          },
+          {
+            title: "Reading Informational Text (Nonfiction)",
+            items: [
+              "Ask and answer questions about key details in a nonfiction text.",
+              "Identify the main topic and key details (with support).",
+              "Use pictures and headings to learn new information."
+            ]
+          },
+          {
+            title: "Writing",
+            items: [
+              "Write/draw to share an opinion (what you like) and give a reason (with support).",
+              "Write/draw to teach about a topic with facts (with support).",
+              "Tell a story using pictures and words in order (with support).",
+              "Use basic punctuation with help (periods, question marks)."
+            ]
+          },
+          {
+            title: "Speaking & Listening",
+            items: [
+              "Participate in conversations (take turns, listen, respond).",
+              "Speak clearly to share ideas and describe events.",
+              "Ask and answer questions to get information or clarify."
+            ]
+          },
+          {
+            title: "Language (Grammar & Vocabulary)",
+            items: [
+              "Use nouns and verbs in simple sentences.",
+              "Use frequently occurring prepositions (in, on, under).",
+              "Learn and use new words from stories and conversations."
+            ]
+          }
+        ]
+      },
+      1: {
+        blurb: "Focus: decoding one-syllable words, stronger comprehension, and sentence-level writing.",
+        tip: "Practice short decodable texts. Ask your child to point to evidence: “Which sentence shows that?”",
+        groups: [
+          {
+            title: "Foundational Skills (Phonics + Fluency)",
+            items: [
+              "Decode one-syllable words with common spelling patterns.",
+              "Know final -e and common vowel teams (intro level).",
+              "Read grade-level text with accuracy and expression (with support).",
+              "Recognize high-frequency words quickly (sight words).",
+              "Use context and pictures to confirm meaning."
+            ]
+          },
+          {
+            title: "Reading Literature (Stories)",
+            items: [
+              "Retell stories and include key details.",
+              "Describe characters, settings, and major events using details.",
+              "Identify the lesson/message (with support).",
+              "Compare adventures/experiences of characters in different stories."
+            ]
+          },
+          {
+            title: "Reading Informational Text (Nonfiction)",
+            items: [
+              "Identify the main topic and retell key details.",
+              "Ask and answer questions using details from the text.",
+              "Use text features (headings, captions) to find information.",
+              "Describe connections between ideas (e.g., cause/effect) with support."
+            ]
+          },
+          {
+            title: "Writing",
+            items: [
+              "Write opinion pieces with a topic and a reason.",
+              "Write informative pieces with facts and some details.",
+              "Write narratives with a sequence of events and feelings.",
+              "Use capitalization and punctuation more consistently.",
+              "Revise by adding details (with support)."
+            ]
+          },
+          {
+            title: "Speaking & Listening",
+            items: [
+              "Follow conversation rules and build on others’ ideas.",
+              "Describe people/places/things with relevant details.",
+              "Ask/answer questions about what a speaker says."
+            ]
+          },
+          {
+            title: "Language (Grammar & Vocabulary)",
+            items: [
+              "Use common nouns, pronouns, verbs, and adjectives correctly.",
+              "Use basic verb tenses (yesterday/today) in speaking/writing.",
+              "Use new vocabulary from reading and discussions.",
+              "Use context clues to figure out unknown words (with support)."
+            ]
+          }
+        ]
+      },
+      2: {
+        blurb: "Focus: stronger fluency, deeper comprehension (main idea/lesson), and paragraph writing.",
+        tip: "Ask for a quick summary after reading. Practice: “Somebody…Wanted…But…So…Then…”",
+        groups: [
+          {
+            title: "Foundational Skills (Fluency + Word Skills)",
+            items: [
+              "Decode longer words using prefixes/suffixes (intro level).",
+              "Read with accuracy, appropriate rate, and expression.",
+              "Use known patterns to read unfamiliar words.",
+              "Use context to self-correct and confirm meaning."
+            ]
+          },
+          {
+            title: "Reading Literature (Stories)",
+            items: [
+              "Recount stories and determine the central message/lesson.",
+              "Describe how characters respond to events and challenges.",
+              "Explain how words/phrases create feelings (tone).",
+              "Compare and contrast two versions of the same story."
+            ]
+          },
+          {
+            title: "Reading Informational Text (Nonfiction)",
+            items: [
+              "Identify the main topic of a multi-paragraph text.",
+              "Describe how ideas are connected (cause/effect, steps in a process).",
+              "Use text features (glossary, headings) to locate information.",
+              "Explain how pictures/diagrams support the text."
+            ]
+          },
+          {
+            title: "Writing",
+            items: [
+              "Write opinion pieces with reasons and a closing.",
+              "Write informative texts with facts, definitions, and details.",
+              "Write narratives with details, sequence words, and closure.",
+              "Revise/edit to improve clarity and fix mistakes (with support).",
+              "Use linking words (because, also, and, but)."
+            ]
+          },
+          {
+            title: "Speaking & Listening",
+            items: [
+              "Participate in discussions and build on others’ ideas.",
+              "Tell a story or recount an experience with details.",
+              "Create audio/visual presentations (simple) with support."
+            ]
+          },
+          {
+            title: "Language (Grammar & Vocabulary)",
+            items: [
+              "Use collective nouns, irregular verbs, and adjectives/adverbs appropriately.",
+              "Use commas in greetings/closings and apostrophes in contractions.",
+              "Use context clues + glossaries to learn word meanings.",
+              "Use precise words to express feelings and ideas."
+            ]
+          }
+        ]
+      }
+    }
+  },
+
+  math: {
+    label: "Math",
+    playHref: "math.html",
+    grades: {
+      K: {
+        blurb: "Focus: counting, comparing numbers, simple addition/subtraction, and basic shapes.",
+        tip: "Count real objects (snacks/toys). Ask: “How many? Which is more? How do you know?”",
+        groups: [
+          {
+            title: "Counting & Cardinality",
+            items: [
+              "Count to 100 by ones and tens (with practice).",
+              "Count objects and tell how many (up to about 20).",
+              "Understand that the last number said is the total (cardinality).",
+              "Compare numbers (greater/less/equal) using objects or numerals."
+            ]
+          },
+          {
+            title: "Operations & Algebraic Thinking",
+            items: [
+              "Understand addition as putting together and adding to.",
+              "Understand subtraction as taking apart and taking from.",
+              "Solve simple addition/subtraction within 10 (with objects/drawings).",
+              "Decompose numbers (e.g., 5 = 2 + 3)."
+            ]
+          },
+          {
+            title: "Number & Operations in Base Ten",
+            items: [
+              "Work with numbers 11–19 as “ten and some ones.”"
+            ]
+          },
+          {
+            title: "Measurement & Data",
+            items: [
+              "Describe measurable attributes (longer/shorter, heavier/lighter).",
+              "Compare two objects directly (which is longer?).",
+              "Sort objects into categories and count each category."
+            ]
+          },
+          {
+            title: "Geometry",
+            items: [
+              "Name common shapes (circle, square, triangle, rectangle, hexagon).",
+              "Describe shapes (sides, corners) in simple language.",
+              "Compose and decompose shapes (build new shapes from smaller ones)."
+            ]
+          }
+        ]
+      },
+
+      1: {
+        blurb: "Focus: addition/subtraction within 20, place value to 100, time/money basics, and shapes.",
+        tip: "Use a number line or ten-frame. Ask: “What strategy did you use—count on, make ten, doubles?”",
+        groups: [
+          {
+            title: "Operations & Algebraic Thinking",
+            items: [
+              "Solve addition/subtraction within 20 using strategies.",
+              "Understand the equal sign and true/false equations.",
+              "Use properties of operations (commutative for addition) in simple ways.",
+              "Solve word problems (add to, take from, put together, compare)."
+            ]
+          },
+          {
+            title: "Number & Operations in Base Ten",
+            items: [
+              "Understand place value (tens and ones).",
+              "Compare two-digit numbers (>, <, =).",
+              "Add within 100 (with models/strategies).",
+              "Subtract within 100 (with models/strategies)."
+            ]
+          },
+          {
+            title: "Measurement & Data",
+            items: [
+              "Tell time to the hour and half-hour.",
+              "Measure lengths with non-standard units (paper clips, cubes).",
+              "Organize and interpret simple data (picture/bar graphs)."
+            ]
+          },
+          {
+            title: "Geometry",
+            items: [
+              "Recognize and draw shapes (2D) and build simple 3D shapes (cubes, cones, cylinders).",
+              "Partition circles/rectangles into halves and fourths (shares)."
+            ]
+          }
+        ]
+      },
+
+      2: {
+        blurb: "Focus: addition/subtraction within 100, place value to 1000, foundations of multiplication, and measurement.",
+        tip: "Have your child explain thinking out loud. Ask: “Did you regroup? How do you know it makes sense?”",
+        groups: [
+          {
+            title: "Operations & Algebraic Thinking",
+            items: [
+              "Solve one- and two-step word problems within 100 (add/subtract).",
+              "Work with equal groups (foundation for multiplication).",
+              "Fluency with addition/subtraction within 20 (as practice goal)."
+            ]
+          },
+          {
+            title: "Number & Operations in Base Ten",
+            items: [
+              "Understand place value to 1000 (hundreds, tens, ones).",
+              "Compare three-digit numbers using place value reasoning.",
+              "Add and subtract within 100 using strategies and models.",
+              "Add up to four two-digit numbers (with strategies).",
+              "Mentally add/subtract 10 or 100 to a given number."
+            ]
+          },
+          {
+            title: "Measurement & Data",
+            items: [
+              "Measure length in standard units (inches, centimeters) using rulers.",
+              "Estimate lengths and compare measurements.",
+              "Work with money (coins and values) in simple problems (varies by curriculum/state).",
+              "Tell time to the nearest 5 minutes (intro).",
+              "Create and interpret bar graphs (up to 4 categories)."
+            ]
+          },
+          {
+            title: "Geometry",
+            items: [
+              "Recognize and draw shapes with specific attributes (number of sides/angles).",
+              "Partition rectangles into rows/columns of same-size squares and count them (arrays).",
+              "Partition circles/rectangles into equal shares and describe with fractions language (halves, thirds, fourths)."
+            ]
+          }
+        ]
+      }
+    }
+  }
+};
+
+/* ============================
+   Render helpers
+============================ */
+function setActiveButtons(){
+  subjectBtns.forEach(b => b.classList.toggle("active", b.dataset.subject === state.subject));
+  gradeBtns.forEach(b => b.classList.toggle("active", b.dataset.grade === state.grade));
+}
+
+function escapeHtml(str){
+  return (str || "").replace(/[&<>"']/g, s => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[s]));
+}
+
+function buildCardHTML(group, idx){
+  const id = `grp_${state.subject}_${state.grade}_${idx}`;
+  const items = group.items.map(x => `<li>${escapeHtml(x)}</li>`).join("");
+  return `
+    <div class="game-box" style="margin-top:12px;">
+      <button class="btn secondary" data-acc="${id}" aria-expanded="true"
+        style="width:100%; justify-content:space-between; display:flex; align-items:center;">
+        <span>${escapeHtml(group.title)}</span>
+        <span aria-hidden="true">▾</span>
+      </button>
+      <div id="${id}" class="acc-panel" style="margin-top:10px;">
+        <ul class="small" style="margin:0; padding-left:18px; line-height:1.7;">
+          ${items}
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+function updateGoPracticeLink(){
+  const subj = DATA[state.subject];
+  goPlayBtn.href = subj.playHref;
+  goPlayBtn.textContent = state.subject === "ela" ? "Go Practice (Reading)" : "Go Practice (Math)";
+}
+
+function render(){
+  setActiveButtons();
+
+  const subj = DATA[state.subject];
+  const g = subj.grades[state.grade];
+
+  const gradeLabel = state.grade === "K" ? "Kindergarten" : `Grade ${state.grade}`;
+  panelTitle.textContent = `${subj.label} • ${gradeLabel}`;
+  panelBlurb.textContent = g.blurb;
+  homeTip.textContent = g.tip;
+  updateGoPracticeLink();
+
+  cardsWrap.innerHTML = g.groups.map(buildCardHTML).join("");
+
+  // Accordion behavior
+  cardsWrap.querySelectorAll("[data-acc]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-acc");
+      const panel = document.getElementById(id);
+      const open = panel.style.display !== "none";
+      panel.style.display = open ? "none" : "block";
+      btn.setAttribute("aria-expanded", String(!open));
+      btn.querySelector("span[aria-hidden='true']").textContent = open ? "▸" : "▾";
+    });
+  });
+
+  // default: expanded
+  cardsWrap.querySelectorAll(".acc-panel").forEach(p => p.style.display = "block");
+  cardsWrap.querySelectorAll("[data-acc]").forEach(btn=>{
+    btn.setAttribute("aria-expanded", "true");
+    const arrow = btn.querySelector("span[aria-hidden='true']");
+    if (arrow) arrow.textContent = "▾";
+  });
+}
+
+/* ============================
+   Events
+============================ */
+subjectBtns.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    state.subject = btn.dataset.subject;
+    render();
+  });
+});
+
+gradeBtns.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    state.grade = btn.dataset.grade;
+    render();
+  });
+});
+
+document.getElementById("expandAllBtn").addEventListener("click", ()=>{
+  cardsWrap.querySelectorAll(".acc-panel").forEach(p => p.style.display = "block");
+  cardsWrap.querySelectorAll("[data-acc]").forEach(btn=>{
+    btn.setAttribute("aria-expanded", "true");
+    const arrow = btn.querySelector("span[aria-hidden='true']");
+    if (arrow) arrow.textContent = "▾";
+  });
+});
+
+document.getElementById("collapseAllBtn").addEventListener("click", ()=>{
+  cardsWrap.querySelectorAll(".acc-panel").forEach(p => p.style.display = "none");
+  cardsWrap.querySelectorAll("[data-acc]").forEach(btn=>{
+    btn.setAttribute("aria-expanded", "false");
+    const arrow = btn.querySelector("span[aria-hidden='true']");
+    if (arrow) arrow.textContent = "▸";
+  });
+});
+
+document.getElementById("copySummaryBtn").addEventListener("click", async ()=>{
+  const subj = DATA[state.subject];
+  const g = subj.grades[state.grade];
+  const gradeLabel = state.grade === "K" ? "Kindergarten" : `Grade ${state.grade}`;
+
+  const lines = [];
+  lines.push(`BloomELearning — Standards Summary`);
+  lines.push(`${subj.label} • ${gradeLabel}`);
+  lines.push(``);
+  g.groups.forEach(gr=>{
+    lines.push(gr.title);
+    gr.items.forEach(it => lines.push(`- ${it}`));
+    lines.push("");
+  });
+  lines.push(`Home Tip: ${g.tip}`);
+
+  const text = lines.join("\n");
+
+  try{
+    await navigator.clipboard.writeText(text);
+    alert("✅ Copied! You can paste this into an email or notes.");
+  } catch {
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    alert("✅ Copied! You can paste this into an email or notes.");
+  }
+});
+
+document.getElementById("printBtn").addEventListener("click", ()=>{
+  window.print();
+});
+
+/* ============================
+   Init
+============================ */
+render();
+</script>
+
 </body>
 </html>
