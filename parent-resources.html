@@ -17,7 +17,7 @@
         <li><a href="index.html">Home</a></li>
 
         <li class="dropdown">
-          <a href="#">Subjects</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
           <div class="dropdown-menu">
             <a href="phonics.html">🔤 Phonics</a>
             <a href="reading.html">📖 Reading</a>
@@ -27,7 +27,7 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Resources</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
           <div class="dropdown-menu">
             <a href="resources.html">🎥 Kids Resources</a>
             <a href="parent-resources.html">🧑‍🏫 Parent Resources</a>
@@ -36,16 +36,13 @@
         </li>
 
         <li class="dropdown">
-          <a href="#">Student</a>
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
             <a href="student-login.html">🧒 Student Login</a>
             <a href="progress.html">📊 My Progress</a>
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
         </li>
-
-        <li><a href="games.html">🎮 Games</a></li>
-        <li><a href="diagnostic.html">🧠 Diagnostic</a></li>
       </ul>
     </nav>
   </div>
@@ -54,81 +51,228 @@
 <section class="hero">
   <div class="container">
     <h1>Parent Resources 🧑‍🏫🌿</h1>
-    <p>Simple ways to support learning at home (K–2).</p>
+    <p>Simple, friendly ways to support learning at home (K–2).</p>
 
+    <!-- quick bubbles (same vibe as your other pages) -->
     <div class="bubbles">
+      <a class="bubble" href="#routine"><span class="emoji">⏱️</span><span class="text">Routine</span></a>
+      <a class="bubble" href="#tips"><span class="emoji">📚</span><span class="text">Tips by Grade</span></a>
       <a class="bubble" href="standards.html"><span class="emoji">📘</span><span class="text">Standards</span></a>
-      <a class="bubble" href="#routine"><span class="emoji">🗓️</span><span class="text">Routine</span></a>
-      <a class="bubble" href="#phonics"><span class="emoji">🔤</span><span class="text">Phonics Tips</span></a>
-      <a class="bubble" href="#math"><span class="emoji">➕</span><span class="text">Math Tips</span></a>
+      <a class="bubble" href="progress.html"><span class="emoji">📊</span><span class="text">Progress</span></a>
     </div>
+
+    <div class="hero-note">Tip: Keep it short + fun. Consistency beats long sessions.</div>
   </div>
 </section>
 
 <section id="routine" class="section">
   <div class="container">
     <h2 class="section-title">A Quick Daily Routine ⏱️</h2>
+
     <div class="game-box wide">
       <div class="grid-3">
         <div class="card">
-          <h3>5 minutes</h3>
-          <p>Letter sounds or quick counting.</p>
+          <h3 style="margin-bottom:6px;">5 minutes</h3>
+          <p class="small">Letter sounds, sight words, or quick counting.</p>
         </div>
         <div class="card">
-          <h3>10 minutes</h3>
-          <p>Reading or math mini game.</p>
+          <h3 style="margin-bottom:6px;">10 minutes</h3>
+          <p class="small">A short reading passage <em>or</em> a math mini-game.</p>
         </div>
         <div class="card">
-          <h3>5 minutes</h3>
-          <p>Tracing a letter or number (earn stickers!).</p>
+          <h3 style="margin-bottom:6px;">5 minutes</h3>
+          <p class="small">Trace a letter/number (then celebrate with a sticker!).</p>
         </div>
       </div>
 
-      <div class="quick-strip">
-        <a class="btn secondary" href="resources.html#tracing">Tracing</a>
-        <a class="btn secondary" href="sticker-book.html">Sticker Book</a>
-        <a class="btn secondary" href="standards.html">Standards</a>
+      <div class="quick-strip" style="justify-content:center; margin-top:14px;">
+        <a class="btn secondary" href="letter-formation.html">✍️ Tracing</a>
+        <a class="btn secondary" href="sticker-book.html">📖 Sticker Book</a>
+        <a class="btn secondary" href="standards.html">📘 Standards</a>
+      </div>
+
+      <div class="game-box" style="margin-top:14px;">
+        <p class="kid-big">Parent Bonus 🌟</p>
+        <p class="small">
+          If your child gets stuck, try: “Let’s try the first part together,” “Point to the tricky word,” or
+          “Show me how you know.” Little prompts build confidence.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="phonics" class="section">
+<section id="tips" class="section">
   <div class="container">
-    <h2 class="section-title">Phonics Tips 🔤</h2>
-    <div class="game-box">
-      <ul style="padding-left: 18px; line-height: 1.7;">
-        <li>Say the <strong>sound</strong>, not the letter name (“/m/”, not “em”).</li>
-        <li>Practice 3 letters a week and review daily.</li>
-        <li>Play “I Spy”: “I spy something that starts with /s/.”</li>
-        <li>Blend slowly: “/c/…/a/…/t/ → cat.”</li>
-      </ul>
-      <div class="quick-strip">
-        <a class="btn" href="phonics.html">Open Phonics Game</a>
-        <a class="btn secondary" href="resources.html#videos">Videos</a>
-      </div>
-    </div>
-  </div>
-</section>
+    <h2 class="section-title">Tips by Grade + Subject 📚</h2>
 
-<section id="math" class="section">
-  <div class="container">
-    <h2 class="section-title">Math Tips ➕</h2>
-    <div class="game-box">
-      <ul style="padding-left: 18px; line-height: 1.7;">
-        <li>Count snacks: “If we eat 2, how many left?”</li>
-        <li>Use number lines for + and − within 20.</li>
-        <li>Practice “make 10”: 6+4, 7+3, 8+2.</li>
-        <li>Ask “How did you know?” to build math thinking.</li>
-      </ul>
-      <div class="quick-strip">
-        <a class="btn" href="math.html">Open Math Game</a>
-        <a class="btn secondary" href="standards.html#math">Math Standards</a>
+    <div class="game-box wide">
+      <!-- Subject pills -->
+      <div class="kid-big" style="text-align:center;">Choose Subject</div>
+      <div class="badge-row" style="justify-content:center; margin-top:10px;">
+        <button class="pill active pill-lg" data-subject="ela">📖 ELA</button>
+        <button class="pill pill-lg" data-subject="math">➕ Math</button>
+      </div>
+
+      <!-- Grade pills -->
+      <div class="kid-big" style="text-align:center; margin-top:16px;">Choose Grade</div>
+      <div class="badge-row" style="justify-content:center; margin-top:10px;">
+        <button class="pill active pill-lg" data-grade="K">🧸 Kindergarten</button>
+        <button class="pill pill-lg" data-grade="1">🌱 Grade 1</button>
+        <button class="pill pill-lg" data-grade="2">🌟 Grade 2</button>
+      </div>
+
+      <div class="game-box" style="margin-top:14px;">
+        <div class="small" id="tipsMeta">Showing: ELA • Kindergarten</div>
+        <div class="grid-3" id="tipsGrid" style="margin-top:12px;"></div>
+
+        <div class="quick-strip" style="justify-content:center; margin-top:14px;">
+          <a class="btn" id="ctaBtn" href="reading.html">Go to Reading</a>
+          <a class="btn secondary" href="progress.html">View Progress</a>
+        </div>
+
+        <p class="small" style="margin-top:12px;" id="parentNote"></p>
       </div>
     </div>
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
+
+<script src="./nav.js"></script>
+<script>
+  // Keep it simple + consistent with your site’s “bubbly” style.
+  let subject = "ela"; // ela | math
+  let grade = "K";     // K | 1 | 2
+
+  const tipsMeta = document.getElementById("tipsMeta");
+  const tipsGrid = document.getElementById("tipsGrid");
+  const ctaBtn = document.getElementById("ctaBtn");
+  const parentNote = document.getElementById("parentNote");
+
+  function setActive(selector, key, value){
+    document.querySelectorAll(selector).forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset[key] === value);
+    });
+  }
+
+  const TIP_BANK = {
+    ela: {
+      K: [
+        {t:"Sound Games", d:"Say a sound and hunt for objects that start with it (m… mug, marker)."},
+        {t:"Print Concepts", d:"Point to words as you read. Ask: “Where do we start?” “Which way do we go?”"},
+        {t:"Story Talk", d:"After 1 page: “Who is this about?” “What happened?” “How do they feel?”"},
+        {t:"Sight Words", d:"Pick 3 words for the week (the, I, a). Find them in books + signs."},
+        {t:"Rhyming", d:"Play: cat… hat… what else rhymes? Silly answers are welcome."},
+        {t:"Writing", d:"Draw a picture and say a sentence. You write it, they trace it."}
+      ],
+      1: [
+        {t:"Decoding", d:"When stuck: cover the ending, sound it out, then blend it together."},
+        {t:"Fluency", d:"Read a short page twice. Second time = smoother + more confident."},
+        {t:"Comprehension", d:"Ask: “What is the problem?” “How was it solved?”"},
+        {t:"Vocabulary", d:"Pick 1 new word. Use it in a silly sentence together."},
+        {t:"Spelling", d:"Practice word families: -at (cat, hat, sat), -an (can, man, pan)."},
+        {t:"Writing", d:"Use a 3-sentence story: First… Then… Last…"}
+      ],
+      2: [
+        {t:"Main Idea", d:"Ask: “What was this mostly about?” Then find 2 details that support it."},
+        {t:"Text Evidence", d:"“Show me the part that proves it.” (Point to the sentence.)"},
+        {t:"Fluency", d:"Try “read like a storyteller” with expression and pauses."},
+        {t:"Vocabulary", d:"Try prefixes/suffixes: re-, un-, -ful, -less. What do they change?"},
+        {t:"Writing", d:"Paragraph plan: topic sentence + 2 details + closing sentence."},
+        {t:"Reading Stamina", d:"Set a tiny timer (5–8 min). Stop while it’s still going well."}
+      ]
+    },
+    math: {
+      K: [
+        {t:"Counting", d:"Count objects you touch (blocks, snacks). Stop at 10, then try 20."},
+        {t:"Number Sense", d:"Ask: “Which is more?” Use small groups (3 vs 5) to compare."},
+        {t:"Make 10", d:"Use fingers: “How many more to make 10?” (7 needs 3)."},
+        {t:"Shapes", d:"Spot shapes at home. “Find a circle” (plate), “find a rectangle” (book)."},
+        {t:"Addition", d:"Act it out: 2 toys + 1 toy = ? Then say the math sentence."},
+        {t:"Games", d:"Roll a die, count, and color that many squares."}
+      ],
+      1: [
+        {t:"Add/Sub Within 20", d:"Use a number line: start at 9, hop +6. Where do you land?"},
+        {t:"Facts", d:"Practice “doubles” (6+6) and “near doubles” (6+7)."},
+        {t:"Place Value", d:"Build numbers with tens/ones (13 = 1 ten + 3 ones)."},
+        {t:"Time", d:"Talk about clock routines: morning, afternoon, bedtime."},
+        {t:"Word Problems", d:"Circle the numbers, underline what they’re asking, then solve."},
+        {t:"Math Talk", d:"Ask: “How did you get that?” (Any strategy is a win.)"}
+      ],
+      2: [
+        {t:"Add/Sub Within 100", d:"Break apart tens/ones: 47+25 = (40+20)+(7+5)."},
+        {t:"Place Value", d:"Compare numbers: 62 vs 26. Which is bigger and why?"},
+        {t:"Skip Count", d:"Count by 2s, 5s, 10s during transitions (walking, cleanup)."},
+        {t:"Money", d:"Practice coins: “Show me 10¢.” “How can we make 25¢?”"},
+        {t:"Word Problems", d:"Two-step problems: first do this… then do that…"},
+        {t:"Estimation", d:"“About how many?” before solving. Helps build strong number sense."}
+      ]
+    }
+  };
+
+  const CTA = {
+    ela: { K:"reading.html", "1":"reading.html", "2":"reading.html", label:"Go to Reading" },
+    math:{ K:"math.html", "1":"math.html", "2":"math.html", label:"Go to Math" }
+  };
+
+  const NOTES = {
+    ela: {
+      K:"Keep sessions playful. If your child is wiggly, do 2 minutes now + 2 minutes later.",
+      1:"If a word is too hard, tell it quickly and keep reading. Flow matters more than struggle.",
+      2:"Ask one strong question, not five. A good chat after reading is powerful."
+    },
+    math: {
+      K:"Use real objects (snacks/toys). Math feels easier when kids can touch it.",
+      1:"Celebrate strategies. If they solve it their own way, that’s real math thinking.",
+      2:"Make it practical: money, time, and measuring around the house builds confidence."
+    }
+  };
+
+  function labelGrade(g){
+    if(g==="K") return "Kindergarten";
+    if(g==="1") return "Grade 1";
+    return "Grade 2";
+  }
+
+  function renderTips(){
+    tipsMeta.textContent = `Showing: ${subject.toUpperCase()} • ${labelGrade(grade)}`;
+
+    const items = TIP_BANK[subject][grade];
+    tipsGrid.innerHTML = items.slice(0,6).map(it => `
+      <div class="card">
+        <h3 style="margin-bottom:6px;">${it.t}</h3>
+        <p class="small">${it.d}</p>
+      </div>
+    `).join("");
+
+    const c = CTA[subject];
+    ctaBtn.href = c[grade];
+    ctaBtn.textContent = c.label;
+
+    parentNote.textContent = NOTES[subject][grade] || "";
+  }
+
+  // Hook pills
+  document.querySelectorAll('[data-subject]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      subject = btn.dataset.subject;
+      setActive('[data-subject]', 'subject', subject);
+      renderTips();
+    });
+  });
+
+  document.querySelectorAll('[data-grade]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      grade = btn.dataset.grade;
+      setActive('[data-grade]', 'grade', grade);
+      renderTips();
+    });
+  });
+
+  // init
+  renderTips();
+</script>
+
 </body>
 </html>
