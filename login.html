@@ -2,22 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Student Login | BloomELearning ✨</title>
+  <title>Login | BloomELearning ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
 <header>
   <div class="container">
     <div class="logo">BloomELearning ✨</div>
+
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="progress.html">My Progress</a></li>
-        <li><a href="games.html">Character Games</a></li>
-        <li><a href="parent.html">Parent Resources</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Subjects</a>
+          <div class="dropdown-menu">
+            <a href="phonics.html">🔤 Phonics</a>
+            <a href="reading.html">📖 Reading</a>
+            <a href="math.html">➕ Math</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Resources</a>
+          <div class="dropdown-menu">
+            <a href="resources.html#kids">🎥 Kid Resources</a>
+            <a href="resources.html#parents">🧑‍🏫 Parent Resources</a>
+            <a href="resources.html#standards">📘 Standards (K–2)</a>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
+          <div class="dropdown-menu">
+            <a href="login.html">🧒 Login</a>
+            <a href="progress.html">📊 My Progress</a>
+            <a href="sticker-book.html">📖 Sticker Book</a>
+          </div>
+        </li>
       </ul>
     </nav>
   </div>
@@ -25,37 +50,169 @@
 
 <section class="hero">
   <div class="container">
-    <h1>👋 Student Login</h1>
-    <p>Pick your buddy and type your 4-number PIN.</p>
+    <h1>Welcome Back! 🧒✨</h1>
+    <p>Pick your buddy and type your 4-number PIN to start learning.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">Choose Your Buddy 🐾</h2>
+    <h2 class="section-title">Student Login</h2>
 
-    <div class="game-box">
-      <div class="kid-big">1) Tap a character:</div>
-      <div class="char-grid" id="charGrid"></div>
+    <div class="game-box wide">
+      <!-- MAIN LOGIN CARD -->
+      <div class="game-box" style="max-width:900px; margin:0 auto;">
 
-      <div style="margin-top:14px;" class="kid-big">2) Type your PIN (4 numbers):</div>
-      <div class="game-row">
-        <input id="pin" class="pin-input" inputmode="numeric" maxlength="4" placeholder="1234" />
-        <button class="btn" id="loginBtn">Log In</button>
-        <button class="btn secondary" id="logoutBtn">Log Out</button>
+        <div class="kid-big">1) Choose your buddy</div>
+
+        <!-- Buddy grid (styles are inline-safe if CSS doesn't have these yet) -->
+        <div id="charGrid" style="
+          display:grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap:12px;
+          margin-top:12px;
+        "></div>
+
+        <div class="kid-big" style="margin-top:18px;">2) Type your PIN (4 numbers)</div>
+
+        <div class="quick-strip" style="justify-content:center; gap:12px; margin-top:12px; flex-wrap:wrap;">
+          <input
+            id="pin"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="1234"
+            aria-label="Enter 4 digit PIN"
+            style="
+              max-width:180px;
+              text-align:center;
+              padding:14px 16px;
+              border-radius:999px;
+              border:2px solid rgba(0,0,0,0.12);
+              font-size:20px;
+              font-weight:800;
+              outline:none;
+            "
+          />
+          <button class="btn" id="loginBtn">Log In</button>
+          <button class="btn secondary" id="logoutBtn">Log Out</button>
+        </div>
+
+        <div class="status" id="status" style="margin-top:12px;"></div>
+
+        <!-- After login actions -->
+        <div class="quick-strip" id="afterLoginRow" style="justify-content:center; margin-top:12px; display:none;">
+          <a class="btn secondary" href="phonics.html">Go to Phonics</a>
+          <a class="btn secondary" href="reading.html">Go to Reading</a>
+          <a class="btn secondary" href="math.html">Go to Math</a>
+        </div>
+
+        <p class="small" style="margin-top:12px; text-align:center;">
+          This is a simple login for kids. It saves your buddy + progress on <strong>this device</strong>.
+        </p>
+
       </div>
 
-      <div class="status" id="status"></div>
-      <p class="small" style="margin-top:10px;">
-        This is a pretend login. It saves your character on this device only.
-      </p>
+      <!-- MINI DASHBOARD -->
+      <div class="game-box" style="max-width:900px; margin:16px auto 0;">
+        <div class="kid-big">My Learning Dashboard 📊</div>
+        <p class="small" style="margin-top:6px;">
+          Your stars and activity update as you play games on BloomELearning.
+        </p>
+
+        <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; margin-top:12px;">
+          <div class="card" style="text-align:center;">
+            <h3 style="margin-bottom:6px;">🔤 Phonics ⭐</h3>
+            <div id="pPhonics" style="font-size:34px; font-weight:900;">0</div>
+            <div class="small">stars earned</div>
+          </div>
+
+          <div class="card" style="text-align:center;">
+            <h3 style="margin-bottom:6px;">📖 Reading ⭐</h3>
+            <div id="pReading" style="font-size:34px; font-weight:900;">0</div>
+            <div class="small">stars earned</div>
+          </div>
+
+          <div class="card" style="text-align:center;">
+            <h3 style="margin-bottom:6px;">➕ Math ⭐</h3>
+            <div id="pMath" style="font-size:34px; font-weight:900;">0</div>
+            <div class="small">stars earned</div>
+          </div>
+        </div>
+
+        <div class="game-box" style="margin-top:12px;">
+          <div class="kid-big" style="margin-bottom:6px;">Last Activity 🕒</div>
+          <div class="small" id="lastActivity">No activity yet. Play a game to start!</div>
+
+          <div class="quick-strip" style="justify-content:center; margin-top:12px; flex-wrap:wrap;">
+            <a class="btn secondary" href="progress.html">Open Full Progress</a>
+            <a class="btn secondary" href="sticker-book.html">Open Sticker Book</a>
+            <button class="btn secondary" id="resetProgressBtn" type="button">Reset Progress (This Device)</button>
+          </div>
+
+          <div class="small" style="margin-top:8px; text-align:center; opacity:0.9;">
+            Teacher/Parent tip: “Reset Progress” clears stars and login saved on this device.
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </div>
 </section>
 
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
+<script src="./nav.js"></script>
 <script>
+  // ----------------------------
+  // Keys (align with the rest of your site)
+  // ----------------------------
+  const PROG_KEY = "bloom_progress";
+  const SESSION_KEY = "bloom_student_session"; // new but harmless
+  const KEY_CHAR = "bloom_student_character";
+  const KEY_PIN  = "bloom_student_pin";
+  const KEY_LOG  = "bloom_student_logged_in";
+  const LAST_ACTIVITY_KEY = "bloom_last_activity"; // small helper
+
+  // ----------------------------
+  // Helpers
+  // ----------------------------
+  function load(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
+  }
+  function save(key, obj) {
+    localStorage.setItem(key, JSON.stringify(obj));
+  }
+
+  function ensureProgress(){
+    const p = load(PROG_KEY, null);
+    if (p && typeof p === "object") return p;
+
+    const fresh = {
+      phonicsStars: 0,
+      readingStars: 0,
+      mathStars: 0,
+      tracingDone: 0,
+      gamesStars: 0,
+      diagnosticScore: null
+    };
+    save(PROG_KEY, fresh);
+    return fresh;
+  }
+
+  function prettyTime(ts){
+    try {
+      const d = new Date(ts);
+      return d.toLocaleString(undefined, { weekday:"short", hour:"numeric", minute:"2-digit" });
+    } catch {
+      return "recently";
+    }
+  }
+
+  // ----------------------------
+  // Characters
+  // ----------------------------
   const characters = [
     { id:"bunny", emoji:"🐰", name:"Bunny" },
     { id:"panda", emoji:"🐼", name:"Panda" },
@@ -70,49 +227,147 @@
   const charGrid = document.getElementById("charGrid");
   const statusEl = document.getElementById("status");
   const pinEl = document.getElementById("pin");
+  const afterLoginRow = document.getElementById("afterLoginRow");
 
-  let selected = localStorage.getItem("bloom_student_character") || "bunny";
+  let selected = localStorage.getItem(KEY_CHAR) || "bunny";
+
+  function getChar(id){
+    return characters.find(x => x.id === id) || characters[0];
+  }
 
   function renderCharacters() {
     charGrid.innerHTML = "";
     characters.forEach(c => {
-      const div = document.createElement("div");
-      div.className = "char-card" + (c.id === selected ? " selected" : "");
-      div.innerHTML = `<div class="char-emoji">${c.emoji}</div><div class="char-name">${c.name}</div>`;
-      div.onclick = () => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.style.cssText = `
+        border-radius:22px;
+        border:2px solid ${c.id === selected ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.10)"};
+        background: ${c.id === selected ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.75)"};
+        padding:12px;
+        cursor:pointer;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        transition: transform .15s ease;
+      `;
+      b.onmouseenter = ()=> b.style.transform = "translateY(-2px)";
+      b.onmouseleave = ()=> b.style.transform = "translateY(0px)";
+      b.setAttribute("aria-label", "Select " + c.name);
+      b.innerHTML = `
+        <div style="font-size:34px; line-height:1;">${c.emoji}</div>
+        <div style="margin-top:6px; font-weight:900; font-size:16px;">${c.name}</div>
+      `;
+      b.onclick = () => {
         selected = c.id;
-        localStorage.setItem("bloom_student_character", selected);
+        localStorage.setItem(KEY_CHAR, selected);
         renderCharacters();
         statusEl.textContent = `✅ Selected: ${c.name}`;
       };
-      charGrid.appendChild(div);
+      charGrid.appendChild(b);
     });
   }
 
-  function getCharName(id){
-    const c = characters.find(x => x.id === id);
-    return c ? c.name : "Buddy";
+  // ----------------------------
+  // Dashboard render
+  // ----------------------------
+  function renderDashboard(){
+    const p = ensureProgress();
+
+    document.getElementById("pPhonics").textContent = p.phonicsStars || 0;
+    document.getElementById("pReading").textContent = p.readingStars || 0;
+    document.getElementById("pMath").textContent = p.mathStars || 0;
+
+    const la = load(LAST_ACTIVITY_KEY, null);
+    const lastEl = document.getElementById("lastActivity");
+    if (!la) {
+      lastEl.textContent = "No activity yet. Play a game to start!";
+      return;
+    }
+    const when = la.time ? prettyTime(la.time) : "recently";
+    lastEl.textContent = `Last played: ${la.area || "a game"} — ${when}`;
   }
 
+  // ----------------------------
+  // Logged in UI
+  // ----------------------------
+  function setLoggedInUI(){
+    const logged = localStorage.getItem(KEY_LOG) === "true";
+    const buddy = getChar(selected);
+
+    afterLoginRow.style.display = logged ? "flex" : "none";
+
+    statusEl.textContent = logged
+      ? `✅ You’re logged in as ${buddy.name} ${buddy.emoji}`
+      : "Pick a buddy to begin!";
+
+    // also write a simple session object for other pages (optional use later)
+    const session = load(SESSION_KEY, {});
+    session.character = selected;
+    session.loggedIn = logged;
+    session.updatedAt = Date.now();
+    save(SESSION_KEY, session);
+  }
+
+  // ----------------------------
+  // Actions
+  // ----------------------------
   document.getElementById("loginBtn").addEventListener("click", () => {
     const pin = pinEl.value.trim();
     if (!/^\d{4}$/.test(pin)) {
       statusEl.textContent = "❌ Please enter a 4-digit PIN.";
+      afterLoginRow.style.display = "none";
       return;
     }
-    localStorage.setItem("bloom_student_pin", pin);
-    localStorage.setItem("bloom_student_logged_in", "true");
-    statusEl.textContent = `🎉 Welcome, ${getCharName(selected)}!`;
+
+    localStorage.setItem(KEY_PIN, pin);
+    localStorage.setItem(KEY_LOG, "true");
+
+    // ensure progress exists
+    ensureProgress();
+
+    const buddy = getChar(selected);
+    statusEl.textContent = `🎉 Welcome, ${buddy.name}! ${buddy.emoji}`;
+    afterLoginRow.style.display = "flex";
+
+    // record login as activity
+    save(LAST_ACTIVITY_KEY, { area: "Login", time: Date.now() });
+    renderDashboard();
+    setLoggedInUI();
   });
 
   document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.setItem("bloom_student_logged_in", "false");
+    localStorage.setItem(KEY_LOG, "false");
     statusEl.textContent = "👋 Logged out!";
+    afterLoginRow.style.display = "none";
+    setLoggedInUI();
   });
 
+  document.getElementById("resetProgressBtn").addEventListener("click", () => {
+    const ok = confirm("Reset progress and login info on this device?");
+    if (!ok) return;
+
+    localStorage.removeItem(PROG_KEY);
+    localStorage.removeItem(KEY_PIN);
+    localStorage.setItem(KEY_LOG, "false");
+    localStorage.removeItem(LAST_ACTIVITY_KEY);
+
+    statusEl.textContent = "✅ Progress reset.";
+    afterLoginRow.style.display = "none";
+
+    renderDashboard();
+    setLoggedInUI();
+  });
+
+  // Press Enter -> login
+  pinEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("loginBtn").click();
+  });
+
+  // ----------------------------
+  // Init
+  // ----------------------------
   renderCharacters();
-  const logged = localStorage.getItem("bloom_student_logged_in") === "true";
-  statusEl.textContent = logged ? `✅ You’re logged in as ${getCharName(selected)}.` : "Pick a buddy to begin!";
+  renderDashboard();
+  setLoggedInUI();
 </script>
 
 </body>
