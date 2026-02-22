@@ -37,7 +37,7 @@
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" aria-expanded="false">Student</a>
           <div class="dropdown-menu">
-            <a href="student-login.html">🧒 Student Login</a>
+            <a href="login.html">🧒 Login</a>
             <a href="progress.html">📊 My Progress</a>
             <a href="sticker-book.html">📖 Sticker Book</a>
           </div>
@@ -159,6 +159,7 @@
 ============================ */
 const PROG_KEY = "bloom_progress";
 const PHONICS_STATE_KEY = "bloom_phonics_state";
+const LAST_ACTIVITY_KEY = "bloom_last_activity";
 
 function load(key, fallback){
   try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
@@ -174,6 +175,7 @@ function shuffle(arr){
   }
   return a;
 }
+
 function speak(text){
   if (!("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
@@ -182,8 +184,41 @@ function speak(text){
   u.pitch = 1.05;
   speechSynthesis.speak(u);
 }
+
+/* ============================
+   Progress monitor helpers
+============================ */
+function ensureProgress(){
+  const p = load(PROG_KEY, null);
+  if (p && typeof p === "object") return p;
+
+  const fresh = {
+    phonicsStars: 0, readingStars: 0, mathStars: 0,
+    phonicsPlays: 0, phonicsCorrect: 0, phonicsAttempts: 0,
+    phonicsLastGame: null, phonicsDiag: null
+  };
+  save(PROG_KEY, fresh);
+  return fresh;
+}
+
+function logActivity(area, details){
+  save(LAST_ACTIVITY_KEY, { area, details: details || "", time: Date.now() });
+}
+
+function bumpCounter(field, inc=1){
+  const p = ensureProgress();
+  p[field] = (p[field] || 0) + inc;
+  save(PROG_KEY, p);
+}
+
+function setField(field, value){
+  const p = ensureProgress();
+  p[field] = value;
+  save(PROG_KEY, p);
+}
+
 function addPhonicsStar(){
-  const p = load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
+  const p = ensureProgress();
   p.phonicsStars = (p.phonicsStars || 0) + 1;
   save(PROG_KEY, p);
 
@@ -193,6 +228,8 @@ function addPhonicsStar(){
     ms.phonics += 1;
     save("bloom_daily_mission", ms);
   }
+
+  logActivity("Phonics", "Earned a star ⭐");
 }
 
 /* ============================
@@ -211,12 +248,12 @@ document.querySelectorAll(".pill[data-grade]").forEach(btn=>{
     // if saved state matches grade, enable games
     const st = load(PHONICS_STATE_KEY, null);
     setGamesEnabled(!!(st && st.grade === grade && st.finished));
+    logActivity("Phonics", "Changed grade to " + (grade === "K" ? "Kindergarten" : "Grade " + grade));
   });
 });
 
 /* ============================
    Diagnostic question banks (K-2)
-   10 questions each build
 ============================ */
 const letterNameBank = {
   K: ["A","M","S","T","B","P","R","G","V","D"],
@@ -365,12 +402,14 @@ function chooseDiag(choice){
   diagNextBtn.disabled = false;
 
   const q = diagQs[diagIndex];
+  bumpCounter("phonicsAttempts", 1);
+
   if (choice === q.answer){
     diagCorrect++;
     diagResult.textContent = "Correct! ⭐";
+    bumpCounter("phonicsCorrect", 1);
   } else {
     diagResult.textContent = `Good try! Answer: ${q.answer}`;
-    // tag weaknesses for recommendation
     if (q.type === "name") diagMissedTags.add("letterNames");
     if (q.type === "sound") diagMissedTags.add("letterSounds");
     if (q.type === "vowel") diagMissedTags.add("vowels");
@@ -384,7 +423,6 @@ diagSoundBtn.onclick = ()=>{
 };
 
 diagNextBtn.onclick = ()=>{
-  // if they never answered, count as missed
   if (!diagAnswered){
     const q = diagQs[diagIndex];
     if (q.type === "name") diagMissedTags.add("letterNames");
@@ -408,6 +446,7 @@ diagSkipBtn.onclick = ()=>{
 };
 
 startDiagBtn.onclick = ()=>{
+  ensureProgress();
   diagQs = buildDiagnostic(grade);
   diagIndex = 0;
   diagCorrect = 0;
@@ -416,6 +455,7 @@ startDiagBtn.onclick = ()=>{
   diagNextBtn.disabled = true;
   diagSkipBtn.disabled = false;
   renderDiagQ();
+  logActivity("Phonics", "Started diagnostic (Grade " + (grade === "K" ? "K" : grade) + ")");
 };
 
 resetDiagBtn.onclick = ()=>{
@@ -423,6 +463,12 @@ resetDiagBtn.onclick = ()=>{
   resetDiagUI();
   setPanels({diag:true, results:false, games:false});
   setGamesEnabled(false);
+
+  const p = ensureProgress();
+  p.phonicsDiag = null;
+  save(PROG_KEY, p);
+
+  logActivity("Phonics", "Reset diagnostic");
 };
 
 function finishDiagnostic(){
@@ -438,9 +484,14 @@ function finishDiagnostic(){
   };
   save(PHONICS_STATE_KEY, state);
 
+  // store diag snapshot in progress
+  setField("phonicsDiag", { scorePct, grade, time: Date.now() });
+
   buildRecommendations(state);
   setPanels({diag:false, results:true, games:false});
   setGamesEnabled(true);
+
+  logActivity("Phonics", "Finished diagnostic: " + scorePct + "%");
 }
 
 /* ============================
@@ -453,6 +504,7 @@ document.getElementById("openGamesFromResults").onclick = ()=> {
   setPanels({diag:false, results:false, games:true});
   renderGameCards();
   document.getElementById("gameStage").style.display = "none";
+  logActivity("Phonics", "Opened games after results");
 };
 
 function buildRecommendations(state){
@@ -493,20 +545,19 @@ function buildRecommendations(state){
 
 /* ============================
    Games (grade-appropriate)
-   - Choose after diagnostic
 ============================ */
 const showGamesFromTop = showGamesBtn;
 showGamesFromTop.onclick = ()=>{
   setPanels({diag:false, results:false, games:true});
   renderGameCards();
   document.getElementById("gameStage").style.display = "none";
+  logActivity("Phonics", "Opened games list");
 };
 
 function renderGameCards(){
   const st = load(PHONICS_STATE_KEY, null) || { grade, weaknesses:[] };
   const w = new Set(st.weaknesses || []);
 
-  // game availability by grade
   const games = [
     { id:"nameToSound", title:"Letter Name → Sound", emoji:"🔤", length: grade==="K" ? "3–5 min" : "4–6 min", rec: w.has("letterSounds") },
     { id:"soundToName", title:"Sound → Letter", emoji:"🔊", length: "4–6 min", rec: w.has("letterSounds") },
@@ -554,13 +605,15 @@ let currentItem = null;
 
 backToGamesBtn.onclick = ()=>{
   gameStage.style.display = "none";
+  logActivity("Phonics", "Back to games list");
 };
 
 resetStarsBtn.onclick = ()=>{
-  const p = load(PROG_KEY, { phonicsStars:0, readingStars:0, mathStars:0 });
+  const p = ensureProgress();
   p.phonicsStars = 0;
   save(PROG_KEY, p);
   alert("Phonics stars reset!");
+  logActivity("Phonics", "Reset phonics stars");
 };
 
 gameSoundBtn.onclick = ()=>{
@@ -574,26 +627,16 @@ gameNextBtn.onclick = ()=>{
 };
 
 function startGame(id){
+  ensureProgress();
   currentGame = id;
+  setField("phonicsLastGame", id);
+  bumpCounter("phonicsPlays", 1);
+
   gameStage.style.display = "block";
   gameResult.textContent = "";
   playNext(true);
-}
 
-function playNext(reset=false){
-  gameResult.textContent = "";
-  if (reset) currentItem = null;
-
-  // decide next question by game type
-  if (currentGame === "nameToSound") return renderNameToSound();
-  if (currentGame === "soundToName") return renderSoundToName();
-  if (currentGame === "pictureLabel") return renderPictureLabel();
-  if (currentGame === "cvcBuilder") return renderCvcBuilder();
-  if (currentGame === "tracing") return renderTracing();
-  if (currentGame === "typing") return renderTyping();
-  if (currentGame === "mysteryReveal") return renderMysteryReveal();
-  if (currentGame === "wordFamilyTrain") return renderWordFamilyTrain();
-  if (currentGame === "vowelTreasure") return renderVowelTreasure();
+  logActivity("Phonics", "Started game: " + id);
 }
 
 /* ---------- Game content banks ---------- */
@@ -657,6 +700,22 @@ const cvcWords = {
   ]
 };
 
+/* ---------- Game routing ---------- */
+function playNext(reset=false){
+  gameResult.textContent = "";
+  if (reset) currentItem = null;
+
+  if (currentGame === "nameToSound") return renderNameToSound();
+  if (currentGame === "soundToName") return renderSoundToName();
+  if (currentGame === "pictureLabel") return renderPictureLabel();
+  if (currentGame === "cvcBuilder") return renderCvcBuilder();
+  if (currentGame === "tracing") return renderTracing();
+  if (currentGame === "typing") return renderTyping();
+  if (currentGame === "mysteryReveal") return renderMysteryReveal();
+  if (currentGame === "wordFamilyTrain") return renderWordFamilyTrain();
+  if (currentGame === "vowelTreasure") return renderVowelTreasure();
+}
+
 /* ---------- Game renders ---------- */
 function renderNameToSound(){
   const item = shuffle(basicLetterSounds[grade])[0];
@@ -701,7 +760,6 @@ function renderSoundToName(){
   });
   gameUI.appendChild(grid);
 
-  // auto: sound button reads the sound hint
   gameSoundBtn.onclick = ()=> speak(item.sound);
 }
 
@@ -814,6 +872,9 @@ function renderCvcBuilder(){
   function checkBuilt(){
     const built = slotEls.map(s=> s.querySelector("[data-slot]").textContent).join("");
     if (built.includes("_")) return;
+
+    bumpCounter("phonicsAttempts", 1);
+
     if (built.toLowerCase() === item.word.toLowerCase()){
       gradeAnswer(true);
     } else {
@@ -824,7 +885,6 @@ function renderCvcBuilder(){
 }
 
 function renderTracing(){
-  // simple on-page tracing canvas (fun practice)
   const letters = grade==="K" ? ["A","M","S","T"] : grade==="1" ? ["B","R","SH","CH"] : ["AI","EE","OA","G"];
   const L = shuffle(letters)[0];
 
@@ -851,7 +911,6 @@ function renderTracing(){
   ctx.lineWidth = 8;
   ctx.lineCap = "round";
 
-  // faint guide letter
   ctx.save();
   ctx.globalAlpha = 0.12;
   ctx.font = "160px 'Baloo 2', cursive";
@@ -882,9 +941,13 @@ function renderTracing(){
   c.addEventListener("touchmove", move, {passive:false});
   window.addEventListener("touchend", end);
 
-  document.getElementById("traceClear").onclick = ()=> location.reload(); // simplest
+  document.getElementById("traceClear").onclick = ()=> location.reload();
   document.getElementById("traceHear").onclick = ()=> speak(`Trace ${L}`);
-  document.getElementById("traceDone").onclick = ()=> gradeAnswer(true);
+  document.getElementById("traceDone").onclick = ()=> {
+    bumpCounter("phonicsAttempts", 1);
+    bumpCounter("phonicsCorrect", 1);
+    gradeAnswer(true);
+  };
 }
 
 function renderTyping(){
@@ -911,12 +974,13 @@ function renderTyping(){
   document.getElementById("hearTypeBtn").onclick = ()=> speak(item.sound);
   document.getElementById("checkTypeBtn").onclick = ()=>{
     const v = (document.getElementById("typeInput").value || "").trim().toUpperCase();
+    bumpCounter("phonicsAttempts", 1);
+    if (v === item.letter) bumpCounter("phonicsCorrect", 1);
     gradeAnswer(v === item.letter);
   };
 }
 
 function renderMysteryReveal(){
-  // reveal in 3 correct taps (simple fun)
   const item = shuffle(pictureLabels[grade])[0];
   const target = item.word.toUpperCase();
 
@@ -933,10 +997,12 @@ function renderMysteryReveal(){
     <p class="small" id="revealMsg">Correct answers: 0 / 3</p>
   `;
 
+  const round = document.createElement("div");
+  round.style.marginTop = "12px";
+
   const playRound = ()=>{
     const q = shuffle(basicLetterSounds[grade])[0];
     const choices = buildChoices(q.letter, basicLetterSounds[grade].map(x=>x.letter));
-
     currentItem = { prompt:"Which letter(s)?", soundText:q.sound, answer:q.letter };
 
     const grid = document.createElement("div");
@@ -947,7 +1013,10 @@ function renderMysteryReveal(){
       card.style.textAlign = "center";
       card.innerHTML = `<h3 style="font-size:28px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
       card.onclick = ()=>{
+        bumpCounter("phonicsAttempts", 1);
+
         if (c === q.letter){
+          bumpCounter("phonicsCorrect", 1);
           addPhonicsStar();
           revealed++;
           document.getElementById("revealMsg").textContent = `Correct answers: ${revealed} / 3`;
@@ -955,6 +1024,7 @@ function renderMysteryReveal(){
             document.getElementById("revealPic").textContent = item.pic;
             document.getElementById("revealMsg").textContent = `It’s ${target}! 🎉`;
             speak(`Great job! It's ${item.word}.`);
+            logActivity("Phonics", "Revealed mystery picture 🎉");
           } else {
             speak("Correct!");
             playRound();
@@ -970,9 +1040,6 @@ function renderMysteryReveal(){
     round.appendChild(grid);
   };
 
-  const round = document.createElement("div");
-  round.style.marginTop = "12px";
-
   const soundBtn = document.createElement("button");
   soundBtn.className = "btn secondary";
   soundBtn.textContent = "🔊 Hear Sound";
@@ -986,7 +1053,6 @@ function renderMysteryReveal(){
 }
 
 function renderWordFamilyTrain(){
-  // K-1: choose correct rhyming family
   const families = ["-at","-an","-op","-it","-ug"];
   const family = shuffle(families)[0];
 
@@ -1009,14 +1075,17 @@ function renderWordFamilyTrain(){
     card.className = "card";
     card.style.textAlign = "center";
     card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-    card.onclick = ()=> gradeAnswer(c === word);
+    card.onclick = ()=>{
+      bumpCounter("phonicsAttempts", 1);
+      if (c === word) bumpCounter("phonicsCorrect", 1);
+      gradeAnswer(c === word);
+    };
     grid.appendChild(card);
   });
   gameUI.appendChild(grid);
 }
 
 function renderVowelTreasure(){
-  // Grade 2: pick correct vowel team for word
   const items = [
     { word:"rain", team:"AI" },
     { word:"feet", team:"EE" },
@@ -1038,7 +1107,11 @@ function renderVowelTreasure(){
     card.className = "card";
     card.style.textAlign = "center";
     card.innerHTML = `<h3 style="font-size:28px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-    card.onclick = ()=> gradeAnswer(c === it.team);
+    card.onclick = ()=>{
+      bumpCounter("phonicsAttempts", 1);
+      if (c === it.team) bumpCounter("phonicsCorrect", 1);
+      gradeAnswer(c === it.team);
+    };
     grid.appendChild(card);
   });
   gameUI.appendChild(grid);
@@ -1046,8 +1119,11 @@ function renderVowelTreasure(){
 
 /* ---------- scoring for games ---------- */
 function gradeAnswer(correct){
+  bumpCounter("phonicsAttempts", 0); // no-op but ensures progress exists
+
   if (correct){
     gameResult.textContent = "Correct! ⭐";
+    bumpCounter("phonicsCorrect", 1);
     addPhonicsStar();
     speak("Correct!");
   } else {
@@ -1071,7 +1147,8 @@ function extraLettersForGrade(){
    Init
 ============================ */
 (function init(){
-  // enable games if saved state finished
+  ensureProgress();
+
   const st = load(PHONICS_STATE_KEY, null);
   if (st && st.grade === grade && st.finished){
     setGamesEnabled(true);
