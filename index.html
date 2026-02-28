@@ -53,7 +53,6 @@
     <h1>Learn & Play 🌿✨</h1>
     <p>Pick a grade, then start phonics, reading, and math with rewards!</p>
 
-    <!-- Start Here Box -->
     <div class="game-box wide" style="margin-top:16px;">
       <div class="kid-big" style="text-align:center;">Start Here (Pick a Grade)</div>
 
@@ -161,10 +160,8 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script src="./nav.js"></script>
+
 <script>
-  // -----------------------------
-  // Grade preference
-  // -----------------------------
   const PREF_GRADE_KEY = "bloom_pref_grade";
   let grade = localStorage.getItem(PREF_GRADE_KEY) || "K";
 
@@ -175,7 +172,6 @@
       b.classList.toggle("active", b.dataset.grade === grade);
     });
 
-    // Pass grade in URL (used by subject pages if you want)
     document.getElementById("startPhonics").href = `phonics.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startReading").href = `reading.html?grade=${encodeURIComponent(grade)}`;
     document.getElementById("startMath").href = `math.html?grade=${encodeURIComponent(grade)}`;
@@ -185,18 +181,12 @@
     btn.onclick = ()=> setGrade(btn.dataset.grade);
   });
 
-  // -----------------------------
-  // Missions (Daily)
-  // -----------------------------
   const MISSION_KEY = "bloom_daily_mission";
   const PROG_KEY = "bloom_progress";
 
   function todayKey(){
     const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
   }
 
   function load(key, fallback){
@@ -254,9 +244,6 @@
     }
   }
 
-  // -----------------------------
-  // Badge preview (unlocks)
-  // -----------------------------
   function getProgress(){
     return load(PROG_KEY, {
       phonicsStars:0, readingStars:0, mathStars:0, tracingDone:0, gamesStars:0, diagnosticScore:null
@@ -270,13 +257,9 @@
     const readUnlocked = (p.readingStars || 0) >= 5;
     const phonicsUnlocked = (p.phonicsStars || 0) >= 10;
 
-    const bMath = document.getElementById("bMath");
-    const bRead = document.getElementById("bRead");
-    const bPhon = document.getElementById("bPhonics");
-
-    bMath.classList.toggle("locked", !mathUnlocked);
-    bRead.classList.toggle("locked", !readUnlocked);
-    bPhon.classList.toggle("locked", !phonicsUnlocked);
+    document.getElementById("bMath").classList.toggle("locked", !mathUnlocked);
+    document.getElementById("bRead").classList.toggle("locked", !readUnlocked);
+    document.getElementById("bPhonics").classList.toggle("locked", !phonicsUnlocked);
 
     document.getElementById("bMathReq").textContent =
       mathUnlocked ? "Unlocked ✅" : `Unlock at 10 Math ⭐ (you have ${p.mathStars||0})`;
@@ -288,7 +271,6 @@
       phonicsUnlocked ? "Unlocked ✅" : `Unlock at 10 Phonics ⭐ (you have ${p.phonicsStars||0})`;
   }
 
-  // Init
   setGrade(grade);
   renderMission();
   renderBadges();
