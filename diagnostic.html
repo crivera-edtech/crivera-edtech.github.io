@@ -50,7 +50,7 @@
 <section class="hero">
   <div class="container">
     <h1>Diagnostic 🧠</h1>
-    <p>2nd grade and older. Quick check to see what to practice next.</p>
+    <p id="heroSub">Pick a grade band, then answer 20 quick questions to see what to practice next.</p>
     <div class="quick-strip">
       <button class="btn secondary" id="soundBtn">🔊 Read</button>
       <a class="btn secondary" href="progress.html">My Progress</a>
@@ -64,18 +64,75 @@
 
     <div class="game-box wide">
       <div class="game-box">
-        <p class="kid-big" id="qText">Ready?</p>
+        <!-- START SCREEN -->
+        <div id="startScreen">
+          <p class="kid-big" style="margin-bottom:10px;">Choose your grade band 👇</p>
 
-        <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+          <div class="grid-3" id="gradeChoices" style="margin-top:14px;"></div>
 
-        <p class="kid-big" id="result" style="margin-top:14px;"></p>
+          <div class="quick-strip" style="margin-top:14px;">
+            <button class="btn" id="startBtn" disabled>Start</button>
+            <button class="btn secondary" id="resetBtn">Reset</button>
+          </div>
 
-        <div class="quick-strip">
-          <button class="btn" id="nextBtn">Next</button>
-          <button class="btn secondary" id="finishBtn">Finish</button>
+          <p class="small" style="margin-top:10px;">
+            This diagnostic checks <b>Foundational Skills</b>: phonological awareness, phonics, and word recognition/decoding.
+          </p>
         </div>
 
-        <p class="small" style="margin-top:10px;">Score saves to My Progress.</p>
+        <!-- QUIZ SCREEN -->
+        <div id="quizScreen" style="display:none;">
+          <div class="quick-strip" style="justify-content:space-between; align-items:center;">
+            <p class="small" id="meta" style="margin:0;">Question 1 of 20</p>
+            <p class="small" id="bandTag" style="margin:0;"></p>
+          </div>
+
+          <p class="kid-big" id="qText" style="margin-top:10px;">Ready?</p>
+
+          <div class="grid-3" id="choices" style="margin-top:14px;"></div>
+
+          <p class="kid-big" id="result" style="margin-top:14px;"></p>
+
+          <div class="quick-strip">
+            <button class="btn" id="nextBtn">Next</button>
+            <button class="btn secondary" id="finishBtn">Finish</button>
+          </div>
+
+          <p class="small" style="margin-top:10px;">Score saves to My Progress.</p>
+        </div>
+
+        <!-- SUMMARY SCREEN -->
+        <div id="summaryScreen" style="display:none;">
+          <p class="kid-big" id="sumTitle">All done! 🎉</p>
+
+          <div class="card" style="padding:16px; margin-top:12px;">
+            <p class="kid-big" style="margin:0 0 8px 0;">Your Score: <span id="sumScore">0%</span></p>
+            <p class="small" id="sumBand" style="margin:0 0 10px 0;"></p>
+
+            <div class="grid-3" style="margin-top:10px;">
+              <div class="card" style="padding:12px;">
+                <h3 style="margin:0; font-size:18px;">👂 Phonological Awareness</h3>
+                <p class="small" style="margin:6px 0 0 0;" id="sumPA">0 / 0</p>
+              </div>
+              <div class="card" style="padding:12px;">
+                <h3 style="margin:0; font-size:18px;">🔤 Phonics</h3>
+                <p class="small" style="margin:6px 0 0 0;" id="sumPH">0 / 0</p>
+              </div>
+              <div class="card" style="padding:12px;">
+                <h3 style="margin:0; font-size:18px;">📘 Word Recognition</h3>
+                <p class="small" style="margin:6px 0 0 0;" id="sumWR">0 / 0</p>
+              </div>
+            </div>
+
+            <p class="small" style="margin-top:12px;" id="sumTip"></p>
+          </div>
+
+          <div class="quick-strip" style="margin-top:14px;">
+            <a class="btn" href="progress.html">Go to My Progress</a>
+            <button class="btn secondary" id="restartBtn">Try Again</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -84,9 +141,19 @@
 <footer>© 2026 BloomELearning ✨ | Made with 💚</footer>
 
 <script>
+  // =========================
+  //  Local storage helpers
+  // =========================
   const PROG_KEY = "bloom_progress";
-  function loadProgress(){ try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); } catch { return {}; } }
+  function loadProgress(){
+    try { return JSON.parse(localStorage.getItem(PROG_KEY) || "{}"); }
+    catch { return {}; }
+  }
   function saveProgress(p){ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }
+
+  // =========================
+  //  Speech helper
+  // =========================
   function speak(text){
     if (!("speechSynthesis" in window)) return;
     speechSynthesis.cancel();
@@ -95,56 +162,441 @@
     speechSynthesis.speak(u);
   }
 
-  const items = [
-    { q:"Which is the correct answer? 12 + 9 = ?", correct:"21", choices:["19","21","22"] },
-    { q:"Which word has a long E sound?", correct:"feet", choices:["feet","fan","fog"] },
-    { q:"What is the main idea? “Dogs need food and water to stay healthy.”", correct:"Dogs need care", choices:["Dogs can fly","Dogs need care","Dogs are cars"] }
+  // =========================
+  //  Foundational Skills Umbrella
+  //  Categories:
+  //   - PA: Phonological Awareness (sound work)
+  //   - PH: Phonics (sounds-to-print)
+  //   - WR: Word Recognition/Decoding (automaticity, sight words)
+  // =========================
+
+  const BANK = {
+    prek: [
+      // 8 PA
+      { cat:"PA", q:"Which two words rhyme?", choices:["cat / hat","dog / sun","fish / tree"], correct:"cat / hat", speak:"Which two words rhyme?" },
+      { cat:"PA", q:"How many syllables are in “banana”?", choices:["2","3","4"], correct:"3", speak:"How many syllables are in banana?" },
+      { cat:"PA", q:"What is the first sound in “moon”?", choices:["/m/","/s/","/t/"], correct:"/m/", speak:"What is the first sound in moon?" },
+      { cat:"PA", q:"What is the last sound in “bus”?", choices:["/s/","/b/","/m/"], correct:"/s/", speak:"What is the last sound in bus?" },
+      { cat:"PA", q:"Clap the parts: “rainbow” has…", choices:["1 part","2 parts","3 parts"], correct:"2 parts", speak:"Rainbow has how many parts?" },
+      { cat:"PA", q:"Which starts with the same sound as “sun”?", choices:["sock","cat","rain"], correct:"sock", speak:"Which starts with the same sound as sun?" },
+      { cat:"PA", q:"Blend the sounds: /c/…/a/…/t/ makes…", choices:["cat","cup","cap"], correct:"cat", speak:"Blend the sounds c a t." },
+      { cat:"PA", q:"Which word is made of 3 sounds?", choices:["me","cat","she"], correct:"cat", speak:"Which word is made of three sounds?" },
+
+      // 8 PH (letters + basic print concepts)
+      { cat:"PH", q:"Which letter makes the /m/ sound?", choices:["M","S","T"], correct:"M", speak:"Which letter makes the m sound?" },
+      { cat:"PH", q:"Which letter makes the /s/ sound?", choices:["S","A","P"], correct:"S", speak:"Which letter makes the s sound?" },
+      { cat:"PH", q:"Which letter makes the /a/ sound (as in apple)?", choices:["A","E","I"], correct:"A", speak:"Which letter makes the a sound as in apple?" },
+      { cat:"PH", q:"Point to the letter B.", choices:["B","D","P"], correct:"B", speak:"Point to the letter B." },
+      { cat:"PH", q:"Which word starts with the letter T?", choices:["top","sun","map"], correct:"top", speak:"Which word starts with the letter T?" },
+      { cat:"PH", q:"Which is a letter?", choices:["G","7","$"], correct:"G", speak:"Which is a letter?" },
+      { cat:"PH", q:"Which is a word (not a letter)?", choices:["cat","C","/c/"], correct:"cat", speak:"Which is a word, not a letter?" },
+      { cat:"PH", q:"Which letter makes the /p/ sound?", choices:["P","H","R"], correct:"P", speak:"Which letter makes the p sound?" },
+
+      // 4 WR (very early print word recognition)
+      { cat:"WR", q:"Which word is “I”?", choices:["I","in","it"], correct:"I", speak:"Which word is I?" },
+      { cat:"WR", q:"Which word is “a”?", choices:["a","at","an"], correct:"a", speak:"Which word is a?" },
+      { cat:"WR", q:"Which word is “the”?", choices:["the","they","then"], correct:"the", speak:"Which word is the?" },
+      { cat:"WR", q:"Which word is “me”?", choices:["me","my","men"], correct:"me", speak:"Which word is me?" },
+    ],
+
+    k: [
+      // 6 PA
+      { cat:"PA", q:"Which two words rhyme?", choices:["pig / wig","cat / dog","sun / hat"], correct:"pig / wig", speak:"Which two words rhyme?" },
+      { cat:"PA", q:"How many sounds are in “map”?", choices:["2","3","4"], correct:"3", speak:"How many sounds are in map?" },
+      { cat:"PA", q:"What is the first sound in “ship”?", choices:["/sh/","/s/","/p/"], correct:"/sh/", speak:"What is the first sound in ship?" },
+      { cat:"PA", q:"Blend: /s/ /a/ /t/ makes…", choices:["sat","sit","set"], correct:"sat", speak:"Blend s a t." },
+      { cat:"PA", q:"Segment: “dog” is…", choices:["/d/ /o/ /g/","/do/ /g/","/d/ /og/"], correct:"/d/ /o/ /g/", speak:"Dog is d o g." },
+      { cat:"PA", q:"Which has 2 syllables?", choices:["robot","cat","sun"], correct:"robot", speak:"Which has two syllables?" },
+
+      // 10 PH (CVC + digraphs intro)
+      { cat:"PH", q:"Which letter makes the /b/ sound?", choices:["B","D","G"], correct:"B", speak:"Which letter makes the b sound?" },
+      { cat:"PH", q:"Choose the CVC word.", choices:["cat","cake","chair"], correct:"cat", speak:"Choose the CVC word." },
+      { cat:"PH", q:"What is the middle vowel sound in “pin”?", choices:["/i/","/a/","/o/"], correct:"/i/", speak:"What is the middle vowel sound in pin?" },
+      { cat:"PH", q:"Which word has the /sh/ sound?", choices:["ship","sip","shop"], correct:"ship", speak:"Which word has the sh sound?" },
+      { cat:"PH", q:"Which word has the /ch/ sound?", choices:["chip","tip","cap"], correct:"chip", speak:"Which word has the ch sound?" },
+      { cat:"PH", q:"Read the word: “sun”", choices:["sun","sin","son"], correct:"sun", speak:"Read the word sun." },
+      { cat:"PH", q:"Read the word: “bed”", choices:["bed","bad","bid"], correct:"bed", speak:"Read the word bed." },
+      { cat:"PH", q:"Which word ends with /t/?", choices:["hat","ham","has"], correct:"hat", speak:"Which word ends with t?" },
+      { cat:"PH", q:"Which letter makes the /k/ sound at the beginning of “cat”?", choices:["C","S","K"], correct:"C", speak:"Which letter makes the k sound at the beginning of cat?" },
+      { cat:"PH", q:"Which word has a short a sound?", choices:["cap","cape","keep"], correct:"cap", speak:"Which word has a short a sound?" },
+
+      // 4 WR (HF words)
+      { cat:"WR", q:"Which word is “said”?", choices:["said","sad","seed"], correct:"said", speak:"Which word is said?" },
+      { cat:"WR", q:"Which word is “the”?", choices:["the","then","they"], correct:"the", speak:"Which word is the?" },
+      { cat:"WR", q:"Which word is “to”?", choices:["to","two","too"], correct:"to", speak:"Which word is to?" },
+      { cat:"WR", q:"Which word is “was”?", choices:["was","saw","as"], correct:"was", speak:"Which word is was?" },
+    ],
+
+    first: [
+      // 4 PA
+      { cat:"PA", q:"How many sounds are in “ship”?", choices:["2","3","4"], correct:"3", speak:"How many sounds are in ship?" },
+      { cat:"PA", q:"Blend: /f/ /l/ /a/ /g/ makes…", choices:["flag","frog","fog"], correct:"flag", speak:"Blend f l a g." },
+      { cat:"PA", q:"Which word has 2 syllables?", choices:["paper","cat","milk"], correct:"paper", speak:"Which word has two syllables?" },
+      { cat:"PA", q:"Segment: “stop” begins with…", choices:["/st/","/s/","/t/"], correct:"/st/", speak:"Stop begins with what blend?" },
+
+      // 12 PH (blends, digraphs, long vowels/silent e, vowel teams intro)
+      { cat:"PH", q:"Which word has a silent e (makes the vowel say its name)?", choices:["cake","cat","can"], correct:"cake", speak:"Which word has a silent e?" },
+      { cat:"PH", q:"Choose the word with a long a sound.", choices:["rain","rat","ran"], correct:"rain", speak:"Choose the word with a long a sound." },
+      { cat:"PH", q:"Which word has the /th/ sound?", choices:["thin","tin","fin"], correct:"thin", speak:"Which word has the th sound?" },
+      { cat:"PH", q:"Which word has a blend at the beginning?", choices:["stop","sip","so"], correct:"stop", speak:"Which word has a beginning blend?" },
+      { cat:"PH", q:"Read the word: “note”", choices:["note","not","nut"], correct:"note", speak:"Read the word note." },
+      { cat:"PH", q:"Which word has the vowel team “ee”?", choices:["seed","sad","sled"], correct:"seed", speak:"Which word has the vowel team ee?" },
+      { cat:"PH", q:"Which word has the /ai/ sound?", choices:["train","tan","tin"], correct:"train", speak:"Which word has the ai sound?" },
+      { cat:"PH", q:"Which word ends with a digraph?", choices:["wish","win","wig"], correct:"wish", speak:"Which word ends with a digraph?" },
+      { cat:"PH", q:"Which word has the /oa/ sound?", choices:["boat","bat","bit"], correct:"boat", speak:"Which word has the oa sound?" },
+      { cat:"PH", q:"Which word has a short e sound?", choices:["pen","pine","peel"], correct:"pen", speak:"Which word has a short e sound?" },
+      { cat:"PH", q:"Read the word: “shape”", choices:["shape","ship","shop"], correct:"shape", speak:"Read the word shape." },
+      { cat:"PH", q:"Which word has the /ng/ ending sound?", choices:["ring","rip","rid"], correct:"ring", speak:"Which word has the ng ending sound?" },
+
+      // 4 WR (HF / irregular)
+      { cat:"WR", q:"Which word is “because”?", choices:["because","becase","beacuse"], correct:"because", speak:"Which word is because?" },
+      { cat:"WR", q:"Which word is “could”?", choices:["could","cold","cloud"], correct:"could", speak:"Which word is could?" },
+      { cat:"WR", q:"Which word is “they”?", choices:["they","the","then"], correct:"they", speak:"Which word is they?" },
+      { cat:"WR", q:"Which word is “come”?", choices:["come","cone","comb"], correct:"come", speak:"Which word is come?" },
+    ],
+
+    second: [
+      // 2 PA (quick check still matters)
+      { cat:"PA", q:"How many syllables are in “elephant”?", choices:["2","3","4"], correct:"3", speak:"How many syllables are in elephant?" },
+      { cat:"PA", q:"Blend: /s/ /p/ /l/ /a/ /sh/ makes…", choices:["splash","slash","spash"], correct:"splash", speak:"Blend s p l a sh." },
+
+      // 14 PH (r-controlled, vowel teams, variants, multisyllabic basics)
+      { cat:"PH", q:"Which word has an r-controlled vowel (ar)?", choices:["star","stay","seat"], correct:"star", speak:"Which word has ar?" },
+      { cat:"PH", q:"Which word has an r-controlled vowel (er)?", choices:["her","hat","hot"], correct:"her", speak:"Which word has er?" },
+      { cat:"PH", q:"Which word has an r-controlled vowel (or)?", choices:["corn","can","cone"], correct:"corn", speak:"Which word has or?" },
+      { cat:"PH", q:"Which word has the vowel team “ea” (as in eat)?", choices:["eat","at","it"], correct:"eat", speak:"Which word has ea as in eat?" },
+      { cat:"PH", q:"Which word has the vowel team “oi”?", choices:["coin","can","cone"], correct:"coin", speak:"Which word has oi?" },
+      { cat:"PH", q:"Which word has the vowel team “ow” (as in snow)?", choices:["snow","now","new"], correct:"snow", speak:"Which word has ow as in snow?" },
+      { cat:"PH", q:"Choose the word with the /oo/ sound (as in moon).", choices:["moon","man","main"], correct:"moon", speak:"Choose the word with oo as in moon." },
+      { cat:"PH", q:"Read the word: “bright”", choices:["bright","brigt","bridgt"], correct:"bright", speak:"Read the word bright." },
+      { cat:"PH", q:"Which word has the suffix -ed?", choices:["jumped","jump","jumps"], correct:"jumped", speak:"Which word has ed?" },
+      { cat:"PH", q:"Which word has the prefix re-?", choices:["redo","do","done"], correct:"redo", speak:"Which word has re?" },
+      { cat:"PH", q:"Choose the correct spelling for /k/ at the end.", choices:["back","bac","bak"], correct:"back", speak:"Choose the correct spelling for k at the end." },
+      { cat:"PH", q:"Read the word: “market”", choices:["market","makret","martek"], correct:"market", speak:"Read the word market." },
+      { cat:"PH", q:"Which word has the “kn” pattern (silent k)?", choices:["knee","keen","need"], correct:"knee", speak:"Which word has silent k?" },
+      { cat:"PH", q:"Which word has “dge” at the end?", choices:["badge","bag","bad"], correct:"badge", speak:"Which word has dge?" },
+
+      // 4 WR (HF / irregular)
+      { cat:"WR", q:"Which word is “through”?", choices:["through","threw","thru"], correct:"through", speak:"Which word is through?" },
+      { cat:"WR", q:"Which word is “people”?", choices:["people","peopel","peeple"], correct:"people", speak:"Which word is people?" },
+      { cat:"WR", q:"Which word is “would”?", choices:["would","wold","wild"], correct:"would", speak:"Which word is would?" },
+      { cat:"WR", q:"Which word is “one”?", choices:["one","won","on"], correct:"one", speak:"Which word is one?" },
+    ]
+  };
+
+  // Grade labels
+  const GRADE_LABELS = {
+    prek: "Pre-K",
+    k: "Kindergarten",
+    first: "1st Grade",
+    second: "2nd Grade"
+  };
+
+  // =========================
+  //  State
+  // =========================
+  const TOTAL_Q = 20;
+  let selectedBand = null;
+  let quizItems = [];
+  let idx = 0;
+
+  let correctCount = 0;
+  let correctByCat = { PA:0, PH:0, WR:0 };
+  let totalByCat   = { PA:0, PH:0, WR:0 };
+
+  // =========================
+  //  DOM
+  // =========================
+  const startScreen   = document.getElementById("startScreen");
+  const quizScreen    = document.getElementById("quizScreen");
+  const summaryScreen = document.getElementById("summaryScreen");
+
+  const gradeChoices = document.getElementById("gradeChoices");
+  const startBtn = document.getElementById("startBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  const meta = document.getElementById("meta");
+  const bandTag = document.getElementById("bandTag");
+  const qText = document.getElementById("qText");
+  const choicesEl = document.getElementById("choices");
+  const resultEl = document.getElementById("result");
+
+  const nextBtn = document.getElementById("nextBtn");
+  const finishBtn = document.getElementById("finishBtn");
+  const soundBtn = document.getElementById("soundBtn");
+
+  // Summary fields
+  const sumScore = document.getElementById("sumScore");
+  const sumBand = document.getElementById("sumBand");
+  const sumPA = document.getElementById("sumPA");
+  const sumPH = document.getElementById("sumPH");
+  const sumWR = document.getElementById("sumWR");
+  const sumTip = document.getElementById("sumTip");
+  const restartBtn = document.getElementById("restartBtn");
+
+  // =========================
+  //  UI: Grade band cards
+  // =========================
+  const gradeCardData = [
+    { id:"prek", title:"🧸 Pre-K", desc:"Rhyming • Syllables • Letter sounds" },
+    { id:"k", title:"🎒 Kindergarten", desc:"CVC words • Digraphs • Sight words" },
+    { id:"first", title:"🌟 1st Grade", desc:"Blends • Silent-e • Vowel teams" },
+    { id:"second", title:"🚀 2nd Grade", desc:"R-controlled • Patterns • Prefix/Suffix" }
   ];
 
-  let idx = 0;
-  let correctCount = 0;
-
-  function render(){
-    const it = items[idx % items.length];
-    document.getElementById("qText").textContent = it.q;
-    document.getElementById("result").textContent = "";
-    const choices = document.getElementById("choices");
-    choices.innerHTML = "";
-    it.choices.forEach(c=>{
+  function renderGradeCards(){
+    gradeChoices.innerHTML = "";
+    gradeCardData.forEach(g=>{
       const card = document.createElement("div");
       card.className = "card";
-      card.style.textAlign = "center";
-      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
-      card.onclick = ()=> check(c, it.correct);
-      choices.appendChild(card);
+      card.style.textAlign = "left";
+      card.style.cursor = "pointer";
+      card.dataset.band = g.id;
+      card.innerHTML = `
+        <h3 style="font-size:22px; margin-bottom:6px;">${g.title}</h3>
+        <p class="small" style="margin:0;">${g.desc}</p>
+        <p class="small" style="margin:8px 0 0 0; opacity:.85;">Tap to select</p>
+      `;
+      card.onclick = ()=> selectBand(g.id);
+      gradeChoices.appendChild(card);
     });
   }
 
-  function check(choice, correct){
-    if (document.getElementById("result").textContent) return;
-    if (choice === correct){
-      document.getElementById("result").textContent = "Correct! ⭐";
+  function selectBand(band){
+    selectedBand = band;
+    // visual highlight (works with your existing .card style)
+    [...gradeChoices.children].forEach(c=>{
+      c.style.outline = (c.dataset.band === band) ? "3px solid rgba(46, 204, 113, .55)" : "none";
+      c.style.transform = (c.dataset.band === band) ? "translateY(-2px)" : "none";
+    });
+    startBtn.disabled = false;
+    bandTag.textContent = `Grade Band: ${GRADE_LABELS[band]}`;
+  }
+
+  // =========================
+  //  Quiz creation
+  // =========================
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Make exactly 20, prioritizing the selected band, but ensuring umbrella coverage.
+  // Simple distribution by band:
+  //  Pre-K: PA 8, PH 8, WR 4
+  //  K:     PA 6, PH 10, WR 4
+  //  1st:   PA 4, PH 12, WR 4
+  //  2nd:   PA 2, PH 14, WR 4
+  const TARGETS = {
+    prek:  { PA:8, PH:8,  WR:4 },
+    k:     { PA:6, PH:10, WR:4 },
+    first: { PA:4, PH:12, WR:4 },
+    second:{ PA:2, PH:14, WR:4 }
+  };
+
+  function buildQuiz(band){
+    const pool = BANK[band] || [];
+    const byCat = { PA:[], PH:[], WR:[] };
+    pool.forEach(it => byCat[it.cat].push(it));
+
+    const targets = TARGETS[band];
+    const selected = [];
+
+    ["PA","PH","WR"].forEach(cat=>{
+      const need = targets[cat];
+      const pick = shuffle(byCat[cat]).slice(0, need);
+      selected.push(...pick);
+    });
+
+    // Final shuffle for fun
+    const final = shuffle(selected).slice(0, TOTAL_Q);
+
+    // Count totals per category for summary
+    totalByCat = { PA:0, PH:0, WR:0 };
+    final.forEach(it => totalByCat[it.cat]++);
+
+    return final;
+  }
+
+  // =========================
+  //  Rendering / checking
+  // =========================
+  function showStart(){
+    startScreen.style.display = "block";
+    quizScreen.style.display = "none";
+    summaryScreen.style.display = "none";
+    document.getElementById("heroSub").textContent =
+      "Pick a grade band, then answer 20 quick questions to see what to practice next.";
+    qText.textContent = "Ready?";
+    resultEl.textContent = "";
+  }
+
+  function showQuiz(){
+    startScreen.style.display = "none";
+    quizScreen.style.display = "block";
+    summaryScreen.style.display = "none";
+    document.getElementById("heroSub").textContent =
+      "Answer each question. Tap 🔊 Read if you want it read aloud.";
+  }
+
+  function showSummary(){
+    startScreen.style.display = "none";
+    quizScreen.style.display = "none";
+    summaryScreen.style.display = "block";
+    document.getElementById("heroSub").textContent =
+      "Nice work! Check your results and choose what to practice next.";
+  }
+
+  function renderQuestion(){
+    const it = quizItems[idx];
+    meta.textContent = `Question ${idx + 1} of ${TOTAL_Q}`;
+    bandTag.textContent = `Grade Band: ${GRADE_LABELS[selectedBand]}`;
+    qText.textContent = it.q;
+    resultEl.textContent = "";
+    choicesEl.innerHTML = "";
+
+    // shuffle choices each time
+    const ch = shuffle(it.choices);
+    ch.forEach(c=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.textAlign = "center";
+      card.style.cursor = "pointer";
+      card.innerHTML = `<h3 style="font-size:26px; margin-bottom:6px;">${c}</h3><p class="small">Tap!</p>`;
+      card.onclick = ()=> checkAnswer(c, it);
+      choicesEl.appendChild(card);
+    });
+  }
+
+  function checkAnswer(choice, it){
+    if (resultEl.textContent) return; // prevent double-answer
+    if (choice === it.correct){
+      resultEl.textContent = "Correct! ⭐";
       correctCount++;
+      correctByCat[it.cat]++;
       speak("Correct!");
     } else {
-      document.getElementById("result").textContent = `Oops! The answer was ${correct}.`;
+      resultEl.textContent = `Oops! The answer was ${it.correct}.`;
       speak("Good try.");
     }
   }
 
-  document.getElementById("nextBtn").onclick = ()=>{ idx++; render(); };
-  document.getElementById("finishBtn").onclick = ()=>{
-    const score = Math.round((correctCount / items.length) * 100);
+  function finishQuiz(){
+    // Score
+    const score = Math.round((correctCount / TOTAL_Q) * 100);
+
+    // Save to progress
     const p = loadProgress();
-    p.diagnosticScore = score;
+    p.diagnostic = p.diagnostic || {};
+    p.diagnostic.lastRun = new Date().toISOString();
+    p.diagnostic.band = selectedBand;
+    p.diagnostic.score = score;
+    p.diagnostic.breakdown = {
+      PA: { correct: correctByCat.PA, total: totalByCat.PA },
+      PH: { correct: correctByCat.PH, total: totalByCat.PH },
+      WR: { correct: correctByCat.WR, total: totalByCat.WR }
+    };
     saveProgress(p);
-    alert(`Finished! Your score: ${score}%`);
-    window.location.href = "progress.html";
+
+    // Render summary
+    sumScore.textContent = `${score}%`;
+    sumBand.textContent = `Grade Band: ${GRADE_LABELS[selectedBand]} • 20 questions`;
+    sumPA.textContent = `${correctByCat.PA} / ${totalByCat.PA}`;
+    sumPH.textContent = `${correctByCat.PH} / ${totalByCat.PH}`;
+    sumWR.textContent = `${correctByCat.WR} / ${totalByCat.WR}`;
+
+    // Simple next-step tip
+    const rates = {
+      PA: totalByCat.PA ? correctByCat.PA / totalByCat.PA : 1,
+      PH: totalByCat.PH ? correctByCat.PH / totalByCat.PH : 1,
+      WR: totalByCat.WR ? correctByCat.WR / totalByCat.WR : 1
+    };
+    const weakest = Object.entries(rates).sort((a,b)=> a[1]-b[1])[0]?.[0];
+
+    let tip = "You’re ready for more practice!";
+    if (weakest === "PA") tip = "Next step: practice 👂 rhyming, syllables, and blending sounds.";
+    if (weakest === "PH") tip = "Next step: practice 🔤 decoding (letter sounds, patterns, vowel teams).";
+    if (weakest === "WR") tip = "Next step: practice 📘 high-frequency words for faster reading.";
+
+    // If overall low, encourage re-run
+    if (score < 60) tip = "Let’s build confidence 💚 Start with the basics and try again after practice!";
+
+    sumTip.textContent = tip;
+
+    showSummary();
+  }
+
+  function resetAll(){
+    selectedBand = null;
+    quizItems = [];
+    idx = 0;
+    correctCount = 0;
+    correctByCat = { PA:0, PH:0, WR:0 };
+    totalByCat   = { PA:0, PH:0, WR:0 };
+    startBtn.disabled = true;
+    bandTag.textContent = "";
+    renderGradeCards();
+    showStart();
+  }
+
+  // =========================
+  //  Events
+  // =========================
+  startBtn.onclick = ()=>{
+    if (!selectedBand) return;
+    quizItems = buildQuiz(selectedBand);
+    idx = 0;
+    correctCount = 0;
+    correctByCat = { PA:0, PH:0, WR:0 };
+    showQuiz();
+    renderQuestion();
   };
 
-  document.getElementById("soundBtn").onclick = ()=> speak(document.getElementById("qText").textContent);
+  resetBtn.onclick = resetAll;
 
-  render();
+  nextBtn.onclick = ()=>{
+    if (!resultEl.textContent) { speak("Choose an answer first."); return; }
+    idx++;
+    if (idx >= TOTAL_Q) finishQuiz();
+    else renderQuestion();
+  };
+
+  finishBtn.onclick = ()=>{
+    // allow finish early, but still calculate based on answered so far
+    // We’ll treat unanswered as incorrect.
+    // If they haven't answered current question, confirm gently.
+    if (!resultEl.textContent && idx < TOTAL_Q){
+      speak("Choose an answer first, or press Finish again.");
+      // require a second click
+      finishBtn.dataset.confirm = finishBtn.dataset.confirm ? "" : "1";
+      if (!finishBtn.dataset.confirm) return;
+    }
+    // If finishing early, pad totals to TOTAL_Q so % is fair by actual total questions
+    // (Unanswered are already incorrect, so correctCount stays the same.)
+    // Ensure totals per category are set from quizItems (already).
+    finishQuiz();
+  };
+
+  soundBtn.onclick = ()=>{
+    if (quizScreen.style.display !== "none" && quizItems[idx]){
+      const it = quizItems[idx];
+      speak(it.speak || it.q);
+    } else {
+      speak("Choose a grade band to begin.");
+    }
+  };
+
+  restartBtn.onclick = resetAll;
+
+  // =========================
+  //  Init
+  // =========================
+  renderGradeCards();
+  showStart();
 </script>
 
 </body>
